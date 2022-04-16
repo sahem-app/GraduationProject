@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Mediator>
+
+@{
+	ViewData["Title"] = "Mediators";
+}
+<link rel="stylesheet" href="~/css/tables.css">
+<div class="container-fluid my-5 bg-white p-3 mytable">
+	<div class="row mb-4">
+		<div class="col-6">
+			<h5 class="tableName mb-4 mt-2">Mediators Table</h5>
+		</div>
+		<div class="col-6 text-end">
+			<a asp-action="create" class="btn btn-outline-primary">Create New Mediator</a>
+		</div>
+	</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Name)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.PhoneNumber)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model =>model.NationalId)
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr class="align-middle">
+					<td class="d-flex align-items-center">
+						@if (item.ProfileImage != null)
+						{
+							<img width="45" height="45" class="rounded-3 me-3" src="data:image/png;base64,@Convert.ToBase64String(item.ProfileImage)">
+						}
+						<span>@item.Name</span>
+					</td>
+					<td>@item.PhoneNumber</td>
+					<td>@item.NationalId</td>
+					<td class="text-end gap-1">
+						<a asp-action="details" asp-route-id="@item.Id" class="btn btn-outline-success"><i class="fa-solid fa-circle-info"></i> Details</a>
+						<a asp-action="edit" asp-route-id="@item.Id" class="btn btn-outline-secondary"><i class="fa-solid fa-pen"></i> Edit</a>
+						<button type="button" asp-action="delete" data-bs-toggle="modal" data-bs-target="#Modal" class="btn btn-outline-danger"
+							onclick="document.getElementById('deleteform').action = '/mediator/delete/@item.Id'">
+							<i class="fa-solid fa-trash me-1"></i>Delete
+						</button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<button class="btn btn-outline-light">Details</button>
+</div>
+<div class="modal fade" id="Modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Mediators</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal">
+				</button>
+			</div>
+			<div class="modal-body">
+				Are you sure you want delete this mediator?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+				<form id="deleteform" asp-action="delete" asp-route-id="" method="post">
+					<button class="btn btn-danger">Yes</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

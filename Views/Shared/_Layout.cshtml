@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap">
+	<link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="~/lib/hover.css/css/hover-min.css">
+	<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css">
+	<link rel="stylesheet" href="~/css/main.css">
+	<link rel="stylesheet" href="~/css/sidebar.css">
+	<link rel="stylesheet" href="~/css/navbar.css">
+	<link rel="stylesheet" href="~/css/style.css">
+	<title>Sahem - @ViewData["Title"]</title>
+</head>
+<body>
+	<button class="mytoggler">
+		<i class="fa-solid fa-bars fa-2x"></i>
+	</button>
+	<div class="side" id="demo">
+		<a asp-controller="home" asp-action="index" class="logo">
+			<i class="fa-regular fa-hand-back-fist"></i><span>S</span>ahem
+		</a>
+		<ul class="mylinks">
+			<li><a asp-controller="home" asp-action="index"><i class="fa-solid fa-table-columns"></i>Dashboard</a></li>
+			<li data-bs-toggle="collapse" data-bs-target="#cases"><a href="#"><i class="fa-solid fa-table-cells"></i>Cases</a></li>
+			<ul id="cases" class="collapse">
+				<li><a asp-controller="Case" asp-action="PendingCases"><i class="fa-solid fa-id-card"></i>Pending Cases</a></li>
+				<li><a asp-controller="Case" asp-action="AcceptedCases"><i class="fa-solid fa-id-card"></i>Accepted Cases</a></li>
+				<li><a asp-controller="Case" asp-action="RejectedCases"><i class="fa-solid fa-id-card"></i>Rejected Cases</a></li>
+				<li><a asp-controller="category" asp-action="index"><i class="fa-solid fa-id-card"></i>Case Categories</a></li>
+			</ul>
+			<li data-bs-toggle="collapse" data-bs-target="#mediators"><a href="#"><i class="fa-solid fa-table-cells"></i>Mediators</a></li>
+			<ul id="mediators" class="collapse">
+				<li><a asp-controller="mediator" asp-action="pendingmediators"><i class="fa-solid fa-id-card"></i>Pending Mediators</a></li>
+				<li><a asp-controller="mediator" asp-action="acceptedmediators"><i class="fa-solid fa-id-card"></i>Accepted Mediators</a></li>
+				<li><a asp-controller="mediator" asp-action="RejectedMediators"><i class="fa-solid fa-id-card"></i>Rejected Mediators</a></li>
+			</ul>
+			<li data-bs-toggle="collapse" data-bs-target="#locations"><a href="#"><i class="fa-solid fa-table-cells"></i>Locations</a></li>
+			<ul id="locations" class="collapse">
+				<li><a asp-controller="governorate" asp-action="index"><i class="fa-solid fa-id-card"></i>Governorates</a></li>
+				<li><a asp-controller="city" asp-action="index"><i class="fa-solid fa-id-card"></i>Cities</a></li>
+				<li><a asp-controller="region" asp-action="index"><i class="fa-solid fa-id-card"></i>Regions</a></li>
+			</ul>
+		</ul>
+		<p>Account Pages</p>
+		<ul class="myAccPages">
+			<li><a href="#"><i class="fa-solid fa-user"></i>Profile</a></li>
+			<li><a href="#"><i class="fa-solid fa-gear"></i>Settings</a></li>
+			<li>
+				<form method="post" id="logoutform" asp-controller="account" asp-action="logout">
+					<a href="#" onclick="document.getElementById('logoutform').submit()">
+						<i class="fa-solid fa-id-card"></i>Log Out
+					</a>
+				</form>
+			</li>
+		</ul>
+	</div>
+	<div class="mynav w-100 my-4">
+		<div class="container-fluid d-flex align-items-center flex-sm-row flex-column">
+			<div class="d-flex ms-sm-auto mt-3 mt-sm-0">
+				<div class="myi d-flex justify-content-around align-items-center">
+					<a href="#"><i class="fa-solid fa-user"></i></a>
+					<a href="#"><i class="fa-solid fa-gear"></i></a>
+					<a href="#"><i class="fa-solid fa-bell"></i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<main class="container pb-3">@RenderBody()</main>
+
+	<script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+	<script src="~/lib/jquery/jquery.min.js"></script>
+	<script src="~/lib/font-awesome/js/all.min.js"></script>
+	<script src="~/js/sidebar.js"></script>
+	@await Component.InvokeAsync("NToastNotify")
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

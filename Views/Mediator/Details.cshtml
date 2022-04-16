@@ -1,0 +1,46 @@
+﻿@model Mediator
+
+@{
+    ViewData["Title"] = "Detaila- Mediator";
+}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">@Html.DisplayNameFor(m => m.Name): <small class="text-muted">@Model.Name</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.PhoneNumber): <small class="text-muted">@Model.PhoneNumber</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.NationalId): <small class="text-muted">@Model.NationalId</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.BirthDate): <small class="text-muted">@Model.BirthDate</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.Address): <small class="text-muted">@Model.Address</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.GenderId): <small class="text-muted">@Model.Gender.Name</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.RegionId): <small class="text-muted">@Model.Region.Name</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.SocialStatusId): <small class="text-muted">@Model.SocialStatus.Name</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.StatusId): <small class="text-muted">@Model.Status.Name</small></p>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#Modal@(Model.Id)" class="btn btn-outline-primary">
+            Change Status
+        </button>
+
+        <!--  new-->
+        <div class="modal fade" id="Modal@(Model.Id)">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Mediators Status</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        You can change the status to @Model.Name
+                    </div>
+                    <div class="modal-footer">
+                        <form asp-action="ChangeStatus" asp-route-id="@Model.Id" asp-route-name="accepted" method="post">
+                            <button class="btn btn-success">Accepted</button>
+                        </form>
+                        <form asp-action="ChangeStatus" asp-route-id="@Model.Id" asp-route-name="rejected" method="post">
+                            <button class="btn btn-danger">Rejected</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>

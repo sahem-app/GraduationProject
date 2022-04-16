@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Category>
+@{
+	ViewData["Title"] = "Case Categories";
+}
+
+<link rel="stylesheet" href="~/css/tables.css">
+<div class="container-fluid my-5 bg-white p-3 mytable">
+	<div class="row mb-4">
+		<div class="col-6">
+			<h5 class="tableName mb-4 mt-2">Categories Table</h5>
+		</div>
+		<div class="col-6 text-end">
+			<a asp-action="Create" class="btn btn-outline-primary">Create New Category</a>
+		</div>
+	</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th colspan="2">@Html.DisplayNameFor(m => m.Name)</th>
+			</tr>
+		</thead>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Name</td>
+				<td class="text-end gap-1">
+					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-secondary"><i class="fa-solid fa-pen"></i> Edit</a>
+					<button type="button" data-bs-toggle="modal" data-bs-target="#Modal" class="btn btn-outline-danger"
+						onclick="document.getElementById('deleteform').action = '/category/delete/@item.Id'">
+						<i class="fa-solid fa-trash me-1"></i>Delete
+					</button>
+				</td>
+			</tr>
+		}
+	</table>
+</div>
+<div class="modal" id="Modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Case Category</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			</div>
+			<div class="modal-body">
+				Are you sure you want delete this category?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+				<form id="deleteform" asp-action="delete" asp-route-id="" method="post">
+					<button class="btn btn-danger">Yes</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

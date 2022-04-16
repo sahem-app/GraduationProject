@@ -1,0 +1,20 @@
+.mynav .page {
+    white-space: nowrap;
+}
+.myform svg {
+    position: absolute;
+    left: 20px;
+}
+.form-control:focus {
+    color: var(--third-color);
+    border-color: var(--main-color);
+    box-shadow: none; 
+}
+.myi {
+    width: 100px;
+}
+.myi svg,
+.myform svg,
+.mynav h4  {
+    color: var(--third-color);
+}
