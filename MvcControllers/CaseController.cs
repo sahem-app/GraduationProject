@@ -47,13 +47,15 @@ namespace GraduationProject.MvcControllers
                 .Where(m => m.Status.Name == Status.Rejected)
                 .ToArrayAsync());
         }
-
         [HttpGet]
         public async Task<IActionResult> Create()
         {
             var CaseVM = new CaseVM()
             {
                 CaseCategory = await _context.Categories.AsNoTracking().ToArrayAsync(),
+                Mediator = await _context.Mediators.AsNoTracking().ToArrayAsync(),
+                Relationship = await _context.Relationships.AsNoTracking().ToArrayAsync(),
+                Period = await _context.Periods.AsNoTracking().ToArrayAsync(),
                 CasePriority = await _context.Priorities.AsNoTracking().ToArrayAsync(),
                 Gender = await _context.Genders.AsNoTracking().ToArrayAsync(),
                 GeoLocation = await _context.GeoLocations.AsNoTracking().ToArrayAsync(),
@@ -64,12 +66,14 @@ namespace GraduationProject.MvcControllers
             };
             return View(CaseVM);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CaseVM model)
         {
+            model.Relationship = await _context.Relationships.AsNoTracking().ToArrayAsync();
             model.CaseCategory = await _context.Categories.AsNoTracking().ToArrayAsync();
+            model.Period = await _context.Periods.AsNoTracking().ToArrayAsync();
+            model.Mediator = await _context.Mediators.AsNoTracking().ToArrayAsync();
             model.CasePriority = await _context.Priorities.AsNoTracking().ToArrayAsync();
             model.Gender = await _context.Genders.AsNoTracking().ToArrayAsync();
             model.GeoLocation = await _context.GeoLocations.AsNoTracking().ToArrayAsync();
@@ -95,8 +99,8 @@ namespace GraduationProject.MvcControllers
                 ModelState.AddModelError(string.Empty, "image cannot be more than 1MB");
                 return View(model);
             }
-            using var datastream = new MemoryStream();
-            await image.CopyToAsync(datastream);
+            //using var datastream = new MemoryStream();
+            //await image.CopyToAsync(datastream);
             var Case = new Case
             {
                 Name = model.Name,
@@ -109,22 +113,24 @@ namespace GraduationProject.MvcControllers
                 SocialStatusId = model.SocialStatusId,
                 CategoryId = model.CaseCategoryId,
                 PriorityId = model.CasePriorityId,
+                MediatorId = model.MediatorId,
+                GeoLocationId = model.GeoLocationId,
                 StatusId = model.StatusId,
                 GenderId = model.GenderId,
                 RegionId = model.RegionId,
                 NeededMoneyAmount = model.NeededMoneyAmount,
                 Adults = model.Adults,
                 Children = model.Children,
-                NationalIdImage = datastream.ToArray(),
-                Story = model.Story
+                RelationshipId = model.RelationshipId,
+                Story = model.Story,
+                PeriodId = model.PeriodId
             };
-
+            await Case.SetNationalIdImageAsync(model.NationalIdImage);
             await _context.Cases.AddAsync(Case);
             await _context.SaveChangesAsync();
             _toastNotification.AddSuccessToastMessage("Case Created SuccessFully");
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AcceptedCases));
         }
-
         [HttpGet]
         public async Task<IActionResult> GetRegion(int id)
         {
@@ -132,7 +138,6 @@ namespace GraduationProject.MvcControllers
             Regions = await _context.Regions.AsNoTracking().Where(m => m.CityId == id).ToListAsync();
             return Json(new SelectList(Regions, "Id", "Name"));
         }
-
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
@@ -149,7 +154,6 @@ namespace GraduationProject.MvcControllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             return Case == null ? NotFound() : View(Case);
         }
-
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -164,24 +168,32 @@ namespace GraduationProject.MvcControllers
             {
                 Name = Case.Name,
                 PhoneNumber = Case.PhoneNumber,
+                Address = Case.Address,
+                Title = Case.Title,
+                NationalId = Case.NationalId,
                 BirthDate = Case.BirthDate,
                 PaymentDate = Case.PaymentDate,
-                NationalId = Case.NationalId,
-                Address = Case.Address,
-                Adults = Case.Adults,
-                Title = Case.Title,
-                Children = Case.Children,
-                NeededMoneyAmount = Case.NeededMoneyAmount,
-                Story = Case.Story,
-                CaseCategoryId = Case.CategoryId,
-                CasePriorityId = Case.PriorityId,
-                GenderId = Case.GenderId,
-                StatusId = Case.StatusId,
                 SocialStatusId = Case.SocialStatusId,
+                CaseCategoryId = Case.CategoryId,
+                CasePriorityId = Case.PeriodId,
+                MediatorId = Case.MediatorId,
+                GeoLocationId = Case.GeoLocationId,
+                StatusId = Case.StatusId,
+                GenderId = Case.GenderId,
                 RegionId = Case.RegionId,
+                NeededMoneyAmount = Case.NeededMoneyAmount,
+                Adults = Case.Adults,
+                Children = Case.Children,
+                RelationshipId = Case.RelationshipId,
+                Story = Case.Story,
+                PeriodId = Case.PeriodId,
                 CaseCategory = await _context.Categories.AsNoTracking().ToArrayAsync(),
+                Mediator = await _context.Mediators.AsNoTracking().ToArrayAsync(),
+                Relationship = await _context.Relationships.AsNoTracking().ToArrayAsync(),
+                Period = await _context.Periods.AsNoTracking().ToArrayAsync(),
                 CasePriority = await _context.Priorities.AsNoTracking().ToArrayAsync(),
                 Gender = await _context.Genders.AsNoTracking().ToArrayAsync(),
+                GeoLocation = await _context.GeoLocations.AsNoTracking().ToArrayAsync(),
                 SocialStatus = await _context.SocialStatus.AsNoTracking().ToArrayAsync(),
                 Region = await _context.Regions.AsNoTracking().ToArrayAsync(),
                 Status = await _context.Status.AsNoTracking().ToArrayAsync(),
@@ -190,14 +202,17 @@ namespace GraduationProject.MvcControllers
             return View(CaseVM);
 
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CaseVM model)
         {
+            model.Relationship = await _context.Relationships.AsNoTracking().ToArrayAsync();
             model.CaseCategory = await _context.Categories.AsNoTracking().ToArrayAsync();
+            model.Period = await _context.Periods.AsNoTracking().ToArrayAsync();
+            model.Mediator = await _context.Mediators.AsNoTracking().ToArrayAsync();
             model.CasePriority = await _context.Priorities.AsNoTracking().ToArrayAsync();
             model.Gender = await _context.Genders.AsNoTracking().ToArrayAsync();
+            model.GeoLocation = await _context.GeoLocations.AsNoTracking().ToArrayAsync();
             model.SocialStatus = await _context.SocialStatus.AsNoTracking().ToArrayAsync();
             model.Region = await _context.Regions.AsNoTracking().ToArrayAsync();
             model.Status = await _context.Status.AsNoTracking().ToArrayAsync();
@@ -229,9 +244,6 @@ namespace GraduationProject.MvcControllers
                 return View(model);
             }
 
-            using var datastream = new MemoryStream();
-            await image.CopyToAsync(datastream);
-
             Case.Name = model.Name;
             Case.PhoneNumber = model.PhoneNumber;
             Case.Address = model.Address;
@@ -248,14 +260,20 @@ namespace GraduationProject.MvcControllers
             Case.NeededMoneyAmount = model.NeededMoneyAmount;
             Case.Adults = model.Adults;
             Case.Children = model.Children;
-            Case.NationalIdImage = datastream.ToArray();
             Case.Story = model.Story;
+            await Case.SetNationalIdImageAsync(model.NationalIdImage);
 
             await _context.SaveChangesAsync();
-            _toastNotification.AddSuccessToastMessage("Case updated SuccessFully");
-            return RedirectToAction(nameof(Index));
-        }
 
+            _toastNotification.AddSuccessToastMessage($"{Case.Name} information updated SuccessFully");
+
+            if (Case.StatusId == 2)
+                return RedirectToAction(nameof(AcceptedCases));
+            else if (Case.StatusId == 3)
+                return RedirectToAction(nameof(RejectedCases));
+
+            return RedirectToAction(nameof(PendingCases));
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
@@ -269,15 +287,12 @@ namespace GraduationProject.MvcControllers
 
             _context.Cases.Remove(Case);
             await _context.SaveChangesAsync();
-            _toastNotification.AddSuccessToastMessage("Case Deleted Successfully");
-            return RedirectToAction(nameof(Index));
+            _toastNotification.AddSuccessToastMessage($"{Case.Name} information Deleted Successfully");
+            return RedirectToAction(nameof(PendingCases));
         }
-
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(int id, string name)
         {
-            var acceptStatus = _context.Status.FirstOrDefaultAsync(m => m.Name.ToLower() == Status.Accepted);
-            var rejectStatus = _context.Status.FirstOrDefaultAsync(m => m.Name.ToLower() == Status.Rejected);
             if (id <= 0)
                 return BadRequest();
 
@@ -298,7 +313,13 @@ namespace GraduationProject.MvcControllers
                 _toastNotification.AddSuccessToastMessage($"{Case.Name} a Status has been changed to {Status.Rejected} successfully");
             }
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (Case.StatusId == 2)
+            {
+                return RedirectToAction(nameof(AcceptedCases));
+            }
+
+            return RedirectToAction(nameof(RejectedCases));
+
         }
     }
 }
