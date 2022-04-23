@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using GraduationProject.Models;
 using GraduationProject.Models.CaseProperties;
 using GraduationProject.Models.Location;
 using GraduationProject.Models.Shared;
@@ -43,6 +44,9 @@ namespace GraduationProject.ViewModels
 
 		public string Title { get; set; }
 
+		public IEnumerable<Period> Period { get; set; }
+		public byte PeriodId { get; set; }
+
 		[Required, MaxLength(4000)]
 		public string Story { get; set; }
 
@@ -57,6 +61,12 @@ namespace GraduationProject.ViewModels
 
 		public IEnumerable<SocialStatus> SocialStatus { get; set; }
 		public byte SocialStatusId { get; set; }
+
+		public IEnumerable<Relationship> Relationship { get; set; }
+		public byte RelationshipId { get; set; }
+
+		public IEnumerable<Mediator> Mediator { get; set; }
+		public int MediatorId { get; set; }
 
 		public IEnumerable<City> cities { get; set; }
 		public int CityId { get; set; }

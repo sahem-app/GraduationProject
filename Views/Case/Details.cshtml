@@ -27,8 +27,13 @@
         <button type="button" asp-action="ChangeStatus" data-bs-toggle="modal" data-bs-target="#Modal@(Model.Id)" class="btn btn-outline-primary">
             Change Status
         </button>
-
-        <!--  new-->
+        <a type="button" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">
+            Edit
+        </a>
+        @*<button type="button" asp-action="Delete" data-bs-toggle="modal" data-bs-target="#Modal@(Model.Id)" class="btn btn-outline-warning">
+            Delete
+        </button>*@
+        <!--  change status modal-->
         <div class="modal fade" id="Modal@(Model.Id)">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -51,6 +56,28 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+         @*<!--Delete modal-->
+        <div class="modal fade" id="Modal@(Model.Id)">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Remove Case</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Do you want Delete @Model.Name
+                    </div>
+                    <div class="modal-footer">
+                        <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                            <button class="btn btn-danger">Deleted</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>*@
         </div>
     </div>
 </div>
