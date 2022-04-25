@@ -1,4 +1,7 @@
-﻿using GraduationProject.Models.CaseProperties;
+﻿using System;
+using System.Linq;
+using GraduationProject.Enums;
+using GraduationProject.Models.CaseProperties;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,12 +11,12 @@ namespace GraduationProject.Data.EntitiesConfigurations
 	{
 		public void Configure(EntityTypeBuilder<Relationship> builder)
 		{
-			var data = new[]
-			{
-				new Relationship { Id = 1, Name = "Self"},
-				new Relationship { Id = 2, Name = "Family"},
-				new Relationship { Id = 3, Name = "Neighbor"}
-			};
+			var data = Enum.GetValues<RelationshipType>()
+				.Select(e => new Relationship
+				{
+					Id = (byte)e,
+					Name = e.ToString()
+				});
 
 			builder.HasData(data);
 		}

@@ -44,9 +44,6 @@ namespace GraduationProject.ViewModels
 
 		public string Title { get; set; }
 
-		public IEnumerable<Period> Period { get; set; }
-		public byte PeriodId { get; set; }
-
 		[Required, MaxLength(4000)]
 		public string Story { get; set; }
 
@@ -62,20 +59,23 @@ namespace GraduationProject.ViewModels
 		public IEnumerable<SocialStatus> SocialStatus { get; set; }
 		public byte SocialStatusId { get; set; }
 
-		public IEnumerable<Relationship> Relationship { get; set; }
-		public byte RelationshipId { get; set; }
-
-		public IEnumerable<Mediator> Mediator { get; set; }
-		public int MediatorId { get; set; }
-
 		public IEnumerable<City> cities { get; set; }
 		public int CityId { get; set; }
+
+		public IEnumerable<GeoLocation> GeoLocation { get; set; }
+		public int GeoLocationId { get; set; }
+
+		public IEnumerable<Mediator> Mediators { get; set; }
+		public int MediatorId { get; set; }
+
+		public IEnumerable<Relationship> Relationships { get; set; }
+		public int RelationshipId { get; set; }
 
 		public IEnumerable<Region> Region { get; set; }
 		public int RegionId { get; set; }
 
-		public IEnumerable<GeoLocation> GeoLocation { get; set; }
-		public int GeoLocationId { get; set; }
+		public IEnumerable<Period> Periods { get; set; }
+		public int PeriodId { get; set; }
 
 		public IEnumerable<Status> Status { get; set; }
 		public byte StatusId { get; set; }

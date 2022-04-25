@@ -1,269 +1,224 @@
-﻿using GraduationProject.Data;
-using GraduationProject.Models;
-using GraduationProject.Utilities.StaticStrings;
-using GraduationProject.ViewModels;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using NToastNotify;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using GraduationProject.Data;
+using GraduationProject.Enums;
+using GraduationProject.Models;
+using GraduationProject.Models.Shared;
+using GraduationProject.Utilities.StaticStrings;
+using GraduationProject.ViewModels.Mediators;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using NToastNotify;
 
-namespace GraduationProjectMVC.Controllers
+namespace GraduationProject.MvcControllers
 {
-    public class MediatorController : Controller
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly IToastNotification _toast;
+	[Authorize(Roles = Roles.Admin, AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+	public class MediatorController : Controller
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly IToastNotification _toast;
 
-        public MediatorController(ApplicationDbContext context, IToastNotification toastNotification)
-        {
-            _context = context;
-            _toast = toastNotification;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetRegion(int id)
-        {
-            var regions = await _context.Regions.AsNoTracking().Where(m => m.CityId == id).ToArrayAsync();
-            return Json(new SelectList(regions, "Id", "Name"));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> RejectedMediators()
-        {
-            return View(await _context.Mediators.AsNoTracking()
-                .Where(m => m.Status.Name == Status.Rejected)
-                .ToArrayAsync());
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> AcceptedMediators()
-        {
-			return View(await _context.Mediators.AsNoTracking()
-				.Where(m => m.Status.Name == Status.Accepted)
-				.ToArrayAsync());
-        }
-
-		[HttpGet]
-		public async Task<IActionResult> PendingMediators()
+		public MediatorController(ApplicationDbContext context, IToastNotification toastNotification)
 		{
-			return View(await _context.Mediators.AsNoTracking()
-				.Where(m => m.Status.Name == Status.Submitted)
-				.ToArrayAsync());
+			_context = context;
+			_toast = toastNotification;
 		}
-		
+
 		[HttpGet]
-        public async Task<IActionResult> Create()
-        {
-			var mediatorViewModel = new MediatorVM
+		public async Task<IActionResult> Index(StatusType status)
+		{
+			if (!Enum.GetValues<StatusType>().Contains(status))
+				status = StatusType.Accepted;
+
+			return View(await _context.Mediators.AsNoTracking()
+							.Where(m => m.StatusId == (byte)status)
+							.Select(m => new MediatorVM(m))
+							.ToArrayAsync());
+		}
+
+		[HttpGet]
+		public IActionResult Create()
+		{
+			return View(new CreateMediatorVM
 			{
-				Cities = await _context.Cities.AsNoTracking().ToArrayAsync(),
-				SocialStatus = await _context.SocialStatus.AsNoTracking().ToArrayAsync(),
-				Status = await _context.Status.AsNoTracking().ToArrayAsync(),
-				Genders = await _context.Genders.AsNoTracking().ToArrayAsync(),
-				Regions = await _context.Regions.AsNoTracking().ToArrayAsync()
-			};
-            return View(mediatorViewModel);
-        }
+				SocialStatus = Enum.GetValues<SocialStatusType>().Select(e => new SocialStatus { Id = (byte)e, Name = e.ToString() }),
+				Genders = Enum.GetValues<GenderType>().Select(e => new Gender { Id = (byte)e, Name = e.ToString() }),
+			});
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MediatorVM model)
-        {
-            model.Genders = await _context.Genders.AsNoTracking().ToArrayAsync();
-            model.SocialStatus = await _context.SocialStatus.AsNoTracking().ToArrayAsync();
-            model.Regions = await _context.Regions.AsNoTracking().ToArrayAsync();
-            model.Status = await _context.Status.AsNoTracking().ToArrayAsync();
-            model.Cities = await _context.Cities.AsNoTracking().ToArrayAsync();
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(CreateMediatorVM model)
+		{
+			model.Genders = Enum.GetValues<GenderType>().Select(e => new Gender { Id = (byte)e, Name = e.ToString() });
+			model.SocialStatus = Enum.GetValues<SocialStatusType>().Select(e => new SocialStatus { Id = (byte)e, Name = e.ToString() });
+			if (!ModelState.IsValid)
+				return View(model);
 
-            if (!ModelState.IsValid)
-                return View(model);
+			if (await _context.Mediators.AnyAsync(m => m.NationalId == model.NationalId))
+			{
+				ModelState.AddModelError("", "Mediator with the same national ID already exists");
+				return View(model);
+			}
 
-            var image1 = Request.Form.Files[0];
-            var image2 = Request.Form.Files[1];
-            var allowedExtention = new List<String> { ".png", ".jpg", ".jpeg", ".jfif" };
-            if (!allowedExtention.Contains(Path.GetExtension(image1.FileName.ToLower())) &&
-                !allowedExtention.Contains(Path.GetExtension(image2.FileName.ToLower())))
-            {
-                ModelState.AddModelError(string.Empty, "only .jpg and .png and .jfif images are allowed");
-                return View(model);
-            }
-            //check image size
-            if (image1.Length > 1024 * 1024 && image2.Length > 1024 * 1024) // 1 MB
-            {
-                ModelState.AddModelError(string.Empty, "image cannot be more than 1MB");
-                return View(model);
-            }
+			if (await _context.Mediators.AnyAsync(m => m.PhoneNumber == model.PhoneNumber))
+			{
+				ModelState.AddModelError("", "Mediator with the same phone number already exists");
+				return View(model);
+			}
 
-            using var datastream1 = new MemoryStream();
-            await image1.CopyToAsync(datastream1);
-            using var datastream2 = new MemoryStream();
-            await image2.CopyToAsync(datastream2);
+			await _context.Mediators.AddAsync(model.ToMediator());
+			await _context.SaveChangesAsync();
+			_toast.AddSuccessToastMessage("Mediator created successfully");
+			return RedirectToAction(nameof(Index));
+		}
 
-            var Mediator = new Mediator
-            {
-                Name = model.Mediator.Name,
-                PhoneNumber = model.Mediator.PhoneNumber,
-                Address = model.Mediator.Address,
-                NationalId = model.Mediator.NationalId,
-                BirthDate = model.Mediator.BirthDate,
-                Job = model.Mediator.Job,
-                SocialStatusId = model.Mediator.SocialStatusId,
-                Bio = model.Mediator.Bio,
-                StatusId = model.Mediator.StatusId,
-                NationalIdImage = datastream1.ToArray(),
-                ProfileImage = datastream2.ToArray(),
-                GenderId = model.Mediator.GenderId,
-                RegionId = model.Mediator.RegionId
+		[HttpGet]
+		public async Task<IActionResult> Edit(uint id)
+		{
+			if (!await _context.Mediators.AnyAsync(m => m.Id == id && m.StatusId == (byte)StatusType.Accepted))
+				return NotFound();
 
-            };
-            await _context.Mediators.AddAsync(Mediator);
-            await _context.SaveChangesAsync();
-            _toast.AddSuccessToastMessage("Mediator Created SuccessFully");
-            return RedirectToAction(nameof(Index));
-        }
+			var genders = Enum.GetValues<GenderType>().Select(g => new Gender { Id = (byte)g, Name = g.ToString() }).ToArray();
+			var socialStatus = Enum.GetValues<SocialStatusType>().Select(ss => new SocialStatus { Id = (byte)ss, Name = ss.ToString() }).ToArray();
+			var mediator = await _context.Mediators
+				.Select(m => new EditMediatorVM
+				{
+					Id = m.Id,
+					Name = m.Name,
+					PhoneNumber = m.PhoneNumber,
+					NationalId = m.NationalId,
+					Job = m.Job,
+					Address = m.Address,
+					Bio = m.Bio,
+					BirthDate = m.BirthDate,
+					GeoLocation = m.GeoLocation,
+					ProfilePicture = m.ProfileImage,
+					NationalIdImage = m.NationalIdImage,
+					GenderId = m.GenderId,
+					SocialStatusId = m.SocialStatusId,
+					RegionId = m.RegionId,
+					Genders = genders,
+					SocialStatus = socialStatus,
+				})
+				.FirstOrDefaultAsync(m => m.Id == id);
 
+			if (mediator.RegionId != null)
+				mediator.Region = await _context.Regions.AsNoTrackingWithIdentityResolution()
+					.Include(r => r.City)
+					.FirstAsync(r => r.Id == mediator.RegionId);
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            if (id <= 0)
-                return BadRequest();
+			mediator.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
+			return View(mediator);
 
-            var mediator = await _context.Mediators.FindAsync(id);
-            if (mediator == null)
-                return NotFound();
+		}
 
-            var MediatorVM = new MediatorVM()
-            {
-                Mediator = mediator,
-                Genders = await _context.Genders.AsNoTracking().ToArrayAsync(),
-                SocialStatus = await _context.SocialStatus.AsNoTracking().ToArrayAsync(),
-                Regions = await _context.Regions.AsNoTracking().ToArrayAsync(),
-                Status = await _context.Status.AsNoTracking().ToArrayAsync(),
-                Cities = await _context.Cities.AsNoTracking().ToArrayAsync()
-            };
-            return View(MediatorVM);
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(EditMediatorVM model)
+		{
+			var mediator = await _context.Mediators.FirstOrDefaultAsync(m => m.Id == model.Id && m.StatusId == (byte)StatusType.Accepted);
+			if (mediator == null)
+				return NotFound();
 
-        }
+			if (!ModelState.IsValid)
+			{
+				model.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
+				model.Genders = Enum.GetValues<GenderType>().Select(g => new Gender { Id = (byte)g, Name = g.ToString() }).ToArray();
+				model.SocialStatus = Enum.GetValues<SocialStatusType>().Select(ss => new SocialStatus { Id = (byte)ss, Name = ss.ToString() }).ToArray();
+				model.ProfilePicture = mediator.ProfileImage;
+				model.NationalIdImage = mediator.NationalIdImage;
+				if (model.RegionId != null)
+					model.Region = await _context.Regions.AsNoTrackingWithIdentityResolution()
+						.Include(r => r.City)
+						.FirstAsync(r => r.Id == model.RegionId);
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(MediatorVM model)
-        {
-            model.Genders = await _context.Genders.AsNoTracking().ToArrayAsync();
-            model.SocialStatus = await _context.SocialStatus.AsNoTracking().ToArrayAsync();
-            model.Regions = await _context.Regions.AsNoTracking().ToArrayAsync();
-            model.Status = await _context.Status.AsNoTracking().ToArrayAsync();
-            model.Cities = await _context.Cities.AsNoTracking().ToArrayAsync();
+				return View(model);
+			}
 
-            if (!ModelState.IsValid)
-            {
+			model.UpdateMediator(mediator);
+			await _context.SaveChangesAsync();
+			_toast.AddSuccessToastMessage("Mediator updated successfully");
+			return RedirectToAction(nameof(Index));
+		}
 
-                return View(model);
-            }
-            var Mediator = await _context.Mediators.FindAsync(model.Mediator.Id);
-            if (Mediator == null)
-                return NotFound();
+		[HttpGet]
+		public async Task<IActionResult> Details(uint id)
+		{
+			var mediator = await _context.Mediators
+				.Where(m => m.Id == id)
+				.Select(m => new MediatorDetailsVM
+				{
+					Id = m.Id,
+					Name = m.Name,
+					PhoneNumber = m.PhoneNumber,
+					NationalId = m.NationalId,
+					BirthDate = m.BirthDate,
+					Bio = m.Bio,
+					Job = m.Job,
+					Address = m.Address,
+					ProfileImage = m.ProfileImage,
+					NationalIdImage = m.NationalIdImage,
+					DateRegistered = m.DateRegistered,
+					GeoLocation = m.GeoLocation,
+					Governorate = m.Region.City.Governorate.Name,
+					City = m.Region.City.Name,
+					Region = m.Region.Name,
+					Gender = m.Gender.Name,
+					SocialStatus = m.SocialStatus.Name,
+					Status = (StatusType)m.StatusId,
+					ReviewsAboutMe = m.ReviewsAboutMe.Select(r => new MediatorReviewVM
+					{
+						Name = r.Reviewer.Name,
+						IsWorthy = r.IsWorthy,
+						ReviewDate = r.DateReviewed,
+						Description = r.Description,
+						Image = r.Reviewer.ProfileImage
+					}).ToArray()
+				})
+				.FirstOrDefaultAsync();
 
-            var image1 = Request.Form.Files[0];
-            var image2 = Request.Form.Files[1];
-            var allowedExtention = new List<String> { ".png", ".jpg", ".jpeg", ".jfif" };
-            if (!allowedExtention.Contains(Path.GetExtension(image1.FileName.ToLower())) &&
-                !allowedExtention.Contains(Path.GetExtension(image2.FileName.ToLower())))
-            {
-                ModelState.AddModelError(string.Empty, "only .jpg and .png and .jfif images are allowed");
-                return View(model);
-            }
-            //check image size
-            if (image1.Length > 1024 * 1024 && image2.Length > 1024 * 1024) // 1 MB
-            {
-                ModelState.AddModelError(string.Empty, "image cannot be more than 1MB");
-                return View(model);
-            }
+			return mediator == null ? NotFound() : View(mediator);
+		}
 
-            using var datastream1 = new MemoryStream();
-            await image1.CopyToAsync(datastream1);
-            using var datastream2 = new MemoryStream();
-            await image2.CopyToAsync(datastream2);
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Accept(uint id)
+		{
+			var IsExists = await _context.Mediators
+				.AnyAsync(m => m.Id == id && m.StatusId == (byte)StatusType.Submitted);
 
-            Mediator.Name = model.Mediator.Name;
-            Mediator.PhoneNumber = model.Mediator.PhoneNumber;
-            Mediator.Address = model.Mediator.Address;
-            Mediator.NationalId = model.Mediator.NationalId;
-            Mediator.BirthDate = model.Mediator.BirthDate;
-            Mediator.Job = model.Mediator.Job;
-            Mediator.SocialStatusId = model.Mediator.SocialStatusId;
-            Mediator.Bio = model.Mediator.Bio;
-            Mediator.StatusId = model.Mediator.StatusId;
-            Mediator.NationalIdImage = datastream1.ToArray();
-            Mediator.ProfileImage = datastream2.ToArray();
-            Mediator.GenderId = model.Mediator.GenderId;
-            Mediator.RegionId = model.Mediator.RegionId;
+			if (!IsExists)
+				return NotFound();
 
-            await _context.SaveChangesAsync();
-            _toast.AddSuccessToastMessage("Mediator updated SuccessFully");
-            return RedirectToAction(nameof(Index));
-        }
+			var mediator = new Mediator { Id = (int)id };
+			_context.Mediators.Attach(mediator);
+			mediator.StatusId = (byte)StatusType.Accepted;
+			await _context.SaveChangesAsync();
+			_toast.AddSuccessToastMessage("Mediator accepted");
+			return RedirectToAction(nameof(Index));
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(uint id)
-        {
-            var Mediator = await _context.Mediators.FindAsync(id);
-            if (Mediator == null)
-                return NotFound();
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Reject(uint id, string decription)
+		{
+			var IsExists = await _context.Mediators
+				.AnyAsync(m => m.Id == id && m.StatusId == (byte)StatusType.Submitted);
 
-            _context.Mediators.Remove(Mediator);
-            await _context.SaveChangesAsync();
-            _toast.AddSuccessToastMessage("Mediator Deleted Successfully");
-            return RedirectToAction(nameof(Index));
-        }
+			if (!IsExists)
+				return NotFound();
 
-        [HttpGet]
-        public async Task<IActionResult> Details(uint id)
-        {
-            var mediator = await _context.Mediators.AsNoTracking()
-                .Include(m => m.Status)
-                .Include(m => m.SocialStatus)
-                .Include(m => m.Region)
-                .Include(m => m.Gender)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return mediator == null ? NotFound() : View(mediator);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ChangeStatus(int id, string name)
-        {
-            if (id <= 0)
-                return BadRequest();
-
-            var mediator = await _context.Mediators.Include(m => m.Status)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (mediator == null)
-                return NotFound();
-
-            if (Status.Accepted == name.ToLower())
-            {
-                mediator.StatusId = 2;
-                _toast.AddSuccessToastMessage($"{mediator.Name} a Status has been changed to {Status.Accepted} successfully");
-            }
-            else
-            {
-                mediator.StatusId = 3;
-                _toast.AddSuccessToastMessage($"{mediator.Name} a Status has been changed to {Status.Rejected} successfully");
-            }
-            await _context.SaveChangesAsync();
-
-            if (mediator.StatusId == 2)
-                return RedirectToAction(nameof(AcceptedMediators));
-
-            return RedirectToAction(nameof(RejectedMediators));
-        }
-    }
+			Console.WriteLine(decription);
+			var mediator = new Mediator { Id = (int)id };
+			_context.Mediators.Attach(mediator);
+			mediator.StatusId = (byte)StatusType.Rejected;
+			await _context.SaveChangesAsync();
+			_toast.AddSuccessToastMessage("Mediator rejected");
+			return RedirectToAction(nameof(Index));
+		}
+	}
 }

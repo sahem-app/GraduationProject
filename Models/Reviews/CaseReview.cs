@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace GraduationProject.Models.Reviews
 {
@@ -14,6 +17,9 @@ namespace GraduationProject.Models.Reviews
 
 		[Required, MaxLength(4000)]
 		public string Description { get; set; }
+
+		[Column(TypeName = "date")]
+		public DateTime DateReviewed { get; private set; } = DateTime.Now;
 
 		public CaseReview()
 		{

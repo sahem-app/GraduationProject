@@ -28,7 +28,6 @@
 				@item.Name
 			</td>
 			<td class="text-end gap-1">
-				<a asp-action="details" asp-route-id="@item.Id" class="btn btn-outline-success"><i class="fa-solid fa-circle-info"></i> Details</a>
 				<a asp-action="edit" asp-route-id="@item.Id" class="btn btn-outline-secondary"><i class="fa-solid fa-pen"></i> Edit</a>
 				<button data-bs-toggle="modal" data-bs-target="#Modal" class="btn btn-outline-danger"
 					onclick="document.getElementById('deleteform').action = '/governorate/delete/@item.Id'">

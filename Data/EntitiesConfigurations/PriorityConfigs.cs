@@ -1,4 +1,7 @@
-﻿using GraduationProject.Models.CaseProperties;
+﻿using System;
+using System.Linq;
+using GraduationProject.Enums;
+using GraduationProject.Models.CaseProperties;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,12 +11,12 @@ namespace GraduationProject.Data.EntitiesConfigurations
 	{
 		public void Configure(EntityTypeBuilder<Priority> builder)
 		{
-			var data = new[]
-			{
-				new Priority { Id = 1, Name = "Urgent"},
-				new Priority { Id = 2, Name = "High"},
-				new Priority { Id = 3, Name = "Normal"}
-			};
+			var data = Enum.GetValues<PriorityType>()
+				.Select(e => new Priority
+				{
+					Id = (byte)e,
+					Name = e.ToString()
+				});
 
 			builder.HasData(data);
 		}

@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
-using System.Threading.Tasks;
 using GraduationProject.Models.CaseProperties;
 using GraduationProject.Models.Location;
+using GraduationProject.Models.Reviews;
 using GraduationProject.Models.Shared;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Image = GraduationProject.Models.CaseProperties.Image;
 
 namespace GraduationProject.Models
 {
@@ -59,7 +56,7 @@ namespace GraduationProject.Models
 		public int MediatorId { get; set; }
 
 		public Category Category { get; set; }
-		public int CategoryId { get; set; }
+		public byte CategoryId { get; set; }
 
 		public Relationship Relationship { get; set; }
 		public byte RelationshipId { get; set; }
@@ -82,24 +79,7 @@ namespace GraduationProject.Models
 		public Status Status { get; set; }
 		public byte StatusId { get; set; }
 
+		public ICollection<CaseReview> CaseReviews { get; set; }
 		public ICollection<Image> Images { get; set; }
-
-		public async Task SetNationalIdImageAsync(IFormFile nationalIdImage)
-		{
-			using (var stream = new MemoryStream())
-			{
-				await nationalIdImage.CopyToAsync(stream);
-				NationalIdImage = stream.ToArray();
-			}
-		}
-
-		public void AddOptionalImages(IEnumerable<IFormFile> images)
-		{
-			if (Images == null)
-				Images = new List<Image>();
-
-			foreach (var image in images)
-				Images.Add(new Image(image));
-		}
 	}
 }

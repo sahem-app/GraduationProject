@@ -28,20 +28,20 @@ namespace GraduationProject.MvcControllers
 			if (!ModelState.IsValid)
 				return View();
 
-			var claims = new []
+			var claims = new[]
 			{
 				new Claim(ClaimTypes.NameIdentifier, "1"),
 				new Claim(ClaimTypes.Name, "Ahmed"),
 				new Claim(ClaimTypes.Role, Roles.Admin),
 			};
 
-			ClaimsPrincipal principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
-			AuthenticationProperties properties = new AuthenticationProperties
+			var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
+			var properties = new AuthenticationProperties
 			{
 				IsPersistent = model.RememberMe,
 				ExpiresUtc = DateTimeOffset.Now.AddDays(14)
 			};
-			
+
 			await HttpContext.SignInAsync(principal, properties);
 			if (string.IsNullOrEmpty(model.ReturnUrl))
 				return RedirectToAction(nameof(HomeController.Index), "Home");

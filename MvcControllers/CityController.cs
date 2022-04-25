@@ -1,115 +1,124 @@
-﻿using GraduationProject.Data;
+﻿using System.Threading.Tasks;
+using GraduationProject.Data;
 using GraduationProject.Models.Location;
+using GraduationProject.Utilities.StaticStrings;
 using GraduationProject.ViewModels;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
-using System.Threading.Tasks;
 
-namespace GraduationProjectMVC.Controllers
+namespace GraduationProject.MvcControllers
 {
-    public class CityController : Controller
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly IToastNotification _toast;
+	[Authorize(Roles = Roles.Admin, AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+	public class CityController : Controller
+	{
+		private readonly ApplicationDbContext _context;
+		private readonly IToastNotification _toast;
 
-        public CityController(ApplicationDbContext context, IToastNotification toastNotification)
-        {
-            _context = context;
-            _toast = toastNotification;
-        }
+		public CityController(ApplicationDbContext context, IToastNotification toastNotification)
+		{
+			_context = context;
+			_toast = toastNotification;
+		}
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var city = await _context.Cities.AsNoTracking().Include(m => m.Governorate).ToArrayAsync();
-            return View(city);
-        }
+		[HttpGet]
+		public async Task<IActionResult> Index()
+		{
+			return View(await _context.Cities.AsNoTrackingWithIdentityResolution().Include(c => c.Governorate).ToArrayAsync());
+		}
 
-        [HttpGet]
-        public async Task<IActionResult> Create()
-        {
+		[HttpGet]
+		public async Task<IActionResult> Create()
+		{
 			return View(new CityVM
 			{
 				Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync()
 			});
-        }
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CityVM model)
-        {
-            if (!ModelState.IsValid)
-                return View();
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(CityVM model)
+		{
+			if (!ModelState.IsValid)
+			{
+				model.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
+				return View(model);
+			}
 
-            var city = new City
-            {
-                GovernorateId = model.GovernorateId,
-                Name = model.Name,
-            };
-            await _context.Cities.AddAsync(city);
-            await _context.SaveChangesAsync();
-            _toast.AddSuccessToastMessage($"{model.Name} city added successfully");
-            return RedirectToAction(nameof(Index));
-        }
+			model.Name = model.Name.Trim();
+			if (await _context.Cities.AnyAsync(c => c.Name == model.Name && c.GovernorateId == model.GovernorateId))
+			{
+				model.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
+				ModelState.AddModelError("", $"{model.Name} city already exists in this governorate");
+				return View(model);
+			}
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(uint id)
-        {
-            var city = await _context.Cities.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
-            if (city == null)
-                return NotFound();
+			await _context.Cities.AddAsync(new City(model.Name, model.GovernorateId));
+			await _context.SaveChangesAsync();
+			_toast.AddSuccessToastMessage("City added successfully");
+			return RedirectToAction(nameof(Index));
+		}
 
-            var cityVM = new CityVM
-            {
-                Id = city.Id,
-                Name = city.Name,
-                GovernorateId = city.GovernorateId,
-                Governorates = await _context.Governorates.ToArrayAsync()
-            };
-            return View(cityVM);
-        }
+		[HttpGet]
+		public async Task<IActionResult> Edit(uint id)
+		{
+			var city = await _context.Cities.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+			if (city == null)
+				return NotFound();
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CityVM model)
-        {
-            if (!ModelState.IsValid)
-                return View();
+			var cityVM = new CityVM
+			{
+				Id = city.Id,
+				Name = city.Name,
+				GovernorateId = city.GovernorateId,
+				Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync()
+			};
+			return View(cityVM);
+		}
 
-            if (model.Id <= 0)
-                return BadRequest();
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(CityVM model)
+		{
+			if (!ModelState.IsValid)
+			{
+				model.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
+				return View(model);
+			}
 
-            var city = await _context.Cities.FirstOrDefaultAsync(m => m.Id == model.Id);
-            if (city == null)
-                return NotFound();
+			model.Name = model.Name.Trim();
+			if (await _context.Cities.AnyAsync(c => c.Name == model.Name && c.GovernorateId == model.GovernorateId))
+			{
+				model.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
+				ModelState.AddModelError("", $"{model.Name} city already exists in this governorate");
+				return View(model);
+			}
 
-            city.Name = model.Name;
-            city.GovernorateId = model.GovernorateId;
-            await _context.SaveChangesAsync();
-            _toast.AddSuccessToastMessage($"{model.Name} city updated Successfully");
-            return RedirectToAction(nameof(Index));
-        }
+			var city = await _context.Cities.FirstOrDefaultAsync(c => c.Id == model.Id);
+			if (city == null)
+				return NotFound();
 
-        [HttpGet]
-        public async Task<IActionResult> Details(uint id)
-        {
-            var city = await _context.Cities.AsNoTracking().Include(m => m.Governorate).FirstOrDefaultAsync(m => m.Id == id);
-            return city == null ? NotFound() : View(city);
-        }
+			city.Name = model.Name;
+			city.GovernorateId = model.GovernorateId;
+			await _context.SaveChangesAsync();
+			_toast.AddSuccessToastMessage("City updated successfully");
+			return RedirectToAction(nameof(Index));
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(uint id)
-        {
-            var city = await _context.Cities.FirstOrDefaultAsync(m => m.Id == id);
-            if (city == null)
-                return NotFound();
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Delete(uint id)
+		{
+			if (!await _context.Cities.AnyAsync(c => c.Id == id))
+				return NotFound();
 
-            _context.Cities.Remove(city);
-            await _context.SaveChangesAsync();
-            _toast.AddSuccessToastMessage($"{city.Name} city Deleted Successfully");
-            return RedirectToAction(nameof(Index));
-        }
-    }
+			_context.Cities.Remove(new City(id));
+			await _context.SaveChangesAsync();
+			_toast.AddSuccessToastMessage("City deleted successfully");
+			return RedirectToAction(nameof(Index));
+		}
+	}
 }

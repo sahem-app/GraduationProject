@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using GraduationProject.Data;
 using GraduationProject.Models.CaseProperties;
 using GraduationProject.Utilities.StaticStrings;
@@ -44,17 +43,14 @@ namespace GraduationProject.MvcControllers
 
 			await _context.Categories.AddAsync(model);
 			await _context.SaveChangesAsync();
-			_toast.AddSuccessToastMessage($"{model.Name} category was added successfully");
+			_toast.AddSuccessToastMessage($"{model.Name} category added successfully");
 			return RedirectToAction(nameof(Index));
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> Edit(uint id)
 		{
-			var category = await _context.Categories
-				.AsNoTracking()
-				.FirstOrDefaultAsync(m => m.Id == id);
-
+			var category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
 			return category == null ? NotFound() : View(category);
 		}
 
@@ -71,7 +67,7 @@ namespace GraduationProject.MvcControllers
 
 			category.Name = model.Name;
 			await _context.SaveChangesAsync();
-			_toast.AddSuccessToastMessage($"{model.Name} category was updated successfully");
+			_toast.AddSuccessToastMessage($"{model.Name} category updated successfully");
 			return RedirectToAction(nameof(Index));
 		}
 
@@ -85,7 +81,7 @@ namespace GraduationProject.MvcControllers
 
 			_context.Categories.Remove(category);
 			await _context.SaveChangesAsync();
-			_toast.AddSuccessToastMessage($"{category.Name} category was deleted successfully");
+			_toast.AddSuccessToastMessage($"{category.Name} category deleted successfully");
 			return RedirectToAction(nameof(Index));
 		}
 	}

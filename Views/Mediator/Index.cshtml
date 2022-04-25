@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Mediator>
+﻿@model IEnumerable<MediatorVM>
 
 @{
 	ViewData["Title"] = "Mediators";
@@ -32,21 +32,20 @@
 			{
 				<tr class="align-middle">
 					<td class="d-flex align-items-center">
-						@if (item.ProfileImage != null)
-						{
-							<img width="45" height="45" class="rounded-3 me-3" src="data:image/png;base64,@Convert.ToBase64String(item.ProfileImage)">
-						}
+						<img width="45" height="45" class="rounded-3 me-3" src="data:image/png;base64,@Convert.ToBase64String(item.Image)">
 						<span>@item.Name</span>
 					</td>
 					<td>@item.PhoneNumber</td>
 					<td>@item.NationalId</td>
 					<td class="text-end gap-1">
 						<a asp-action="details" asp-route-id="@item.Id" class="btn btn-outline-success"><i class="fa-solid fa-circle-info"></i> Details</a>
-						<a asp-action="edit" asp-route-id="@item.Id" class="btn btn-outline-secondary"><i class="fa-solid fa-pen"></i> Edit</a>
-						<button type="button" asp-action="delete" data-bs-toggle="modal" data-bs-target="#Modal" class="btn btn-outline-danger"
-							onclick="document.getElementById('deleteform').action = '/mediator/delete/@item.Id'">
-							<i class="fa-solid fa-trash me-1"></i>Delete
-						</button>
+						@if (item.Status == StatusType.Accepted)
+						{
+							<a asp-action="edit" asp-route-id="@item.Id" class="btn btn-outline-secondary"><i class="fa-solid fa-pen"></i> Edit</a>
+							<button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#Modal" onclick="document.getElementById('deleteform').action = '/mediator/lock/@item.Id'">
+								<i class="fa-solid fa-lock"></i> Lock
+							</button>
+						}
 					</td>
 				</tr>
 			}
@@ -54,6 +53,7 @@
 	</table>
 	<button class="btn btn-outline-light">Details</button>
 </div>
+
 <div class="modal fade" id="Modal">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -63,11 +63,11 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				Are you sure you want delete this mediator?
+				Are you sure you want lock this mediator?
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-				<form id="deleteform" asp-action="delete" asp-route-id="" method="post">
+				<form id="deleteform" asp-action="lock" asp-route-id="" method="post">
 					<button class="btn btn-danger">Yes</button>
 				</form>
 			</div>

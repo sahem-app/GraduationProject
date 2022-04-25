@@ -1,4 +1,7 @@
-﻿using GraduationProject.Models.Shared;
+﻿using System;
+using System.Linq;
+using GraduationProject.Enums;
+using GraduationProject.Models.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,10 +11,12 @@ namespace GraduationProject.Data.EntitiesConfigurations
 	{
 		public void Configure(EntityTypeBuilder<Locale> builder)
 		{
-			var data = new[]
-			{
-				new Locale { Id = 1, Name = "en"}
-			};
+			var data = Enum.GetValues<LocaleType>()
+				.Select(e => new Locale
+				{
+					Id = (byte)e,
+					Name = e.ToString()
+				});
 
 			builder.HasData(data);
 		}
