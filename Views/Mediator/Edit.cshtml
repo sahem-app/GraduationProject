@@ -1,141 +1,178 @@
-﻿@model MediatorVM
+﻿@model EditMediatorVM
 
 @{
-    ViewData["Title"] = "Edit";
+	ViewData["Title"] = "Edit Mediator";
 }
 
-<h1>Edit</h1>
-
+<h1>Edit Mediator</h1>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Mediator.Id" />
-            <div class="form-group">
-                <label asp-for="Mediator.Name" class="control-label"></label>
-                <input asp-for="Mediator.Name" class="form-control" />
-                <span asp-validation-for="Mediator.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mediator.PhoneNumber" class="control-label"></label>
-                <input asp-for="Mediator.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Mediator.PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mediator.NationalId" class="control-label"></label>
-                <input asp-for="Mediator.NationalId" class="form-control" />
-                <span asp-validation-for="Mediator.NationalId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mediator.Job" class="control-label"></label>
-                <input asp-for="Mediator.Job" class="form-control" />
-                <span asp-validation-for="Mediator.Job" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mediator.Address" class="control-label"></label>
-                <input asp-for="Mediator.Address" class="form-control" />
-                <span asp-validation-for="Mediator.Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mediator.Bio" class="control-label"></label>
-                <input asp-for="Mediator.Bio" class="form-control" />
-                <span asp-validation-for="Mediator.Bio" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Mediator.BirthDate" class="control-label" for="start"></label>
-                <input asp-for="Mediator.BirthDate" type="date" id="start" name="BirthDate"
-                       min="1940-01-01" max="2090-1-1" class="form-control">
-                <span asp-validation-for="Mediator.BirthDate" class="text-danger"></span>
-            </div>
-
-            <div class="custom-file mb-4">
-                <input id="image1" asp-for="NationalIdImage" type="file" class="custom-file-input mt-4" id="customFile" accept="image/*">
-                <label asp-for="NationalIdImage" class="custom-file-label" for="customFile"></label>
-                <span asp-validation-for="NationalIdImage" class="text-danger"></span>
-            </div>
-            <div class="custom-file mb-4">
-                <input id="image1" asp-for="ProfileImage" type="file" class="custom-file-input mt-4" id="customFile" accept="image/*">
-                <label asp-for="ProfileImage" class="custom-file-label" for="customFile"></label>
-                <span asp-validation-for="ProfileImage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mediator.GenderId" class="control-label"></label>
-                <select asp-for="Mediator.GenderId" class="form-control" asp-items="@(new SelectList(Model.Genders,"Id","Name"))">
-                </select>
-                <span asp-validation-for="Mediator.GenderId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mediator.SocialStatusId" class="control-label"></label>
-                <select asp-for="Mediator.SocialStatusId" class="form-control" asp-items="@(new SelectList(Model.SocialStatus,"Id","Name"))">
-                </select>
-                <span asp-validation-for="Mediator.SocialStatusId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CityId" class="control-label"></label>
-                <select asp-for="CityId" id="ddlgovernorate" class="form-control" asp-items="@(new SelectList(Model.Cities,"Id","Name"))">
-                </select>
-                <span asp-validation-for="CityId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Mediator.RegionId" class="control-label"></label>
-                <select asp-for="Mediator.RegionId" id="ddlcity" class="form-control" asp-items="@(new SelectList(string.Empty,"Id","Name"))"></select>
-                <span asp-validation-for="Mediator.RegionId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mediator.StatusId" class="control-label"></label>
-                <select asp-for="Mediator.StatusId" class="form-control" asp-items="@(new SelectList(Model.Status,"Id","Name"))"></select>
-                <span asp-validation-for="Mediator.StatusId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index" class="btn btn-outline-warning">Cancel</a>
+	<div class="col-md-9 col-lg-7">
+		<img width="200" height="200" class="rounded-circle mx-auto d-block mb-4" src="data:image/png;base64,@Convert.ToBase64String(Model.ProfilePicture)">
+		<form asp-action="Edit" method="post" enctype="multipart/form-data">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="Id" />
+			<input type="hidden" asp-for="GeoLocation.Id" />
+			<div class="form-group mb-3">
+				<label asp-for="Name" class="control-label"></label>
+				<input asp-for="Name" class="form-control" />
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="PhoneNumber" class="control-label">Phone Number</label>
+				<input asp-for="PhoneNumber" class="form-control" />
+				<span asp-validation-for="PhoneNumber" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="NationalId" class="control-label">National ID</label>
+				<input asp-for="NationalId" class="form-control" />
+				<span asp-validation-for="NationalId" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="Job" class="control-label"></label>
+				<input asp-for="Job" class="form-control" />
+				<span asp-validation-for="Job" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="Address" class="control-label"></label>
+				<input asp-for="Address" class="form-control" />
+				<span asp-validation-for="Address" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="Bio" class="control-label"></label>
+				<input asp-for="Bio" class="form-control" />
+				<span asp-validation-for="Bio" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="BirthDate" class="control-label" for="start"></label>
+				<input asp-for="BirthDate" type="date" class="form-control">
+				<span asp-validation-for="BirthDate" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="GenderId" class="control-label">Gender</label>
+				<select asp-for="GenderId" class="form-select" asp-items="@(new SelectList(Model.Genders,"Id","Name"))">
+				</select>
+				<span asp-validation-for="GenderId" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="SocialStatusId" class="control-label">Social Status</label>
+				<select asp-for="SocialStatusId" class="form-select" asp-items="@(new SelectList(Model.SocialStatus,"Id","Name"))"></select>
+				<span asp-validation-for="SocialStatusId" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="Region.City.GovernorateId" class="control-label">Governorate</label>
+				<select for="Region.City.GovernorateId" id="ddlGovernorate" class="form-select" asp-items="@(new SelectList(Model.Governorates,"Id","Name", Model.Region?.City?.GovernorateId ?? 0))">
+					<option value="0"> - No Location - </option>
+				</select>
+				<span asp-validation-for="Region.City.GovernorateId" class="text-danger"></span>
+			</div>
+			<div id="ddlLocation" class=@(Model.RegionId == null ? "d-none" : "d-block")>
+				<div class="form-group mb-3">
+					<label asp-for="Region.CityId" class="control-label">City</label>
+					<select for="Region.CityId" id="ddlCity" class="form-select"></select>
+					<span asp-validation-for="Region.CityId" class="text-danger"></span>
+				</div>
+				<div class="form-group mb-3">
+					<label asp-for="RegionId" class="control-label">Region</label>
+					<select asp-for="RegionId" id="ddlRegion" class="form-select"></select>
+					<span asp-validation-for="RegionId" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="GeoLocation.Latitude" class="control-label"></label>
+				<input asp-for="GeoLocation.Latitude" class="form-control" />
+				<span asp-validation-for="GeoLocation.Latitude" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="GeoLocation.Longitude" class="control-label"></label>
+				<input asp-for="GeoLocation.Longitude" class="form-control" />
+				<span asp-validation-for="GeoLocation.Longitude" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="GeoLocation.Details" class="control-label"></label>
+				<input asp-for="GeoLocation.Details" class="form-control" />
+				<span asp-validation-for="GeoLocation.Details" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="NationalIdImage" class="control-label">National ID Image</label>
+				<img class="rounded mx-auto img-fluid d-block" src="data:image/png;base64,@Convert.ToBase64String(Model.NationalIdImage)">
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="NationalIdImageFile" class="control-label"></label>
+				<input asp-for="NationalIdImageFile" class="form-control">
+				<span asp-validation-for="NationalIdImageFile" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="ProfilePictureFile" class="control-label" for="customFile"></label>
+				<input asp-for="ProfilePictureFile" class="form-control">
+				<span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<button type="submit" value="Save" class="btn btn-primary me-3">Save </button>
+				<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+			</div>
+		</form>
+	</div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        $(document).ready(function () {
-            $('#image1').on('change', function () {
-                var selectedfile = $(this).val().split('\\').pop();
-                $(this).siblings('label').text(selectedfile);
-            });
-            $('.datepicker').datepicker();
-        });
+    @{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+<script>
+	let governoratesList = document.getElementById('ddlGovernorate');
+	let citiesList = document.getElementById('ddlCity');
+	let regionsList = document.getElementById('ddlRegion');
+	let locationDiv = document.getElementById('ddlLocation');
+	governoratesList.onchange = function ()
+		{
+			if(governoratesList.value == 0)
+			{
+				locationDiv.className = 'd-none';
+				regionsList.value = '';
+			}
+			else
+			{
+				locationDiv.className = 'd-block';
+				updateCitiesList();
+			}
+		};
 
-        /*Governorate >> City >> Region*/
-        function updatesubcategorylist() {
-            var selectcategory = document.getElementById("ddlgovernorate").value;
-            $list = $('#ddlcity');
-            $.ajax({
-                url: '/Case/GetRegion/' + selectcategory,
-                type: 'GET',
-                datatype: 'text',
-                success: function (data) {
-                    $list.html('');
-                    var items = '';
-                    for (i in data) {
-                        items += '<option value="' + data[i].value + '">' + data[i].text + '<option>';
-                    }
-                    $list.html(items);
-                }
-            });
-        }
+	citiesList.onchange = updateRegionsList;
 
-        $(document).ready(updatesubcategorylist);
+	$(document).ready(() => {
+		let cityId = null;
+		let regionId = null;
+		@if(Model.Region != null)
+		{
+			@: cityId = @Model.Region.CityId;
+			@: regionId = @Model.RegionId;
+		}
 
-        $("#ddlgovernorate").on("change", function () {
-            updatesubcategorylist();
-        })
+		if(cityId != null)
+		{
+			$.ajaxSetup({'async': false});
+			updateCitiesList();
+			citiesList.value = cityId;
+			updateRegionsList();
+			$.ajaxSetup({'async': true});
+			regionsList.value = regionId;
+		}
+	});
 
-    </script>
+	function updateCitiesList() {
+		$.getJSON('/api/cities/' + governoratesList.value, function(result) {
+			citiesList.innerHTML = '';
+			result.data.forEach(d => citiesList.append(new Option(d.name, d.id)));
+		}).done(updateRegionsList);
+	}
+
+	function updateRegionsList() {
+		$.getJSON('/api/regions/' + citiesList.value, function(result) {
+			regionsList.innerHTML = '';
+			result.data.forEach(d => regionsList.append(new Option(d.name, d.id)));
+		});
+	}
+</script>
 }

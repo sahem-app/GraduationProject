@@ -4,6 +4,7 @@ using GraduationProject.Data;
 using GraduationProject.Utilities;
 using GraduationProject.Utilities.AuthenticationConfigurations;
 using GraduationProject.Utilities.CustomApiResponses;
+using GraduationProject.Utilities.StaticStrings;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -48,7 +49,7 @@ namespace GraduationProject
 					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"]))
 				};
 			})
-			.AddCookie(options => options.LoginPath = "/Account/SignIn");
+			.AddCookie(options => options.LoginPath = "/account/signin");
 
 			services.AddControllersWithViews()
 				.AddRazorRuntimeCompilation()
@@ -70,6 +71,8 @@ namespace GraduationProject
 
 			services.AddAutoMapper(options => options.AddProfile<MapperProfile>());
 			services.AddScoped<IAuthenticationTokenGenerator, JwtGenerator>();
+
+			services.AddMemoryCache();
 		}
 
 		public void Configure(IApplicationBuilder app)
@@ -78,9 +81,13 @@ namespace GraduationProject
 			app.UseStaticFiles();
 			app.Use(async (context, next) =>
 			{
-				if (context.Request.Method == "POST")
-					HttpRequestLogger.Log(context.Request);
+				//new Task(() =>
+				//{
+				//	if (context.Request.Method == "POST" && !string.IsNullOrWhiteSpace(context.Request.ContentType))
+				//		HttpRequestLogger.Log(context.Request);
+				//}).Start();
 
+				Paths.Request = context.Request;
 				await next.Invoke();
 			});
 

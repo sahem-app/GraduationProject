@@ -19,64 +19,6 @@ namespace GraduationProject.Migrations
                 .HasAnnotation("ProductVersion", "5.0.15")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("GraduationProject.Models.Admin", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(4000)
-                        .HasColumnType("nvarchar(4000)");
-
-                    b.Property<byte>("GenderId")
-                        .HasColumnType("tinyint");
-
-                    b.Property<bool>("Locked")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(8000)
-                        .HasColumnType("varchar(8000)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("varchar(11)");
-
-                    b.Property<byte>("StatusId")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GenderId");
-
-                    b.HasIndex("StatusId");
-
-                    b.ToTable("Admins");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "admin@sahem.com",
-                            GenderId = (byte)1,
-                            Locked = false,
-                            Name = "Ahmed Medhat",
-                            PasswordHash = "AQAAAAEAACcQAAAAEN51AJTAImssnM0ZiQGY0nRmJZui0akiWHdoGMaaa9QJ2zSVY1OgGzUeD6b2IdJRng==",
-                            PhoneNumber = "01068218987",
-                            StatusId = (byte)2
-                        });
-                });
-
             modelBuilder.Entity("GraduationProject.Models.Case", b =>
                 {
                     b.Property<int>("Id")
@@ -94,8 +36,8 @@ namespace GraduationProject.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("date");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                    b.Property<byte>("CategoryId")
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("Children")
                         .HasColumnType("tinyint");
@@ -198,10 +140,8 @@ namespace GraduationProject.Migrations
 
             modelBuilder.Entity("GraduationProject.Models.CaseProperties.Category", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<byte>("Id")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -215,12 +155,12 @@ namespace GraduationProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = (byte)1,
                             Name = "Medical"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = (byte)2,
                             Name = "Poverty"
                         });
                 });
@@ -259,6 +199,23 @@ namespace GraduationProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Periods");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (byte)1,
+                            Name = "One Time"
+                        },
+                        new
+                        {
+                            Id = (byte)2,
+                            Name = "Weekly"
+                        },
+                        new
+                        {
+                            Id = (byte)3,
+                            Name = "Monthly"
+                        });
                 });
 
             modelBuilder.Entity("GraduationProject.Models.CaseProperties.Priority", b =>
@@ -366,6 +323,9 @@ namespace GraduationProject.Migrations
 
                     b.HasIndex("GovernorateId");
 
+                    b.HasIndex("Name", "GovernorateId")
+                        .IsUnique();
+
                     b.ToTable("Cities");
                 });
 
@@ -406,6 +366,9 @@ namespace GraduationProject.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Governorates");
                 });
 
@@ -427,6 +390,9 @@ namespace GraduationProject.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
+
+                    b.HasIndex("Name", "CityId")
+                        .IsUnique();
 
                     b.ToTable("Regions");
                 });
@@ -451,6 +417,11 @@ namespace GraduationProject.Migrations
 
                     b.Property<bool>("Completed")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("DateRegistered")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2(0)")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("FirebaseToken")
                         .HasMaxLength(4000)
@@ -489,6 +460,7 @@ namespace GraduationProject.Migrations
                         .HasColumnType("varchar(11)");
 
                     b.Property<byte[]>("ProfileImage")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<int?>("RegionId")
@@ -524,6 +496,71 @@ namespace GraduationProject.Migrations
                     b.ToTable("Mediators");
                 });
 
+            modelBuilder.Entity("GraduationProject.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MediatorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<byte>("TypeId")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MediatorId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("GraduationProject.Models.NotificationType", b =>
+                {
+                    b.Property<byte>("Id")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NotificationTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (byte)1,
+                            Name = "MediatorReview"
+                        },
+                        new
+                        {
+                            Id = (byte)2,
+                            Name = "CaseReview"
+                        });
+                });
+
             modelBuilder.Entity("GraduationProject.Models.Reviews.CaseReview", b =>
                 {
                     b.Property<int>("MediatorId")
@@ -531,6 +568,11 @@ namespace GraduationProject.Migrations
 
                     b.Property<int>("CaseId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("DateReviewed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -545,6 +587,34 @@ namespace GraduationProject.Migrations
                     b.HasIndex("CaseId");
 
                     b.ToTable("CaseReviews");
+                });
+
+            modelBuilder.Entity("GraduationProject.Models.Reviews.MediatorReview", b =>
+                {
+                    b.Property<int>("RevieweeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReviewerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateReviewed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<bool>("IsWorthy")
+                        .HasColumnType("bit");
+
+                    b.HasKey("RevieweeId", "ReviewerId");
+
+                    b.HasIndex("ReviewerId");
+
+                    b.ToTable("MediatorReviews");
                 });
 
             modelBuilder.Entity("GraduationProject.Models.Shared.Gender", b =>
@@ -592,7 +662,12 @@ namespace GraduationProject.Migrations
                         new
                         {
                             Id = (byte)1,
-                            Name = "en"
+                            Name = "EN"
+                        },
+                        new
+                        {
+                            Id = (byte)2,
+                            Name = "AR"
                         });
                 });
 
@@ -668,25 +743,6 @@ namespace GraduationProject.Migrations
                             Id = (byte)4,
                             Name = "Submitted"
                         });
-                });
-
-            modelBuilder.Entity("GraduationProject.Models.Admin", b =>
-                {
-                    b.HasOne("GraduationProject.Models.Shared.Gender", "Gender")
-                        .WithMany()
-                        .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GraduationProject.Models.Shared.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Gender");
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("GraduationProject.Models.Case", b =>
@@ -855,10 +911,29 @@ namespace GraduationProject.Migrations
                     b.Navigation("Status");
                 });
 
+            modelBuilder.Entity("GraduationProject.Models.Notification", b =>
+                {
+                    b.HasOne("GraduationProject.Models.Mediator", "Mediator")
+                        .WithMany("Notifications")
+                        .HasForeignKey("MediatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GraduationProject.Models.NotificationType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Mediator");
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("GraduationProject.Models.Reviews.CaseReview", b =>
                 {
                     b.HasOne("GraduationProject.Models.Case", "Case")
-                        .WithMany()
+                        .WithMany("CaseReviews")
                         .HasForeignKey("CaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -874,8 +949,29 @@ namespace GraduationProject.Migrations
                     b.Navigation("Mediator");
                 });
 
+            modelBuilder.Entity("GraduationProject.Models.Reviews.MediatorReview", b =>
+                {
+                    b.HasOne("GraduationProject.Models.Mediator", "Reviewee")
+                        .WithMany("ReviewsAboutMe")
+                        .HasForeignKey("RevieweeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GraduationProject.Models.Mediator", "Reviewer")
+                        .WithMany("ReviewsByMe")
+                        .HasForeignKey("ReviewerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Reviewee");
+
+                    b.Navigation("Reviewer");
+                });
+
             modelBuilder.Entity("GraduationProject.Models.Case", b =>
                 {
+                    b.Navigation("CaseReviews");
+
                     b.Navigation("Images");
                 });
 
@@ -892,6 +988,12 @@ namespace GraduationProject.Migrations
             modelBuilder.Entity("GraduationProject.Models.Mediator", b =>
                 {
                     b.Navigation("CasesAdded");
+
+                    b.Navigation("Notifications");
+
+                    b.Navigation("ReviewsAboutMe");
+
+                    b.Navigation("ReviewsByMe");
                 });
 #pragma warning restore 612, 618
         }

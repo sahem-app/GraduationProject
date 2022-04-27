@@ -21,8 +21,11 @@ namespace GraduationProject.DTOs.Mediator
 		[Required, MaxLength(4000)]
 		public string FirebaseToken { get; set; }
 
-		[Required, ImageFile(MaxSize = 1024 * 1024)] // 1MB
-		public IFormFile NatoinalIdImage { get; set; }
+		[Required, ImageFile(MaxSize = 1024 * 1024)]
+		public IFormFile ProfileImage { get; set; }
+
+		[Required, ImageFile(MaxSize = 1024 * 1024)]
+		public IFormFile NationalIdImage { get; set; }
 
 		[Range(1, 2)]
 		public byte GenderId { get; set; }

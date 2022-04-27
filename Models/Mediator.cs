@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using GraduationProject.Models.Location;
+using GraduationProject.Models.Reviews;
 using GraduationProject.Models.Shared;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -39,9 +40,13 @@ namespace GraduationProject.Models
 		public bool Completed { get; set; }
 
 		[Required]
+		public byte[] ProfileImage { get; set; }
+
+		[Required]
 		public byte[] NationalIdImage { get; set; }
 
-		public byte[] ProfileImage { get; set; }
+		[Column(TypeName = "datetime2(0)")]
+		public DateTime DateRegistered { get; private set; } = DateTime.Now;
 
 		public GeoLocation GeoLocation { get; set; }
 		public int GeoLocationId { get; set; }
@@ -61,6 +66,9 @@ namespace GraduationProject.Models
 		public Locale Locale { get; set; }
 		public byte LocaleId { get; set; }
 
+		public ICollection<MediatorReview> ReviewsAboutMe;
+		public ICollection<MediatorReview> ReviewsByMe;
+		public ICollection<Notification> Notifications { get; set; }
 		public ICollection<Case> CasesAdded { get; set; }
 	}
 }

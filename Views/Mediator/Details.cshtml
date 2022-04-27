@@ -1,48 +1,194 @@
-﻿@model Mediator
+﻿@model MediatorDetailsVM
 
 @{
-    ViewData["Title"] = "Detaila- Mediator";
+	ViewData["Title"] = "Mediator Details";
 }
 
-<div class="card mb-3">
-    <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Name): <small class="text-muted">@Model.Name</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.PhoneNumber): <small class="text-muted">@Model.PhoneNumber</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.NationalId): <small class="text-muted">@Model.NationalId</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.BirthDate): <small class="text-muted">@Model.BirthDate</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Address): <small class="text-muted">@Model.Address</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.GenderId): <small class="text-muted">@Model.Gender.Name</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.RegionId): <small class="text-muted">@Model.Region.Name</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.SocialStatusId): <small class="text-muted">@Model.SocialStatus.Name</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.StatusId): <small class="text-muted">@Model.Status.Name</small></p>
-        <button type="button" data-bs-toggle="modal" data-bs-target="#Modal@(Model.Id)" class="btn btn-outline-primary">
-            Change Status
-        </button>
-        <a type="button" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark">
-            Edit
-        </a>
-        <!--  new-->
-        <div class="modal fade" id="Modal@(Model.Id)">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Mediators Status</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        You can change the status to @Model.Name
-                    </div>
-                    <div class="modal-footer">
-                        <form asp-action="ChangeStatus" asp-route-id="@Model.Id" asp-route-name="accepted" method="post">
-                            <button class="btn btn-success">Accepted</button>
-                        </form>
-                        <form asp-action="ChangeStatus" asp-route-id="@Model.Id" asp-route-name="rejected" method="post">
-                            <button class="btn btn-danger">Rejected</button>
-                        </form>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<h1>Mediator Details</h1>
+
+<hr />
+<div class="row">
+	<div class="col-md-10 col-lg-8">
+		<img width="200" height="200" class="rounded-circle mx-auto d-block mb-4" src="data:image/png;base64,@Convert.ToBase64String(Model.ProfileImage)">
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="Name" class="col-form-label"></label>
+			</div>
+			<div class="col-9">
+				<input asp-for="Name" disabled class="col-auto form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="PhoneNumber" class="control-label">Phone Number</label>
+			</div>
+			<div class="col-9">
+				<input asp-for="PhoneNumber" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="NationalId" class="control-label">National ID</label>
+			</div>
+			<div class="col-9">
+				<input asp-for="NationalId" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="BirthDate" class="control-label">Birthdate</label>
+			</div>
+			<div class="col-9">
+				<input asp-for="BirthDate" type="@(Model.BirthDate.HasValue ? "date" : "text")" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="Bio" class="control-label"></label>
+			</div>
+			<div class="col-9">
+				<input asp-for="Bio" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="Governorate" class="control-label"></label>
+			</div>
+			<div class="col-9">
+				<input asp-for="Governorate" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="City" class="control-label"></label>
+			</div>
+			<div class="col-9">
+				<input asp-for="City" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="Region" class="control-label"></label>
+			</div>
+			<div class="col-9">
+				<input asp-for="Region" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="Job" class="control-label"></label>
+			</div>
+			<div class="col-9">
+				<input asp-for="Job" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="Address" class="control-label"></label>
+			</div>
+			<div class="col-9">
+				<input asp-for="Address" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="DateRegistered" class="control-label">Date Registered</label>
+			</div>
+			<div class="col-9">
+				<input asp-for="DateRegistered" type="text" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="Gender" class="control-label">Gender</label>
+			</div>
+			<div class="col-9">
+				<input asp-for="Gender" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-3">
+			<div class="col-3">
+				<label asp-for="SocialStatus" class="control-label">Social Status</label>
+			</div>
+			<div class="col-9">
+				<input asp-for="SocialStatus" disabled class="form-control bg-white" />
+			</div>
+		</div>
+		<div class="row form-group mb-4">
+			<div class="col-3">
+				<label asp-for="NationalIdImage" class="control-label">National ID Image</label>
+			</div>
+			<div class="col-9">
+				<img class="rounded mx-auto img-fluid d-block" src="data:image/png;base64,@Convert.ToBase64String(Model.NationalIdImage)">
+			</div>
+		</div>
+		@if (Model.ReviewsAboutMe.Any())
+		{
+			<h4>Mediator Reviews</h4>
+			<hr />
+
+			@foreach (var review in Model.ReviewsAboutMe)
+			{
+				<div class="row form-group my-4 d-flex align-items-center">
+					<div class="col-3 col-sm-2">
+						<img width="50" height="50" class="rounded" src="data:image/png;base64,@Convert.ToBase64String(review.Image)">
+					</div>
+					<div class="col-4">
+						<span class="fs-5">@review.Name</span>
+					</div>
+					<div class="col-4">
+						@if (review.IsWorthy)
+						{
+							<span class="text-success fs-5">Worthy</span>
+						}
+						else
+						{
+							<span class="text-danger fs-5">Unworthy</span>
+						}
+					</div>
+				</div>
+				<div>
+					<textarea asp-for="@review.Description" disabled class="form-control bg-white">@review.Description</textarea>
+				</div>
+			}
+		}
+
+		@if (Model.Status == StatusType.Submitted)
+		{
+			<div class="form-group mt-4">
+				<form class="d-inline-block" asp-action="accept" asp-route-id="@Model.Id" method="post">
+					<button class="btn btn-success me-3">Accept</button>
+				</form>
+				<button class="btn btn-danger me-3" data-bs-toggle="modal" data-bs-target="#reject">Reject</button>
+				<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+			</div>
+		}
+	</div>
+</div>
+
+@if (Model.Status == StatusType.Submitted)
+{
+	<div class="modal fade" id="reject">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Reject Mediator</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal">
+					</button>
+				</div>
+				<form asp-action="reject" asp-route-id="@Model.Id" method="post">
+					<div class="modal-body">
+						<span>Are you sure you want to reject this meditor?</span>
+						<textarea name="decription" class="form-control mt-3" placeholder="explain the reason..."></textarea>
+					</div>
+					<div class="modal-footer">
+
+						<button class="btn btn-danger">Reject</button>
+
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+}

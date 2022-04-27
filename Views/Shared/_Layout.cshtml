@@ -6,12 +6,10 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap">
-	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="~/lib/hover.css/css/hover-min.css">
 	<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css">
 	<link rel="stylesheet" href="~/css/main.css">
-	<link rel="stylesheet" href="~/css/case.css">
 	<link rel="stylesheet" href="~/css/sidebar.css">
 	<link rel="stylesheet" href="~/css/navbar.css">
 	<link rel="stylesheet" href="~/css/style.css">
@@ -36,9 +34,9 @@
 			</ul>
 			<li data-bs-toggle="collapse" data-bs-target="#mediators"><a href="#"><i class="fa-solid fa-table-cells"></i>Mediators</a></li>
 			<ul id="mediators" class="collapse">
-				<li><a asp-controller="mediator" asp-action="pendingmediators"><i class="fa-solid fa-id-card"></i>Pending Mediators</a></li>
-				<li><a asp-controller="mediator" asp-action="acceptedmediators"><i class="fa-solid fa-id-card"></i>Accepted Mediators</a></li>
-				<li><a asp-controller="mediator" asp-action="RejectedMediators"><i class="fa-solid fa-id-card"></i>Rejected Mediators</a></li>
+				<li><a asp-controller="mediator" asp-action="index" asp-route-status="@StatusType.Submitted"><i class="fa-solid fa-id-card"></i>Pending Mediators</a></li>
+				<li><a asp-controller="mediator" asp-action="index" asp-route-status="@StatusType.Accepted"><i class="fa-solid fa-id-card"></i>Accepted Mediators</a></li>
+				<li><a asp-controller="mediator" asp-action="index" asp-route-status="@StatusType.Rejected"><i class="fa-solid fa-id-card"></i>Rejected Mediators</a></li>
 			</ul>
 			<li data-bs-toggle="collapse" data-bs-target="#locations"><a href="#"><i class="fa-solid fa-table-cells"></i>Locations</a></li>
 			<ul id="locations" class="collapse">

@@ -1,4 +1,6 @@
-﻿namespace GraduationProject.DTOs.Case
+﻿using System.Collections.Generic;
+
+namespace GraduationProject.DTOs.Case
 {
 	public class CaseElementDto
 	{
@@ -8,6 +10,6 @@
 		public string Priority { get; set; }
 		public int FundRaised { get; set; }
 		public short Age { get; set; }
-		public string ImageUrl { get; set; }
+		public IEnumerable<string> ImagesUrl { get; set; }
 	}
 }

@@ -13,5 +13,15 @@ namespace GraduationProject.Models.Location
 
 		public City City { get; set; }
 		public int CityId { get; set; }
+
+		public Region()
+		{
+
+		}
+
+		public Region(uint id)
+		{
+			Id = (int)id;
+		}
 	}
 }

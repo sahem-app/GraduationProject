@@ -13,10 +13,10 @@ namespace GraduationProject.ViewModels
 
 		[Display(Name = "City")]
 		public int CityId { get; set; }
-		public IEnumerable<City> City { get; set; }
 
 		[Display(Name = "Governorate")]
 		public int GovernorateId { get; set; }
-		public IEnumerable<Governorate> governorate { get; set; }
+
+		public IEnumerable<Governorate> Governorates { get; set; }
 	}
 }

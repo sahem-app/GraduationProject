@@ -10,6 +10,8 @@ namespace GraduationProject.Data
 	public class ApplicationDbContext : DbContext
 	{
 		public DbSet<Category> Categories { get; set; }
+		public DbSet<Notification> Notifications { get; set; }
+		public DbSet<NotificationType> NotificationTypes { get; set; }
 		public DbSet<Priority> Priorities { get; set; }
 		public DbSet<Period> Periods { get; set; }
 		public DbSet<Relationship> Relationships { get; set; }
@@ -23,9 +25,9 @@ namespace GraduationProject.Data
 		public DbSet<City> Cities { get; set; }
 		public DbSet<Region> Regions { get; set; }
 		public DbSet<Mediator> Mediators { get; set; }
-		public DbSet<Admin> Admins { get; set; }
 		public DbSet<GeoLocation> GeoLocations { get; set; }
 		public DbSet<CaseReview> CaseReviews { get; set; }
+		public DbSet<MediatorReview> MediatorReviews { get; set; }
 		public DbSet<Locale> Locales { get; set; }
 
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)

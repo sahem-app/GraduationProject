@@ -1,114 +1,73 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using GraduationProject.Data;
 using GraduationProject.DTOs.Case;
+using GraduationProject.Enums;
 using GraduationProject.Models;
-using GraduationProject.Models.Reviews;
 using GraduationProject.Utilities.CustomApiResponses;
-using GraduationProject.Utilities.StaticStrings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace GraduationProject.ApiControllers
 {
+	[Authorize]
 	[ApiController]
 	[Route("api/[controller]")]
 	public class CasesController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly IMapper _mapper;
+		private readonly IMemoryCache _memoryCache;
 
-		public CasesController(ApplicationDbContext context, IMapper mapper)
+		public CasesController(ApplicationDbContext context, IMapper mapper, IMemoryCache memoryCache)
 		{
 			_context = context;
 			_mapper = mapper;
+			_memoryCache = memoryCache;
 		}
-
-		[Authorize]
-		[HttpGet("[action]")]
-		public async Task<IActionResult> Add()
-		{
-			var properties = new CaseProperties
-			{
-				Genders = await _context.Genders.AsNoTracking().ToArrayAsync(),
-				SocialStatus = await _context.SocialStatus.AsNoTracking().ToArrayAsync(),
-				Relationships = await _context.Relationships.AsNoTracking().ToArrayAsync(),
-				Categories = await _context.Categories.AsNoTracking().ToArrayAsync(),
-				Periods = await _context.Periods.AsNoTracking().ToArrayAsync(),
-				Priorities = await _context.Priorities.AsNoTracking().ToArrayAsync()
-			};
-
-			return new Success(properties);
-		}
-
-		//[HttpGet]
-		//[Authorize]
-		//public async Task<IActionResult> GetCases()
-		//{
-		//	var cases = await _context.Cases
-		//		.Where(c => c.Status.Name == Status.Accepted)
-		//		.Select(c => new CaseElementDto
-		//		{
-		//			Id = c.Id,
-		//			Name = c.Name,
-		//			Title = c.Title,
-		//			Priority = c.Priority.Name,
-		//			Age = ((short)(DateTime.Now - c.DateRequested).TotalDays),
-		//			FundRaised = 4000,
-		//			ImageUrl = string.Concat(Request.Scheme, "://", Request.Host, Request.PathBase.ToString().ToLower(), "/api/cases/image")
-		//		}).ToArrayAsync();
-
-		//	return new Success(cases);
-		//}
 
 		[HttpPost]
-		[Authorize]
 		public async Task<IActionResult> Add([FromForm] NewCaseDto dto)
 		{
-			var result = await IsCasesAddedAsync(dto);
+			var result = await ValidateCaseAsync(dto);
 			if (result != null)
 				return result;
 
-			var pendingStatusId = _context.Status
-				.Where(s => s.Name == Status.Pending)
-				.Select(s => s.Id)
-				.FirstAsync();
-
 			var newCase = _mapper.Map<Case>(dto);
-			var settingImageTask = newCase.SetNationalIdImageAsync(dto.NationalIdImage);
-
-			if (dto.OptionalImages != null)
-				newCase.AddOptionalImages(dto.OptionalImages);
-
 			newCase.MediatorId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-			newCase.StatusId = await pendingStatusId;
-			await settingImageTask;
+			newCase.StatusId = (byte)StatusType.Pending;
 			await _context.AddAsync(newCase);
 			await _context.SaveChangesAsync();
 			return new Success();
 		}
 
-		[Authorize]
-		[HttpPost("[action]")]
-		public async Task<IActionResult> Reviews([FromForm] ReviewDto dto)
+		[HttpGet("[action]/{id:min(1)}")]
+		public async Task<IActionResult> Images(int id)
 		{
-			if (!await _context.Cases.AnyAsync(c => c.Id == dto.CaseId))
-				return new BadRequest("Case was not found");
+			byte[] image;
+			if (_memoryCache.TryGetValue(nameof(image) + id, out image))
+				return File(image, "image/jpeg");
 
-			var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-			if (await _context.CaseReviews.AnyAsync(c => c.CaseId == dto.CaseId && c.MediatorId == userId))
-				return new BadRequest("Case has been reviewd already");
+			image = await _context.Images
+				.Where(m => m.Id == id)
+				.Select(m => m.Data)
+				.FirstOrDefaultAsync();
 
-			var review = _mapper.Map(dto, new CaseReview(userId));
-			await _context.CaseReviews.AddAsync(review);
-			await _context.SaveChangesAsync();
-			return new Success();
+			if (image == null)
+				return NotFound(null);
+
+			_memoryCache.Set(nameof(image) + id, image, DateTimeOffset.Now.AddMinutes(10));
+			return File(image, "image/jpeg");
 		}
 
-		private async Task<BadRequest> IsCasesAddedAsync(NewCaseDto dto)
+		// ********************** Private methods **********************************
+
+		private async Task<BadRequest> ValidateCaseAsync(NewCaseDto dto)
 		{
 			var caseDb = await _context.Cases
 				.Select(m => new Case

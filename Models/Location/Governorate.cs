@@ -12,5 +12,15 @@ namespace GraduationProject.Models.Location
 		public string Name { get; set; }
 
 		public ICollection<City> Cities { get; set; }
+
+		public Governorate()
+		{
+
+		}
+
+		public Governorate(uint id)
+		{
+			Id = (int)id;
+		}
 	}
 }

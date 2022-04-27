@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using GraduationProject.Enums;
+using GraduationProject.Models.Shared;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Status = GraduationProject.Models.Shared.Status;
 
 namespace GraduationProject.Data.EntitiesConfigurations
 {
@@ -8,13 +11,12 @@ namespace GraduationProject.Data.EntitiesConfigurations
 	{
 		public void Configure(EntityTypeBuilder<Status> builder)
 		{
-			var data = new[]
-			{
-				new Status { Id = 1, Name = Utilities.StaticStrings.Status.Pending},
-				new Status { Id = 2, Name = Utilities.StaticStrings.Status.Accepted},
-				new Status { Id = 3, Name = Utilities.StaticStrings.Status.Rejected},
-				new Status { Id = 4, Name = Utilities.StaticStrings.Status.Submitted}
-			};
+			var data = Enum.GetValues<StatusType>()
+				.Select(e => new Status
+				{
+					Id = (byte)e,
+					Name = e.ToString()
+				});
 
 			builder.HasData(data);
 		}
