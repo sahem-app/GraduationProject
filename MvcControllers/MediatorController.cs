@@ -32,7 +32,7 @@ namespace GraduationProject.MvcControllers
 		{
 			if (!Enum.GetValues<StatusType>().Contains(status))
 				status = StatusType.Accepted;
-
+			TempData["status"] = status;
 			return View(await _context.Mediators.AsNoTracking()
 							.Where(m => m.StatusId == (byte)status)
 							.Select(m => new MediatorVM(m))

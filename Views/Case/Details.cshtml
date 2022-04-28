@@ -1,4 +1,4 @@
-﻿@model Case
+﻿@model CaseVM
 
 @{
     ViewData["Title"] = "Detaila- Case";
@@ -6,6 +6,10 @@
 
 <div class="card mb-3">
     <div class="card-body">
+        @if (@Model.NationalIdImage != null)
+        {
+            <img width="100" height="100" class="rounded mx-auto img-fluid d-block" src="data:image/png;base64,@Convert.ToBase64String(Model.NationalIdImage)">
+        }
         <h5 class="card-title">Card title</h5>
         <p class="card-text">@Html.DisplayNameFor(m => m.Name): <small class="text-muted">@Model.Name</small></p>
         <p class="card-text">@Html.DisplayNameFor(m => m.PhoneNumber): <small class="text-muted">@Model.PhoneNumber</small></p>
@@ -17,12 +21,48 @@
         <p class="card-text">@Html.DisplayNameFor(m => m.NeededMoneyAmount): <small class="text-muted">@Model.NeededMoneyAmount</small></p>
         <p class="card-text">@Html.DisplayNameFor(m => m.Title): <small class="text-muted">@Model.Title</small></p>
         <p class="card-text">@Html.DisplayNameFor(m => m.Address): <small class="text-muted">@Model.Address</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.CategoryId): <small class="text-muted">@Model.Category.Name</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Priority): <small class="text-muted">@Model.Priority.Name</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.GenderId): <small class="text-muted">@Model.Gender.Name</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.RegionId): <small class="text-muted">@Model.Region.Name</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.StatusId): <small class="text-muted">@Model.Status.Name</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.Category): <small class="text-muted">@Model.Category</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.Period): <small class="text-muted">@Model.Period</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.Relationship): <small class="text-muted">@Model.Relationship</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.Mediator): <small class="text-muted">@Model.Mediator</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.Priority): <small class="text-muted">@Model.Priority</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.Gender): <small class="text-muted">@Model.Gender</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.Region): <small class="text-muted">@Model.Region</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.City): <small class="text-muted">@Model.City</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.Governorate): <small class="text-muted">@Model.Governorate</small></p>
+        <p class="card-text">@Html.DisplayNameFor(m => m.Status): <small class="text-muted">@Model.Status</small></p>
         <p class="card-text">@Html.DisplayNameFor(m => m.Story): <small class="text-muted">@Model.Story</small></p>
+        @if (Model.ReviewsAboutMe != null)
+        {
+            <hr />
+            foreach (var item in Model.ReviewsAboutMe)
+            {
+                
+                <div class="row form-group my-4 d-flex align-items-center">
+					<div class="col-3 col-sm-2">
+						<img width="50" height="50" class="rounded" src="data:image/png;base64,@Convert.ToBase64String(item.Image)">
+					</div>
+					<div class="col-4">
+						<span class="fs-5">@item.Name</span>
+					</div>
+					<div class="col-4">
+						@if (item.IsWorthy)
+						{
+							<span class="text-success fs-5">Worthy</span>
+						}
+						else
+						{
+							<span class="text-danger fs-5">Unworthy</span>
+						}
+					</div>
+				</div>
+				<div>
+					<textarea asp-for="@item.Description" disabled class="form-control bg-white">@item.Description</textarea>
+				</div>
+            }
+
+        }
+        
         <!-- Button trigger modal -->
         <button type="button" asp-action="ChangeStatus" data-bs-toggle="modal" data-bs-target="#Modal@(Model.Id)" class="btn btn-outline-primary">
             Change Status

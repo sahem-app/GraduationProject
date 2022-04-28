@@ -1,7 +1,7 @@
 ﻿using GraduationProject.Data;
+using GraduationProject.Enums;
 using GraduationProject.Models;
 using GraduationProject.Models.CaseProperties;
-using GraduationProject.Models.Location;
 using GraduationProject.Models.Shared;
 using GraduationProject.Utilities;
 using GraduationProject.Utilities.StaticStrings;
@@ -12,12 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using GraduationProject.Enums;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GraduationProject.MvcControllers
 {
@@ -68,8 +64,6 @@ namespace GraduationProject.MvcControllers
                 Periods = Enum.GetValues<PeriodType>().Select(e => new Period { Id = (byte)e, Name = e.ToString() }),
                 Priorities = Enum.GetValues<PriorityType>().Select(e => new Priority { Id = (byte)e, Name = e.ToString() }),
                 Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = (byte)e, Name = e.ToString() }),
-                Region = await _context.Regions.AsNoTracking().ToArrayAsync(),
-                cities = await _context.Cities.AsNoTracking().ToArrayAsync(),
                 Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync(),
                 Categories = await _context.Categories.AsNoTracking().ToArrayAsync()
             });
@@ -85,12 +79,9 @@ namespace GraduationProject.MvcControllers
             model.Periods = Enum.GetValues<PeriodType>().Select(e => new Period { Id = (byte)e, Name = e.ToString() });
             model.Priorities = Enum.GetValues<PriorityType>().Select(e => new Priority { Id = (byte)e, Name = e.ToString() });
             model.Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = (byte)e, Name = e.ToString() });
-            //model.Region = await _context.Regions.AsNoTracking().ToArrayAsync();
-            model.cities = await _context.Cities.AsNoTracking().ToArrayAsync();
             model.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
             model.Categories = await _context.Categories.AsNoTracking().ToArrayAsync();
-			model.cities = await _context.Cities.AsNoTracking().ToArrayAsync();
-            model.MediatorId = 3;
+
             if (!ModelState.IsValid)
                 return View(model);
 
@@ -104,7 +95,6 @@ namespace GraduationProject.MvcControllers
                 BirthDate = model.BirthDate,
                 PaymentDate = model.PaymentDate,
                 SocialStatusId = model.SocialStatusId,
-                MediatorId = model.MediatorId,
                 RelationshipId = (byte)model.RelationshipId,
                 PeriodId = (byte)model.PeriodId,
                 CategoryId = (byte)model.CategoryId,
@@ -113,6 +103,7 @@ namespace GraduationProject.MvcControllers
                 StatusId = model.StatusId,
                 GenderId = model.GenderId,
                 RegionId = model.RegionId,
+                MediatorId =1,
                 NeededMoneyAmount = model.NeededMoneyAmount,
                 Adults = model.Adults,
                 Children = model.Children,
@@ -134,28 +125,65 @@ namespace GraduationProject.MvcControllers
             await _context.Cases.AddAsync(Case);
             await _context.SaveChangesAsync();
             _toastNotification.AddSuccessToastMessage("Case created successfully");
-            return RedirectToAction(nameof(Index));
-        }
 
-        [HttpGet]
-        public async Task<IActionResult> GetRegion(int id)
-        {
-            List<Region> Regions = new List<Region>();
-            Regions = await _context.Regions.AsNoTracking().Where(m => m.CityId == id).ToListAsync();
-            return Json(new SelectList(Regions, "Id", "Name"));
+            if (model.StatusId == (byte)StatusType.Accepted)
+                return RedirectToAction(nameof(AcceptedCases));
+            else if (model.StatusId == (byte)StatusType.Rejected)
+                return RedirectToAction(nameof(RejectedCases));
+
+            return RedirectToAction(nameof(PendingCases));
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(uint id)
         {
             var Case = await _context.Cases.AsNoTracking()
-                .Include(m => m.Category)
-                .Include(m => m.Priority)
-                .Include(m => m.Status)
-                .Include(m => m.SocialStatus)
-                .Include(m => m.Region)
-                .Include(m => m.Gender)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Where(c => c.Id == id)
+                .Select(c => new CaseVM
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    PhoneNumber = c.PhoneNumber,
+                    Status = c.Status.Name,
+                    NationalId = c.NationalId,
+                    SocialStatus = c.SocialStatus.Name,
+                    Address = c.Address,
+                    Adults = c.Adults,
+                    Title = c.Title,
+                    Relationship = c.Relationship.Name,
+                    Gender = c.Gender.Name,
+                    Story = c.Story,
+                    BirthDate = c.BirthDate,
+                    PaymentDate = c.PaymentDate,
+                    Category = c.Category.Name,
+                    Priority = c.Priority.Name,
+                    Period = c.Period.Name,
+                    NationalIdImage = c.NationalIdImage,
+                    Mediator = c.Mediator.Name,
+                    Region = c.Region.Name,
+                    City = c.Region.City.Name,
+                    Governorate = c.Region.City.Governorate.Name,
+                    ReviewsAboutMe = c.CaseReviews.Select(r => new CaseReviewVM
+                    {
+                        Name = r.Mediator.Name,
+                        Description = r.Description,
+                        IsWorthy = r.IsWorthy,
+                        ReviewDate = r.DateReviewed,
+                        Image = r.Mediator.ProfileImage
+                    }).ToArray()
+                }).FirstOrDefaultAsync();
+            //.Include(c => c.Category.Name)
+            //.Include(p => p.Priority.Name)
+            //.Include(p => p.Period.Name)
+            //.Include(r => r.Relationship.Name)
+            //.Include(m => m.Mediator.Name)
+            //.Include(s => s.Status.Name)
+            //.Include(s => s.SocialStatus.Name)
+            //.Include(r => r.Region.Name)
+            //.Include(c => c.Region.City.Name)
+            //.Include(g => g.Region.City.Governorate.Name)
+            //.Include(g => g.Gender.Name)
+
             return Case == null ? NotFound() : View(Case);
         }
 
@@ -179,7 +207,6 @@ namespace GraduationProject.MvcControllers
                 Title = Case.Title,
                 PeriodId = Case.PeriodId,
                 RelationshipId = Case.RelationshipId,
-                MediatorId = Case.MediatorId,
                 Children = Case.Children,
                 NeededMoneyAmount = Case.NeededMoneyAmount,
                 Story = Case.Story,
@@ -196,10 +223,11 @@ namespace GraduationProject.MvcControllers
                 Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = (byte)e, Name = e.ToString() }),
                 Categories = await _context.Categories.AsNoTracking().ToArrayAsync(),
                 Priorities = await _context.Priorities.AsNoTracking().ToArrayAsync(),
-                Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync(),
-                //Region = await _context.Regions.AsNoTracking().ToArrayAsync(),
-                cities = await _context.Cities.AsNoTracking().ToArrayAsync()
+                Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync()
             };
+
+            CaseVM.Region = await _context.Regions.Include(r => r.City)
+                .ThenInclude(c => c.Governorate).FirstOrDefaultAsync(r => r.Id == CaseVM.RegionId);
             return View(CaseVM);
 
         }
@@ -214,8 +242,6 @@ namespace GraduationProject.MvcControllers
             model.Periods = Enum.GetValues<PeriodType>().Select(e => new Period { Id = (byte)e, Name = e.ToString() });
             model.Priorities = Enum.GetValues<PriorityType>().Select(e => new Priority { Id = (byte)e, Name = e.ToString() });
             model.Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = (byte)e, Name = e.ToString() });
-            model.Region = await _context.Regions.AsNoTracking().ToArrayAsync();
-            model.cities = await _context.Cities.AsNoTracking().ToArrayAsync();
             model.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
             model.Categories = await _context.Categories.AsNoTracking().ToArrayAsync();
 
@@ -249,26 +275,21 @@ namespace GraduationProject.MvcControllers
             Case.NationalIdImage = FormFileHandler.ConvertToBytes(model.NationalIdImage);
             Case.Story = model.Story;
 
-            if (await _context.Cases.AnyAsync(c => c.NationalId == model.NationalId))
-            {
-                ModelState.AddModelError(string.Empty, "Case with the same national ID already exists");
-                return View(model);
-            }
-
-            if (await _context.Cases.AnyAsync(c => c.PhoneNumber == model.PhoneNumber))
-            {
-                ModelState.AddModelError(string.Empty, "Case with the same phone number already exists");
-                return View(model);
-            }
             await _context.SaveChangesAsync();
             _toastNotification.AddSuccessToastMessage("Case updated successfully");
-            return RedirectToAction(nameof(Index));
+
+            if (model.StatusId == (byte)StatusType.Accepted)
+                return RedirectToAction(nameof(AcceptedCases));
+            else if (model.StatusId == (byte)StatusType.Rejected)
+                return RedirectToAction(nameof(RejectedCases));
+
+            return RedirectToAction(nameof(PendingCases));
         }
 
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(uint id, string Name)
-        { 
-            var Case = await _context.Cases.FirstOrDefaultAsync(m=>m.Id == id);
+        {
+            var Case = await _context.Cases.FirstOrDefaultAsync(m => m.Id == id);
             if (Case == null)
                 return NotFound();
 
@@ -284,10 +305,10 @@ namespace GraduationProject.MvcControllers
                 await _context.SaveChangesAsync();
                 _toastNotification.AddSuccessToastMessage($"{Case.Name} status updated successfully");
             }
-            
-            if(Case.StatusId == (byte)StatusType.Accepted)
+
+            if (Case.StatusId == (byte)StatusType.Accepted)
                 return RedirectToAction(nameof(AcceptedCases));
-          
+
             return RedirectToAction(nameof(RejectedCases));
         }
     }

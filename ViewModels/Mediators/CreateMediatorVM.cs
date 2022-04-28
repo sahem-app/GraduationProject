@@ -20,7 +20,8 @@ namespace GraduationProject.ViewModels.Mediators
 		public string PhoneNumber { get; set; }
 
 		[Display(Name = "National ID")]
-		[Required, Range(10000000000000, 19999999999999, ErrorMessage = "National ID must be 14 digits")]
+
+		[Required,MaxLength(14, ErrorMessage = "National ID must be 14 digits")]
 		public string NationalId { get; set; }
 
 		public byte GenderId { get; set; }
