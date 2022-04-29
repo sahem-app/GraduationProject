@@ -17,15 +17,16 @@ namespace GraduationProject.ViewModels.Cases
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage ="This field is required")]
+        [Required]
         public string Name { get; set; }
 
         [MaxLength(14)]
-        [DisplayName("Phone Number"), Required(ErrorMessage = "This field is required")]
+        [DisplayName("Phone Number"), Required]
         public string PhoneNumber { get; set; }
 
-        [MaxLength(14,ErrorMessage ="The national id should not be more than 14 digits"),MinLength(14, ErrorMessage = "The national id should not be less than 14 digits")]
-        [DisplayName("National ID"),Required(ErrorMessage = "This field is required")]
+        [MaxLength(14,ErrorMessage ="The national id should not be more than 14 digits")]
+        [MinLength(14, ErrorMessage = "The national id should not be less than 14 digits")]
+        [DisplayName("National ID"),Required]
         public string NationalId { get; set; }
 
         [DisplayName("Birth Date")]
@@ -48,50 +49,45 @@ namespace GraduationProject.ViewModels.Cases
 
         public string Title { get; set; }
 
-        [Required(ErrorMessage ="This field  is required"), StringLength(4000)]
+        [Required, StringLength(4000)]
         public string Story { get; set; }
 
         public IEnumerable<Category> Categories { get; set; }
-        [DisplayName("Category"), Required(ErrorMessage = "This field is required")]
+        [DisplayName("Category"), Required]
         public int CategoryId { get; set; }
 
         public IEnumerable<Priority> Priorities { get; set; }
-        [DisplayName("Case Priority"), Required(ErrorMessage = "This field is required")]
+        [DisplayName("Case Priority"), Required]
         public byte PriorityId { get; set; }
 
         public IEnumerable<Period> Periods { get; set; }
-        [DisplayName("Period"), Required(ErrorMessage = "This field is required")]
+        [DisplayName("Period"), Required]
         public int PeriodId { get; set; }
 
         public IEnumerable<Gender> Gender { get; set; }
-        [DisplayName("Gender"), Required(ErrorMessage = "This field is required")]
+        [DisplayName("Gender"), Required]
         public byte GenderId { get; set; }
 
         public IEnumerable<SocialStatus> SocialStatus { get; set; }
-        [DisplayName("Social Status"), Required(ErrorMessage = "This field is required")]
+        [DisplayName("Social Status"), Required]
         public byte SocialStatusId { get; set; }
 
         public IEnumerable<Governorate> Governorates { get; set; }
-        [DisplayName("Governorate"), Required(ErrorMessage = "This field is required")]
+        [DisplayName("Governorate"), Required]
         public int GovernorateId { get; set; }
 
-        public IEnumerable<City> cities { get; set; }
-        [DisplayName("City"), Required(ErrorMessage = "This field is required")]
-        public int CityId { get; set; }
-        public IEnumerable<Region> Region { get; set; }
-        [DisplayName("Region"), Required(ErrorMessage = "This field is required")]
+        public Region Region { get; set; }
+        [DisplayName("Region"), Required]
         public int RegionId { get; set; }
+
         public GeoLocation GeoLocation { get; set; }
 
-        [DisplayName("Mediator"), Required(ErrorMessage = "This field is required")]
-        public int MediatorId { get; set; }
-
         public IEnumerable<Relationship> Relationships { get; set; }
-        [DisplayName("Relationship"), Required(ErrorMessage = "This field is required")]
+        [DisplayName("Relationship"), Required]
         public int RelationshipId { get; set; }
 
         public IEnumerable<Status> Status { get; set; }
-        [DisplayName("Status"), Required(ErrorMessage = "This field is required")]
+        [DisplayName("Status"), Required]
         public byte StatusId { get; set; }
     }
 }

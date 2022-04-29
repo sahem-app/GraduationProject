@@ -14,13 +14,19 @@ namespace GraduationProject.Models
 	{
 		public int Id { get; set; }
 
-		[Required, MaxLength(250)]
+		[Required]
+		[MaxLength(250)]
 		public string Name { get; set; }
 
-		[Required, MaxLength(11), Column(TypeName = "varchar")]
+		[Required]
+		[MaxLength(11)]
+		[Column(TypeName = "varchar")]
 		public string PhoneNumber { get; set; }
 
-		[Required, MaxLength(14), Column(TypeName = "varchar")]
+		[Required]
+		[MaxLength(14)]
+		[Column(TypeName = "varchar")]
+		[Display(Name = "National Id")]
 		public string NationalId { get; set; }
 
 		[Column(TypeName = "date")]
@@ -30,6 +36,7 @@ namespace GraduationProject.Models
 
 		public byte Children { get; set; }
 
+		[Display(Name = "Needed money amount")]
 		public int NeededMoneyAmount { get; set; }
 
 		[Column(TypeName = "date")]
@@ -38,6 +45,7 @@ namespace GraduationProject.Models
 		[Column(TypeName = "date")]
 		public DateTime DateRequested { get; private set; } = DateTime.Now;
 
+		[Display(Name ="National card image")]
 		public byte[] NationalIdImage { get; set; }
 
 		[MaxLength(4000)]
@@ -50,33 +58,43 @@ namespace GraduationProject.Models
 		public string Story { get; set; }
 
 		public Period Period { get; set; }
+		[Display(Name ="Period")]
 		public byte PeriodId { get; set; }
 
 		public Mediator Mediator { get; set; }
+		[Display(Name = "Mediator")]
 		public int MediatorId { get; set; }
 
 		public Category Category { get; set; }
+		[Display(Name = "Category")]
 		public byte CategoryId { get; set; }
 
 		public Relationship Relationship { get; set; }
+		[Display(Name = "Relationship")]
 		public byte RelationshipId { get; set; }
 
 		public Priority Priority { get; set; }
+		[Display(Name = "Priority")]
 		public byte PriorityId { get; set; }
 
 		public Gender Gender { get; set; }
+		[Display(Name = "Gender")]
 		public byte GenderId { get; set; }
 
 		public GeoLocation GeoLocation { get; set; }
+		[Display(Name = "GeoLocation")]
 		public int GeoLocationId { get; set; }
 
 		public SocialStatus SocialStatus { get; set; }
+		[Display(Name = "SocialStatus")]
 		public byte SocialStatusId { get; set; }
 
 		public Region Region { get; set; }
+		[Display(Name = "Region")]
 		public int RegionId { get; set; }
 
 		public Status Status { get; set; }
+		[Display(Name = "Status")]
 		public byte StatusId { get; set; }
 
 		public ICollection<CaseReview> CaseReviews { get; set; }

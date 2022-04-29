@@ -1,14 +1,14 @@
 ﻿@model CrudCaseVM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Cases";
 }
 
-<h1>Edit</h1>
-   
+<h1>Create</h1>
+
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8 col-lg-6">
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id"/>
@@ -28,13 +28,13 @@
                 <span asp-validation-for="NationalId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BirthDate" class="control-label" for="start"></label>
+                <label asp-for="BirthDate" class="control-label mb-3" for="start"></label>
                 <input asp-for="BirthDate" type="date" id="start" name="BirthDate"
-                       min="1990-01-01" max="2090-1-1" class="form-control">
+                       min="1990-01-01" max="2090-1-1" class="form-control" value="">
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <input id="image1" asp-for="NationalIdImage" class="form-control" type="file" id="formFile">
+                <input id="image1" asp-for="NationalIdImage" class="form-control mb-3" type="file" id="formFile">
                 <label  asp-for="NationalIdImage" for="formFile" class="form-label"></label>
                 <span asp-validation-for="NationalIdImage" class="text-danger"></span>
             </div>
@@ -55,9 +55,9 @@
                 <span asp-validation-for="NeededMoneyAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PaymentDate" class="control-label" for="start"></label>
+                <label asp-for="PaymentDate" class="control-label mb-3" for="start"></label>
                 <input asp-for="PaymentDate" type="date" id="start" name="PaymentDate"
-                       min="1990-01-01" max="2090-1-1" class="form-control">
+                       min="1990-01-01" max="2090-1-1" class="form-control" value="">
                 <span asp-validation-for="PaymentDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -76,28 +76,13 @@
                 <span asp-validation-for="Story" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
+                <label asp-for="CategoryId" class="control-label mb-3"></label>
                 <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories,"Id","Name"))">
                 </select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
-            <div class="form-group mb-3">
-				<label asp-for="GeoLocation.Latitude" class="control-label mb-3"></label>
-				<input asp-for="GeoLocation.Latitude" class="form-control" />
-				<span asp-validation-for="GeoLocation.Latitude" class="text-danger"></span>
-			</div>
-			<div class="form-group mb-3">
-				<label asp-for="GeoLocation.Longitude" class="control-label mb-3"></label>
-				<input asp-for="GeoLocation.Longitude" class="form-control" />
-				<span asp-validation-for="GeoLocation.Longitude" class="text-danger"></span>
-			</div>
-			<div class="form-group mb-3">
-				<label asp-for="GeoLocation.Details" class="control-label mb-3"></label>
-				<input asp-for="GeoLocation.Details" class="form-control" />
-				<span asp-validation-for="GeoLocation.Details" class="text-danger"></span>
-			</div>
             <div class="form-group">
-                <label asp-for="PriorityId" class="control-label"></label>
+                <label asp-for="PriorityId" class="control-label mb-3"></label>
                 <select asp-for="PriorityId" class="form-control" asp-items="@(new SelectList(Model.Priorities,"Id","Name"))">
                 </select>
                 <span asp-validation-for="PriorityId" class="text-danger"></span>
@@ -108,15 +93,11 @@
                 </select>
                 <span asp-validation-for="GenderId" class="text-danger"></span>
             </div>
-          @*  <div class="form-group">
-                <label asp-for="MediatorId" class="control-label"></label>
-                <select asp-for="MediatorId" class="form-control" asp-items="@(new SelectList(Model.Mediator,"Id","Name"))">
-                </select>
-                <span asp-validation-for="MediatorId" class="text-danger"></span>
-            </div>*@
+
             <div class="form-group">
                 <label asp-for="RelationshipId" class="control-label"></label>
                 <select asp-for="RelationshipId" class="form-control" asp-items="@(new SelectList(Model.Relationships,"Id","Name"))">
+
                 </select>
                 <span asp-validation-for="RelationshipId" class="text-danger"></span>
             </div>
@@ -127,45 +108,34 @@
                 <span asp-validation-for="PeriodId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SocialStatusId" class="control-label"></label>
+                <label asp-for="SocialStatusId" class="control-label mb-3"></label>
                 <select asp-for="SocialStatusId" class="form-control" asp-items="@(new SelectList(Model.SocialStatus,"Id","Name"))">
                 </select>
                 <span asp-validation-for="SocialStatusId" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <label asp-for="CityId" class="control-label"></label>
-                <select asp-for="CityId" id="ddlgovernorate" class="form-control" asp-items="@(new SelectList(Model.cities,"Id","Name"))">
+                <label asp-for="GovernorateId" class="control-label mb-3"></label>
+                <select asp-for="GovernorateId"  id="ddlGovernorate" class="form-select" asp-items="@(new SelectList(Model.Governorates,"Id","Name"))">
                 </select>
-                <span asp-validation-for="CityId" class="text-danger"></span>
+                <span asp-validation-for="GovernorateId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RegionId" class="control-label"></label>
-                <select asp-for="RegionId" id="ddlcity" class="form-control" asp-items="@(new SelectList(string.Empty,"Id","Name"))"></select>
+                <label for="CityId" class="control-label mb-3">City</label>
+                <select id="ddlCity" class="form-select"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegionId" class="control-label mb-3"></label>
+                <select asp-for="RegionId" id="ddlRegion" class="form-select"></select>
                 <span asp-validation-for="RegionId" class="text-danger"></span>
             </div>
-			<div class="form-group mb-3">
-				<label asp-for="GeoLocation.Latitude" class="control-label"></label>
-				<input asp-for="GeoLocation.Latitude" class="form-control" />
-				<span asp-validation-for="GeoLocation.Latitude" class="text-danger"></span>
-			</div>
-			<div class="form-group mb-3">
-				<label asp-for="GeoLocation.Longitude" class="control-label"></label>
-				<input asp-for="GeoLocation.Longitude" class="form-control" />
-				<span asp-validation-for="GeoLocation.Longitude" class="text-danger"></span>
-			</div>
-			<div class="form-group mb-3">
-				<label asp-for="GeoLocation.Details" class="control-label"></label>
-				<input asp-for="GeoLocation.Details" class="form-control" />
-				<span asp-validation-for="GeoLocation.Details" class="text-danger"></span>
-			</div>
             <div class="form-group">
-                <label asp-for="StatusId" class="control-label"></label>
+                <label asp-for="StatusId" class="control-label mb-3"></label>
                 <select asp-for="StatusId" class="form-control" asp-items="@(new SelectList(Model.Status,"Id","Name"))"></select>
                 <span asp-validation-for="StatusId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <button class="btn btn-primary me-3">Edit</button>
+				<a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
@@ -174,34 +144,27 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
    
-        /*Governorate >> City >> Region*/
-        function updatesubcategorylist() {
-            var selectcategory = document.getElementById("ddlgovernorate").value;
-            $list = $('#ddlcity');
-            $.ajax({
-                url: '/Case/GetRegion/' + selectcategory,
-                type: 'GET',
-                datatype: 'text',
-                success: function (data) {
-                    $list.html('');
-                    var items = '';
-                    for (i in data) {
-                        items += '<option value="' + data[i].value + '">' + data[i].text + '<option>';
-                    }
-                    $list.html(items);
-                }
-            });
-        }
-        $(document).ready(updatesubcategorylist);
-        $("#ddlgovernorate").on("change", function () {
-            updatesubcategorylist();
-        })
+	let governoratesList = document.getElementById('ddlGovernorate');
+	let citiesList = document.getElementById('ddlCity');
+	let regionsList = document.getElementById('ddlRegion');
 
- //   let governoratesList = document.getElementById('Governorate');
-	//governoratesList.onchange = updateCitiesList;
+	governoratesList.onchange = updateCitiesList;
+	citiesList.onchange = updateRegionsList;
 
-	//let citiesList = $('#ddlgovernorate');
+	$(document).ready(updateCitiesList);
 
-	//$(document).ready(updateCitiesList);
-     </script>
+	function updateCitiesList() {
+		$.getJSON('/api/cities/' + governoratesList.value, function(result) {
+			citiesList.innerHTML = '';
+			result.data.forEach(d => citiesList.append(new Option(d.name, d.id)));
+		}).done(updateRegionsList);
+	}
+
+	function updateRegionsList() {
+		$.getJSON('/api/regions/' + citiesList.value, function(result) {
+			regionsList.innerHTML = '';
+			result.data.forEach(d => regionsList.append(new Option(d.name, d.id)));
+		});
+	}
+    </script>
 }
