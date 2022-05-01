@@ -31,26 +31,43 @@ namespace GraduationProject.MvcControllers
 
         [HttpGet]
         public async Task<IActionResult> AcceptedCases()
+
         {
-            return View(await _context.Cases.AsNoTracking()
-                .Where(m => m.Status.Id == (byte)StatusType.Accepted)
-                .ToArrayAsync());
+           var Case= await _context.Cases.AsNoTracking()
+               .Where(m => m.Status.Id == (byte)StatusType.Accepted)
+               .ToArrayAsync();
+
+           var count =  Case.Count();
+            TempData["count"] = count;
+
+            return View(Case);
+           
         }
 
         [HttpGet]
         public async Task<IActionResult> PendingCases()
         {
-            return View(await _context.Cases.AsNoTracking()
-                .Where(m => m.StatusId == (byte)StatusType.Submitted)
-                .ToArrayAsync());
+            var Case = await _context.Cases.AsNoTracking()
+              .Where(m => m.Status.Id == (byte)StatusType.Pending)
+              .ToArrayAsync();
+
+            var count = Case.Count();
+            TempData["count"] = count;
+
+            return View(Case);
         }
 
         [HttpGet]
         public async Task<IActionResult> RejectedCases()
         {
-            return View(await _context.Cases.AsNoTracking()
-                .Where(m => m.Status.Id == (byte)StatusType.Rejected)
-                .ToArrayAsync());
+            var Case = await _context.Cases.AsNoTracking()
+               .Where(m => m.Status.Id == (byte)StatusType.Rejected)
+               .ToArrayAsync();
+
+            var count = Case.Count();
+            TempData["count"] = count;
+
+            return View(Case);
         }
 
         [HttpGet]
