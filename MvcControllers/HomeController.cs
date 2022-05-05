@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GraduationProject.MvcControllers
 {
-	[Authorize(Roles = Roles.Admin, AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-	public class HomeController : Controller
-	{
-		public IActionResult Index()
-		{
-			return View();
-		}
-	}
+    [Authorize(Roles = Roles.Admin, AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+    public class HomeController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+    }
 }

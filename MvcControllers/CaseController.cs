@@ -3,7 +3,7 @@ using GraduationProject.Enums;
 using GraduationProject.Models;
 using GraduationProject.Models.CaseProperties;
 using GraduationProject.Models.Shared;
-using GraduationProject.Utilities;
+using GraduationProject.Utilities.General;
 using GraduationProject.Utilities.StaticStrings;
 using GraduationProject.ViewModels.Cases;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -33,22 +33,22 @@ namespace GraduationProject.MvcControllers
         public async Task<IActionResult> AcceptedCases()
 
         {
-           var Case= await _context.Cases.AsNoTracking()
-               .Where(m => m.Status.Id == (byte)StatusType.Accepted)
-               .ToArrayAsync();
+            var Case = await _context.Cases.AsNoTracking()
+                .Where(m => m.Status.Id == StatusType.Accepted)
+                .ToArrayAsync();
 
-           var count =  Case.Count();
+            var count = Case.Count();
             TempData["count"] = count;
 
             return View(Case);
-           
+
         }
 
         [HttpGet]
         public async Task<IActionResult> PendingCases()
         {
             var Case = await _context.Cases.AsNoTracking()
-              .Where(m => m.Status.Id == (byte)StatusType.Pending)
+              .Where(m => m.Status.Id == StatusType.Pending)
               .ToArrayAsync();
 
             var count = Case.Count();
@@ -61,7 +61,7 @@ namespace GraduationProject.MvcControllers
         public async Task<IActionResult> RejectedCases()
         {
             var Case = await _context.Cases.AsNoTracking()
-               .Where(m => m.Status.Id == (byte)StatusType.Rejected)
+               .Where(m => m.Status.Id == StatusType.Rejected)
                .ToArrayAsync();
 
             var count = Case.Count();
@@ -75,12 +75,12 @@ namespace GraduationProject.MvcControllers
         {
             return View(new CrudCaseVM
             {
-                SocialStatus = Enum.GetValues<SocialStatusType>().Select(e => new SocialStatus { Id = (byte)e, Name = e.ToString() }),
-                Status = Enum.GetValues<StatusType>().Select(e => new Status { Id = (byte)e, Name = e.ToString() }),
-                Gender = Enum.GetValues<GenderType>().Select(e => new Gender { Id = (byte)e, Name = e.ToString() }),
-                Periods = Enum.GetValues<PeriodType>().Select(e => new Period { Id = (byte)e, Name = e.ToString() }),
-                Priorities = Enum.GetValues<PriorityType>().Select(e => new Priority { Id = (byte)e, Name = e.ToString() }),
-                Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = (byte)e, Name = e.ToString() }),
+                SocialStatus = Enum.GetValues<SocialStatusType>().Select(e => new SocialStatus { Id = e, Name = e.ToString() }),
+                Status = Enum.GetValues<StatusType>().Select(e => new Status { Id = e, Name = e.ToString() }),
+                Gender = Enum.GetValues<GenderType>().Select(e => new Gender { Id = e, Name = e.ToString() }),
+                Periods = Enum.GetValues<PeriodType>().Select(e => new Period { Id = e, Name = e.ToString() }),
+                Priorities = Enum.GetValues<PriorityType>().Select(e => new Priority { Id = e, Name = e.ToString() }),
+                Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = e, Name = e.ToString() }),
                 Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync(),
                 Categories = await _context.Categories.AsNoTracking().ToArrayAsync()
             });
@@ -90,12 +90,12 @@ namespace GraduationProject.MvcControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CrudCaseVM model)
         {
-            model.SocialStatus = Enum.GetValues<SocialStatusType>().Select(e => new SocialStatus { Id = (byte)e, Name = e.ToString() });
-            model.Status = Enum.GetValues<StatusType>().Select(e => new Status { Id = (byte)e, Name = e.ToString() });
-            model.Gender = Enum.GetValues<GenderType>().Select(e => new Gender { Id = (byte)e, Name = e.ToString() });
-            model.Periods = Enum.GetValues<PeriodType>().Select(e => new Period { Id = (byte)e, Name = e.ToString() });
-            model.Priorities = Enum.GetValues<PriorityType>().Select(e => new Priority { Id = (byte)e, Name = e.ToString() });
-            model.Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = (byte)e, Name = e.ToString() });
+            model.SocialStatus = Enum.GetValues<SocialStatusType>().Select(e => new SocialStatus { Id = e, Name = e.ToString() });
+            model.Status = Enum.GetValues<StatusType>().Select(e => new Status { Id = e, Name = e.ToString() });
+            model.Gender = Enum.GetValues<GenderType>().Select(e => new Gender { Id = e, Name = e.ToString() });
+            model.Periods = Enum.GetValues<PeriodType>().Select(e => new Period { Id = e, Name = e.ToString() });
+            model.Priorities = Enum.GetValues<PriorityType>().Select(e => new Priority { Id = e, Name = e.ToString() });
+            model.Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = e, Name = e.ToString() });
             model.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
             model.Categories = await _context.Categories.AsNoTracking().ToArrayAsync();
 
@@ -112,15 +112,15 @@ namespace GraduationProject.MvcControllers
                 BirthDate = model.BirthDate,
                 PaymentDate = model.PaymentDate,
                 SocialStatusId = model.SocialStatusId,
-                RelationshipId = (byte)model.RelationshipId,
-                PeriodId = (byte)model.PeriodId,
-                CategoryId = (byte)model.CategoryId,
+                RelationshipId = model.RelationshipId,
+                PeriodId = model.PeriodId,
+                CategoryId = model.CategoryId,
                 PriorityId = model.PriorityId,
                 GeoLocation = model.GeoLocation,
                 StatusId = model.StatusId,
                 GenderId = model.GenderId,
                 RegionId = model.RegionId,
-                MediatorId =1,
+                MediatorId = 1,
                 NeededMoneyAmount = model.NeededMoneyAmount,
                 Adults = model.Adults,
                 Children = model.Children,
@@ -143,9 +143,9 @@ namespace GraduationProject.MvcControllers
             await _context.SaveChangesAsync();
             _toastNotification.AddSuccessToastMessage("Case created successfully");
 
-            if (model.StatusId == (byte)StatusType.Accepted)
+            if (model.StatusId == StatusType.Accepted)
                 return RedirectToAction(nameof(AcceptedCases));
-            else if (model.StatusId == (byte)StatusType.Rejected)
+            else if (model.StatusId == StatusType.Rejected)
                 return RedirectToAction(nameof(RejectedCases));
 
             return RedirectToAction(nameof(PendingCases));
@@ -233,11 +233,11 @@ namespace GraduationProject.MvcControllers
                 StatusId = Case.StatusId,
                 SocialStatusId = Case.SocialStatusId,
                 RegionId = Case.RegionId,
-                SocialStatus = Enum.GetValues<SocialStatusType>().Select(e => new SocialStatus { Id = (byte)e, Name = e.ToString() }),
-                Status = Enum.GetValues<StatusType>().Select(e => new Status { Id = (byte)e, Name = e.ToString() }),
-                Gender = Enum.GetValues<GenderType>().Select(e => new Gender { Id = (byte)e, Name = e.ToString() }),
-                Periods = Enum.GetValues<PeriodType>().Select(e => new Period { Id = (byte)e, Name = e.ToString() }),
-                Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = (byte)e, Name = e.ToString() }),
+                SocialStatus = Enum.GetValues<SocialStatusType>().Select(e => new SocialStatus { Id = e, Name = e.ToString() }),
+                Status = Enum.GetValues<StatusType>().Select(e => new Status { Id = e, Name = e.ToString() }),
+                Gender = Enum.GetValues<GenderType>().Select(e => new Gender { Id = e, Name = e.ToString() }),
+                Periods = Enum.GetValues<PeriodType>().Select(e => new Period { Id = e, Name = e.ToString() }),
+                Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = e, Name = e.ToString() }),
                 Categories = await _context.Categories.AsNoTracking().ToArrayAsync(),
                 Priorities = await _context.Priorities.AsNoTracking().ToArrayAsync(),
                 Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync()
@@ -253,12 +253,12 @@ namespace GraduationProject.MvcControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CrudCaseVM model)
         {
-            model.SocialStatus = Enum.GetValues<SocialStatusType>().Select(e => new SocialStatus { Id = (byte)e, Name = e.ToString() });
-            model.Status = Enum.GetValues<StatusType>().Select(e => new Status { Id = (byte)e, Name = e.ToString() });
-            model.Gender = Enum.GetValues<GenderType>().Select(e => new Gender { Id = (byte)e, Name = e.ToString() });
-            model.Periods = Enum.GetValues<PeriodType>().Select(e => new Period { Id = (byte)e, Name = e.ToString() });
-            model.Priorities = Enum.GetValues<PriorityType>().Select(e => new Priority { Id = (byte)e, Name = e.ToString() });
-            model.Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = (byte)e, Name = e.ToString() });
+            model.SocialStatus = Enum.GetValues<SocialStatusType>().Select(e => new SocialStatus { Id = e, Name = e.ToString() });
+            model.Status = Enum.GetValues<StatusType>().Select(e => new Status { Id = e, Name = e.ToString() });
+            model.Gender = Enum.GetValues<GenderType>().Select(e => new Gender { Id = e, Name = e.ToString() });
+            model.Periods = Enum.GetValues<PeriodType>().Select(e => new Period { Id = e, Name = e.ToString() });
+            model.Priorities = Enum.GetValues<PriorityType>().Select(e => new Priority { Id = e, Name = e.ToString() });
+            model.Relationships = Enum.GetValues<RelationshipType>().Select(e => new Relationship { Id = e, Name = e.ToString() });
             model.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
             model.Categories = await _context.Categories.AsNoTracking().ToArrayAsync();
 
@@ -278,10 +278,10 @@ namespace GraduationProject.MvcControllers
             Case.BirthDate = model.BirthDate;
             Case.PaymentDate = model.PaymentDate;
             Case.SocialStatusId = model.SocialStatusId;
-            Case.CategoryId = (byte)model.CategoryId;
+            Case.CategoryId = model.CategoryId;
             Case.PriorityId = model.PriorityId;
-            Case.PeriodId = (byte)model.PeriodId;
-            Case.RelationshipId = (byte)model.RelationshipId;
+            Case.PeriodId = model.PeriodId;
+            Case.RelationshipId = model.RelationshipId;
             Case.GeoLocation = model.GeoLocation;
             Case.StatusId = model.StatusId;
             Case.GenderId = model.GenderId;
@@ -295,9 +295,9 @@ namespace GraduationProject.MvcControllers
             await _context.SaveChangesAsync();
             _toastNotification.AddSuccessToastMessage("Case updated successfully");
 
-            if (model.StatusId == (byte)StatusType.Accepted)
+            if (model.StatusId == StatusType.Accepted)
                 return RedirectToAction(nameof(AcceptedCases));
-            else if (model.StatusId == (byte)StatusType.Rejected)
+            else if (model.StatusId == StatusType.Rejected)
                 return RedirectToAction(nameof(RejectedCases));
 
             return RedirectToAction(nameof(PendingCases));
@@ -312,18 +312,18 @@ namespace GraduationProject.MvcControllers
 
             if (StatusType.Accepted.ToString().ToLower() == Name.ToLower())
             {
-                Case.StatusId = (byte)StatusType.Accepted;
+                Case.StatusId = StatusType.Accepted;
                 await _context.SaveChangesAsync();
                 _toastNotification.AddSuccessToastMessage($"{Case.Name} status updated successfully");
             }
             else if (StatusType.Rejected.ToString().ToLower() == Name.ToLower())
             {
-                Case.StatusId = (byte)StatusType.Rejected;
+                Case.StatusId = StatusType.Rejected;
                 await _context.SaveChangesAsync();
                 _toastNotification.AddSuccessToastMessage($"{Case.Name} status updated successfully");
             }
 
-            if (Case.StatusId == (byte)StatusType.Accepted)
+            if (Case.StatusId == StatusType.Accepted)
                 return RedirectToAction(nameof(AcceptedCases));
 
             return RedirectToAction(nameof(RejectedCases));

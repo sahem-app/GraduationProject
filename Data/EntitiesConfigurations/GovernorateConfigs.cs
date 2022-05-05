@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GraduationProject.Data.EntitiesConfigurations
 {
-	public class GovernorateConfigs : IEntityTypeConfiguration<Governorate>
-	{
-		public void Configure(EntityTypeBuilder<Governorate> builder)
-		{
-			builder.HasIndex(g => g.Name).IsUnique();
-		}
-	}
+    public class GovernorateConfigs : IEntityTypeConfiguration<Governorate>
+    {
+        public void Configure(EntityTypeBuilder<Governorate> builder)
+        {
+            builder.HasIndex(g => g.Name).IsUnique();
+        }
+    }
 }

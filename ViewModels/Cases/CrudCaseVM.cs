@@ -1,5 +1,4 @@
 ﻿using GraduationProject.Enums;
-using GraduationProject.Models;
 using GraduationProject.Models.CaseProperties;
 using GraduationProject.Models.Location;
 using GraduationProject.Models.Shared;
@@ -24,9 +23,9 @@ namespace GraduationProject.ViewModels.Cases
         [DisplayName("Phone Number"), Required]
         public string PhoneNumber { get; set; }
 
-        [MaxLength(14,ErrorMessage ="The national id should not be more than 14 digits")]
+        [MaxLength(14, ErrorMessage = "The national id should not be more than 14 digits")]
         [MinLength(14, ErrorMessage = "The national id should not be less than 14 digits")]
-        [DisplayName("National ID"),Required]
+        [DisplayName("National ID"), Required]
         public string NationalId { get; set; }
 
         [DisplayName("Birth Date")]
@@ -41,7 +40,7 @@ namespace GraduationProject.ViewModels.Cases
         [Column(TypeName = "date")]
         public DateTime PaymentDate { get; set; }
 
-        [ImageFile(MaxSize = 1024 * 1024) ,Required, DisplayName("National Card Image")]
+        [ImageFile(MaxSize = 1024 * 1024), Required, DisplayName("National Card Image")]
         public IFormFile NationalIdImage { get; set; }
 
         [StringLength(2000)]
@@ -58,19 +57,19 @@ namespace GraduationProject.ViewModels.Cases
 
         public IEnumerable<Priority> Priorities { get; set; }
         [DisplayName("Case Priority"), Required]
-        public byte PriorityId { get; set; }
+        public PriorityType PriorityId { get; set; }
 
         public IEnumerable<Period> Periods { get; set; }
         [DisplayName("Period"), Required]
-        public int PeriodId { get; set; }
+        public PeriodType PeriodId { get; set; }
 
         public IEnumerable<Gender> Gender { get; set; }
         [DisplayName("Gender"), Required]
-        public byte GenderId { get; set; }
+        public GenderType GenderId { get; set; }
 
         public IEnumerable<SocialStatus> SocialStatus { get; set; }
         [DisplayName("Social Status"), Required]
-        public byte SocialStatusId { get; set; }
+        public SocialStatusType SocialStatusId { get; set; }
 
         public IEnumerable<Governorate> Governorates { get; set; }
         [DisplayName("Governorate"), Required]
@@ -84,10 +83,10 @@ namespace GraduationProject.ViewModels.Cases
 
         public IEnumerable<Relationship> Relationships { get; set; }
         [DisplayName("Relationship"), Required]
-        public int RelationshipId { get; set; }
+        public RelationshipType RelationshipId { get; set; }
 
         public IEnumerable<Status> Status { get; set; }
         [DisplayName("Status"), Required]
-        public byte StatusId { get; set; }
+        public StatusType StatusId { get; set; }
     }
 }

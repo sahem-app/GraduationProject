@@ -1,7 +1,7 @@
 ﻿namespace GraduationProject.Utilities.StaticStrings
 {
-	public static class ValidImage
-	{
-		public static readonly string[] Extentions = { ".jpg", ".jpeg", ".png" };
-	}
+    public static class ValidImage
+    {
+        public static readonly string[] Extentions = { ".jpg", ".jpeg", ".png" };
+    }
 }

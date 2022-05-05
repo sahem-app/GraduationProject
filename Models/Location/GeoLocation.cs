@@ -1,19 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using NetTopologySuite.Geometries;
+using System.ComponentModel.DataAnnotations;
 
 namespace GraduationProject.Models.Location
 {
-	public class GeoLocation
-	{
-		public int Id { get; set; }
+    public class GeoLocation
+    {
+        public int Id { get; set; }
 
-		[Column(TypeName = "decimal(9,6)")]
-		public double Longitude { get; set; }
+        [Required]
+        public Point Location { get; set; }
 
-		[Column(TypeName = "decimal(8,6)")]
-		public double Latitude { get; set; }
-
-		[Required, MaxLength(4000)]
-		public string Details { get; set; }
-	}
+        [Required, MaxLength(4000)]
+        public string Details { get; set; }
+    }
 }

@@ -1,12 +1,6 @@
-using GraduationProject.Models;
-using GraduationProject.Models.CaseProperties;
 using GraduationProject.Models.Location;
-using GraduationProject.Models.Reviews;
-using GraduationProject.Models.Shared;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GraduationProject.ViewModels.Cases
 {

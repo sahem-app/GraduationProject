@@ -1,9 +1,9 @@
 ﻿namespace GraduationProject.Enums
 {
-	public enum PriorityType : byte
-	{
-		Urgent = 1,
-		High = 2,
-		Normal = 3
-	}
+    public enum PriorityType : byte
+    {
+        Urgent = 1,
+        High = 2,
+        Normal = 3
+    }
 }
