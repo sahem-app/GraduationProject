@@ -1,0 +1,135 @@
+﻿@model CreateMediatorVM
+
+@{
+    ViewData["Title"] = "Create Mediator";
+}
+
+<h1>Create Mediator</h1>
+<hr />
+<div class="row">
+    <div class="col-md-8 col-lg-6">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="NationalId" class="control-label">National ID</label>
+                <input asp-for="NationalId" class="form-control" />
+                <span asp-validation-for="NationalId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="GenderId" class="control-label">Gender</label>
+                <select asp-for="GenderId" class="form-select" asp-items="@(new SelectList(Model.Genders,"Id","Name"))">
+                </select>
+                <span asp-validation-for="GenderId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="SocialStatusId" class="control-label">Social Status</label>
+                <select asp-for="SocialStatusId" class="form-select" asp-items="@(new SelectList(Model.SocialStatus,"Id","Name"))">
+                </select>
+                <span asp-validation-for="SocialStatusId" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+            <label asp-for="GeolocationId" class="control-label mb-3"></label>
+            <select asp-for="GeolocationId" class="form-control" asp-items="@(new SelectList(Model.GeoLocation,"Id","Details"))"></select>
+            <span asp-validation-for="GeolocationId" class="text-danger"></span>
+        </div>*@
+            <div class="form-group mb-3">
+                <label asp-for="NationalIdImage" class="control-label"></label>
+                <input asp-for="NationalIdImage" class="form-control">
+                <span asp-validation-for="NationalIdImage" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="ProfileImage" class="control-label" for="customFile"></label>
+                <input asp-for="ProfileImage" class="form-control">
+                <span asp-validation-for="ProfileImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Longitude" class="control-label mb-3"></label>
+                <input asp-for="Longitude" class="form-control" readonly />
+                <span asp-validation-for="Longitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Latitude" class="control-label mb-3"></label>
+                <input asp-for="Latitude" class="form-control" readonly />
+                <span asp-validation-for="Latitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Details" class="control-label mb-3"></label>
+                <input asp-for="Details" class="form-control" />
+                <span asp-validation-for="Details" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="height: 400px; width: 600px;" id="map"></div>
+            <div class="form-group">
+                <button class="btn btn-primary me-3">Create</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+<script>
+    function initMap() {
+        console.log('hello my map')
+        var options = {
+            zoom: 8,
+            mapTypeId: google.maps.MapTypeId.HYBRID,
+            center: {
+                lat: 30.0444,
+                lng: 31.2357
+            }
+        }
+
+        //a new map
+        var map = new google.maps.Map(document.getElementById('map'), options)
+        var marker
+        addMarker({
+            coords: {
+                lat: 30.0444,
+                lng: 31.2357
+            },
+            iconImage: ""
+
+        })
+
+        function addMarker(props) {
+            marker = new google.maps.Marker({
+                position: props.coords,
+                map: map,
+                icon: props.iconImage
+
+            })
+        }
+        google.maps.event.addListener(map, 'click', function (event) {
+            placeMarker(event.latLng);
+        });
+
+        function placeMarker(location) {
+            if (marker == undefined) {
+                marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    animation: google.maps.Animation.DROP,
+                });
+            } else {
+                marker.setPosition(location);
+            }
+            document.getElementById('Latitude').value = location.lat();
+            document.getElementById('Longitude').value = location.lng();
+        }
+    }
+</script>
+}
+

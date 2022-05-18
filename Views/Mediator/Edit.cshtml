@@ -1,0 +1,234 @@
+﻿@model EditMediatorVM
+
+@{
+    ViewData["Title"] = "Edit Mediator";
+}
+
+<h1>Edit Mediator</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-9 col-lg-7">
+        <img width="200" height="200" class="rounded-circle mx-auto d-block mb-4" src="data:image/png;base64,@Convert.ToBase64String(Model.ProfilePicture)">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="NationalId" class="control-label">National ID</label>
+                <input asp-for="NationalId" class="form-control" />
+                <span asp-validation-for="NationalId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Job" class="control-label"></label>
+                <input asp-for="Job" class="form-control" />
+                <span asp-validation-for="Job" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Bio" class="control-label"></label>
+                <input asp-for="Bio" class="form-control" />
+                <span asp-validation-for="Bio" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="BirthDate" class="control-label" for="start"></label>
+                <input asp-for="BirthDate" type="date" class="form-control">
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="GenderId" class="control-label">Gender</label>
+                <select asp-for="GenderId" class="form-select" asp-items="@(new SelectList(Model.Genders,"Id","Name"))">
+                </select>
+                <span asp-validation-for="GenderId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="SocialStatusId" class="control-label">Social Status</label>
+                <select asp-for="SocialStatusId" class="form-select" asp-items="@(new SelectList(Model.SocialStatus,"Id","Name"))"></select>
+                <span asp-validation-for="SocialStatusId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Region.City.GovernorateId" class="control-label">Governorate</label>
+                <select for="Region.City.GovernorateId" id="ddlGovernorate" class="form-select" asp-items="@(new SelectList(Model.Governorates,"Id","Name", Model.Region?.City?.GovernorateId ?? 0))">
+                    <option value="0"> - No Location - </option>
+                </select>
+                <span asp-validation-for="Region.City.GovernorateId" class="text-danger"></span>
+            </div>
+            <div id="ddlLocation" class=@(Model.RegionId == null ? "d-none" : "d-block")>
+                <div class="form-group mb-3">
+                    <label asp-for="Region.CityId" class="control-label">City</label>
+                    <select for="Region.CityId" id="ddlCity" class="form-select"></select>
+                    <span asp-validation-for="Region.CityId" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="RegionId" class="control-label">Region</label>
+                    <select asp-for="RegionId" id="ddlRegion" class="form-select"></select>
+                    <span asp-validation-for="RegionId" class="text-danger"></span>
+                </div>
+            </div>
+            @*<div class="form-group">
+            <label asp-for="GeolocationId" class="control-label mb-3"></label>
+            <select asp-for="GeolocationId" class="form-control" asp-items="@(new SelectList(Model.GeoLocation,"Id","Details"))"></select>
+            <span asp-validation-for="GeolocationId" class="text-danger"></span>
+        </div>*@
+            <div class="form-group mb-3">
+                <label asp-for="NationalIdImage" class="control-label">National ID Image</label>
+                <img class="rounded mx-auto img-fluid d-block" src="data:image/png;base64,@Convert.ToBase64String(Model.NationalIdImage)">
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="NationalIdImageFile" class="control-label"></label>
+                <input asp-for="NationalIdImageFile" class="form-control">
+                <span asp-validation-for="NationalIdImageFile" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="ProfilePictureFile" class="control-label" for="customFile"></label>
+                <input asp-for="ProfilePictureFile" class="form-control">
+                <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Longitude" class="control-label mb-3"></label>
+                <input asp-for="Longitude" class="form-control" readonly />
+                <span asp-validation-for="Longitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Latitude" class="control-label mb-3"></label>
+                <input asp-for="Latitude" class="form-control" readonly />
+                <span asp-validation-for="Latitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Details" class="control-label mb-3"></label>
+                <input asp-for="Details" class="form-control" />
+                <span asp-validation-for="Details" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="height: 400px; width: 600px;" id="map"></div>
+            <div class="form-group">
+                <button type="submit" value="Save" class="btn btn-primary me-3">Save </button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+<script>
+    let governoratesList = document.getElementById('ddlGovernorate');
+    let citiesList = document.getElementById('ddlCity');
+    let regionsList = document.getElementById('ddlRegion');
+    let locationDiv = document.getElementById('ddlLocation');
+    governoratesList.onchange = function ()
+        {
+            if(governoratesList.value == 0)
+            {
+                locationDiv.className = 'd-none';
+                regionsList.value = '';
+            }
+            else
+            {
+                locationDiv.className = 'd-block';
+                updateCitiesList();
+            }
+        };
+
+    citiesList.onchange = updateRegionsList;
+
+    $(document).ready(() => {
+        let cityId = null;
+        let regionId = null;
+        @if(Model.Region != null)
+        {
+            @: cityId = @Model.Region.CityId;
+            @: regionId = @Model.RegionId;
+        }
+
+        if(cityId != null)
+        {
+            $.ajaxSetup({'async': false});
+            updateCitiesList();
+            citiesList.value = cityId;
+            updateRegionsList();
+            $.ajaxSetup({'async': true});
+            regionsList.value = regionId;
+        }
+    });
+
+    function updateCitiesList() {
+        $.getJSON('/api/cities/' + governoratesList.value, function(result) {
+            citiesList.innerHTML = '';
+            result.data.forEach(d => citiesList.append(new Option(d.name, d.id)));
+        }).done(updateRegionsList);
+    }
+
+    function updateRegionsList() {
+        $.getJSON('/api/regions/' + citiesList.value, function(result) {
+            regionsList.innerHTML = '';
+            result.data.forEach(d => regionsList.append(new Option(d.name, d.id)));
+        });
+    }
+
+    function initMap() {
+        console.log('hello my map')
+        var options = {
+            zoom: 8,
+            mapTypeId: google.maps.MapTypeId.HYBRID,
+            center: {
+                lat: 30.0444,
+                lng: 31.2357
+            }
+        }
+
+        //a new map
+        var map = new google.maps.Map(document.getElementById('map'), options)
+        var marker
+        addMarker({
+            coords: {
+                lat: @Model.Latitude,
+                lng: @Model.Longitude
+            },
+            iconImage: ""
+
+        })
+
+        function addMarker(props) {
+            marker = new google.maps.Marker({
+                position: props.coords,
+                map: map,
+                icon: props.iconImage
+
+            })
+        }
+        google.maps.event.addListener(map, 'click', function (event) {
+            placeMarker(event.latLng);
+        });
+
+        function placeMarker(location) {
+            if (marker == undefined) {
+                marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    animation: google.maps.Animation.DROP,
+                });
+            } else {
+                marker.setPosition(location);
+            }
+            document.getElementById('Latitude').value = location.lat();
+            document.getElementById('Longitude').value = location.lng();
+
+        }
+    }
+</script>
+}

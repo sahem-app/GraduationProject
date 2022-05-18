@@ -1,0 +1,118 @@
+﻿@model IEnumerable<MediatorVM>
+
+@{
+    ViewData["Title"] = "Mediators";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+<link rel="stylesheet" href="~/css/tables.css">
+<div class="container-fluid my-5 bg-white p-3 mytable">
+    <div class="row mb-4">
+        <div class="col-6">
+            <h5 class="tableName mb-4 mt-2">@TempData["status"] Mediators Table</h5>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-action="create" class="btn btn-outline-primary">Create New Mediator</a>
+            <a asp-controller="Reports" asp-action="AcceptedMediators" class="btn btn-outline-info">Export Pdf</a>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NationalId)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="align-middle">
+                    <td class="d-flex align-items-center">
+                        <img width="45" height="45" class="rounded-3 me-3" src="data:image/png;base64,@Convert.ToBase64String(item.Image)">
+                        <span>@item.Name</span>
+                    </td>
+                    <td>@item.PhoneNumber</td>
+                    <td>@item.NationalId</td>
+                    <td class="text-end gap-1">
+                        <a asp-action="details" asp-route-id="@item.Id" class="btn btn-outline-success"><i class="fa-solid fa-circle-info"></i> Details</a>
+                        @if (item.Status == StatusType.Accepted)
+                        {
+                            <a asp-action="edit" asp-route-id="@item.Id" class="btn btn-outline-secondary"><i class="fa-solid fa-pen"></i> Edit</a>
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#Modal" onclick="document.getElementById('deleteform').action = '/mediator/lock/@item.Id'">
+                                <i class="fa-solid fa-lock"></i> Lock
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button class="btn btn-outline-light">Details</button>
+</div>
+<div class="container">
+    @if (pager.TotalPages > 0)
+    {
+        <ul class="pagination justify-content-end">
+            @if (pager.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Mediator" asp-action="Index" asp-route-status="@TempData["status"]"  asp-route-pg="1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Mediator" asp-action="Index" asp-route-status="@TempData["status"]"  asp-route-pg="@(pager.CurrentPage - 1)">Previous</a>
+                </li>
+            }
+
+            @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+            {
+                <li class="page-item @(pge == pager.CurrentPage ?  "active" : "")">
+                    <a class="page-link" asp-controller="Mediator" asp-action="Index" asp-route-status="@TempData["status"]"  asp-route-pg="@pge"> @pge </a>
+                </li>
+            }
+            @if (pager.CurrentPage < pager.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Mediator" asp-action="Index" asp-route-status="@TempData["status"]" asp-route-pg="@(pager.CurrentPage +1)">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Mediator" asp-action="Index" asp-route-status="@TempData["status"]"  asp-route-pg="@(pager.TotalPages)">Last</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+
+
+<div class="modal fade" id="Modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mediators</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want lock this mediator?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <form id="deleteform" asp-action="lock" asp-route-id="" method="post">
+                    <button class="btn btn-danger">Yes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

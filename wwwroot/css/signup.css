@@ -1,0 +1,184 @@
+body {
+    padding: 15px;
+}
+/* start layout  */
+.layout {
+    background-image: url(../imgs/1.jpg);
+    background-size: cover;
+    background-position: 50%;
+    height: 60vh;
+    border-radius: 15px;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+}
+.layout::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: rgb(0, 0, 0, 60%);
+    z-index: -1;
+}
+.layout .container a:first-child svg {
+    margin-right: 5px;
+}
+.layout .container a:first-child span {
+    color: var(--main-color);
+}
+.layout .container a:last-child {
+    font-size: 14px;
+}
+.layout .container a:last-child:focus {
+    box-shadow: none;
+}
+.layout ul {
+    font-size: 14px;
+}
+.layout .info {
+    max-width: 500px;
+    position: relative;
+    left: 50%;
+    top: 10%;
+    transform: translate(-50%, -10%);
+}
+.layout h2 {
+    font-size: 45px;
+    font-weight: bold;
+}
+.navbar ul li a {
+    color: white;
+}
+.nav-link:focus, .nav-link:hover {
+    color: #cbd4c9;
+}
+.navbar .navbar-toggler {
+    color: transparent;
+    border-color: transparent;
+}
+.navbar .navbar-toggler svg {
+    color: white;
+}
+.dropdown-toggle::after {
+    color: var(--main-color);
+}
+/* end layout  */
+/* start form  */
+.form {
+    position: absolute;
+    width: 410px;
+    height: 70%;
+    overflow: auto;
+    background-color: white;
+    left: 50%;
+    top: 15%;
+    transform: translateX(-50%);
+    z-index: 3;
+    border-radius: 15px;
+    padding: 25px 20px;
+}
+@media (max-width: 767px) {
+    .form {
+        top: 50%;
+        width: calc(100% - 30px);
+    }
+}
+.form h2 {
+    text-align: center;
+    font-size: 20px;
+    color: #344767;
+}
+.form .register {
+    margin: 20px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form .register li a {
+    display: block;
+    padding: 15px 25px;
+    margin: 5px;
+    border: 1px solid rgb(177, 161, 161);
+    border-radius: 10px;
+    transition: 0.3s;
+}
+.form .register li a:hover {
+    border-color: #d9dde4;
+}
+.form .register li a:focus {
+    box-shadow: 2px 2px 10px #6c757dd4;
+}
+.form .register li a svg {
+    font-size: 25px;
+}
+.form .register li:first-child a svg {
+    color: rgb(60, 90, 154);
+}
+.form .register li:nth-child(2) a svg {
+    color: black;
+}
+.form .register li:last-child a svg {
+    color: #dd4b39;
+}
+.form .register li a:hover svg {
+    color: #d9dde4;
+}
+.form h3 {
+    text-align: center;
+    font-size: 16px;
+    color: #777;
+}
+.form form input:not([type="checkbox"]),
+.form form select {
+    border: none;
+    border-bottom: 1px solid var(--main-color);
+    background-color: var(--second-color);
+    caret-color: var(--main-color);
+    border-radius: 30px;
+}
+.form form input:not([type="checkbox"]):focus,
+.form form select:focus {
+    box-shadow: none;
+    background-color: var(--second-color);
+}
+.form form .social,
+.form form .gender {
+    display: inline-block;
+    width: 49%;
+}
+.was-validated .form-check-input:invalid~.form-check-label,
+.was-validated .form-check-input:valid~.form-check-label {
+    color: var(--main-color);
+}
+.was-validated .form-check-input:invalid {
+    border-color: var(--main-color); 
+}
+.was-validated .form-check-input:invalid:focus {
+    box-shadow: none;
+}
+.form-check-input.is-valid:checked, .was-validated .form-check-input:valid:checked {
+    background-color: var(--main-color);
+}
+.form form button {
+    width: 100%;
+    border-radius: 10px;
+    font-size: 14px;
+    color: white;
+    margin: 5px 0 15px;
+    padding: 10px;
+}
+.form form button:hover {
+    color: white;
+}
+.form form p {
+    margin-top: 5px;
+    color: #777;
+}
+.form form p a {
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--main-color);
+}
+/* end form  */

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<CaseReportVM>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <p style="text-align:center; font-size:40px;font-weight:500" >Report for Accepted Cases </p>
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PhoneNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.NationalId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.BirthDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.Gender)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.PaymentDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.DateRequested)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.NeededMoneyAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.Children)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.Adults)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.SocialStatus)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.Status)
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="align-middle">
+                        <td class="d-flex align-items-center">
+                            @item.Name
+                        </td>
+                        <td>@item.PhoneNumber</td>
+                        <td>@item.NationalId</td>
+                        <td>@item.BirthDate</td>
+                        <td>@item.Gender</td>
+                        <td>@item.PaymentDate</td>
+                        <td>@item.DateRequested</td>
+                        <td>@item.NeededMoneyAmount EGP</td>
+                        <td>@item.Children</td>
+                        <td>@item.Adults</td>
+                        <td>@item.Address</td>
+                        <td>@item.SocialStatus</td>
+                        <td>@item.Status</td>
+                    </tr>
+                }
+            </tbody>
+             @if (Model.Any())
+            {
+                <tfoot>
+                    <tr>
+                        <td>Number of Accepted Case:@TempData["count"]</td>
+                    </tr>
+                </tfoot>
+            }
+        </table>
+
+    </div>
+</body>
+</html>

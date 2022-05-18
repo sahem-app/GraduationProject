@@ -1,0 +1,61 @@
+﻿@model RegionVM
+
+@{
+	ViewData["Title"] = "Edit Region";
+}
+
+<h1>Edit Region</h1>
+<hr />
+
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Edit" method="post">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="@Model.Id" />
+			<div class="form-group mb-3">
+				<label asp-for="GovernorateId" class="control-label">Governorate</label>
+				<select id="ddlGovernorate" asp-for="GovernorateId" class="form-select" asp-items="@(new SelectList(Model.Governorates,"Id","Name"))"></select>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="CityId" class="control-label"></label>
+				<select id="ddlCity" asp-for="CityId" class="form-select"></select>
+				<span asp-validation-for="CityId" class="text-danger"></span>
+			</div>
+			<div class="form-group mb-3">
+				<label asp-for="Name" class="control-label"></label>
+				<input asp-for="Name" class="form-control" />
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<button class="btn btn-primary me-3">Save</button>
+				<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+			</div>
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+    @{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+
+<script>
+	let governoratesList = document.getElementById('ddlGovernorate');
+	let citiesList = document.getElementById('ddlCity');
+	governoratesList.onchange = updateCitiesList;
+
+	$(document).ready(() => {
+		$.ajaxSetup({'async': false});
+		updateCitiesList();
+		$.ajaxSetup({'async': true});
+		citiesList.value = @Model.CityId;
+	});
+
+	function updateCitiesList() {
+		$.getJSON('/api/cities/' + governoratesList.value, function(result) {
+			citiesList.innerHTML = '';
+			result.data.forEach(d => citiesList.append(new Option(d.name, d.id)));
+		});
+	}
+</script>
+}
