@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit Cases";
 }
 
-<h1>Create</h1>
+<h1>Edit</h1>
 
 <hr />
 <div class="row">
@@ -164,6 +164,8 @@
     @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
+       <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBW_5XYJse-i3qtDNcWWENWubo1IwqQ3VA&callback=initMap">
+    </script>
 <script>
 
     let governoratesList = document.getElementById('ddlGovernorate');
