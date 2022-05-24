@@ -13,6 +13,7 @@ namespace GraduationProject.Models.Location
         public string Name { get; set; }
 
         public Governorate Governorate { get; set; }
+        [Display(Name = "Governorate")]
         public int GovernorateId { get; set; }
 
         public ICollection<Region> Regions { get; set; }

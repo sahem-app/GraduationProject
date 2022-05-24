@@ -33,7 +33,7 @@ namespace GraduationProject.MvcControllers
             _toastNotification = toastNotification;
             _sMSService = sMSService;
         }
-
+     
         [HttpGet]
         public async Task<IActionResult> AcceptedCases(int pg = 1)
 
@@ -178,14 +178,18 @@ namespace GraduationProject.MvcControllers
             await _context.Cases.AddAsync(Case);
             await _context.SaveChangesAsync();
             _toastNotification.AddSuccessToastMessage("Case created successfully");
+            try
+            {
+                //sms message
+                var result = _sMSService.Send(Case.PhoneNumber, $"{Case.Name} You have been added in sahem application");
 
-            // sms message
-            var result = _sMSService.Send(Case.PhoneNumber, "You have been added in sahem application");
+                if (!string.IsNullOrEmpty(result.ErrorMessage))
+                    return BadRequest(result.ErrorMessage);
 
-            if (!string.IsNullOrEmpty(result.ErrorMessage))
-                return BadRequest(result.ErrorMessage);
-
-            _toastNotification.AddInfoToastMessage("The sms message has been sent successfully");
+                _toastNotification.AddInfoToastMessage("The sms message has been sent successfully");
+            }
+            catch (Exception ex) { }
+            
 
             if (model.StatusId == StatusType.Accepted)
                 return RedirectToAction(nameof(AcceptedCases));

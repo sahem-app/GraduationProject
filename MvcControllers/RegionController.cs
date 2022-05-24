@@ -40,6 +40,8 @@ namespace GraduationProject.MvcControllers
             int recSkip = (pg - 1) * pageSize;
             var data = regions.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
+            var Count = regions.Count();
+            TempData["count"]=Count;
             return View(data);
         }
 

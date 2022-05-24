@@ -2,7 +2,111 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+    <!-- Content wrapper -->
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 order-1">
+                    <div class="row">
+                        @*num of cases*@
+                        <div class="col-lg-6 col-md-12 col-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-start justify-content-between">
+                                        <div class="avatar flex-shrink-0">
+                                            <img src="~/templete/assets/img/icons/unicons/chart-success.png" alt="chart success" class="rounded" />
+                                        </div>
+                                        <div class="dropdown">
+                                            <button class="btn p-0"
+                                                    type="button"
+                                                    id="cardOpt3"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
+                                                <a class="dropdown-item" asp-controller="Case" asp-action="PendingCases">Pending Cases</a>
+                                                <a class="dropdown-item" asp-controller="Case" asp-action="AcceptedCases">Accepted Cases</a>
+                                                <a class="dropdown-item" asp-controller="Case" asp-action="RejectedCases">Rejected Cases</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="fw-semibold d-block mb-1">Number of cases</span>
+                                    <h3 class="card-title mb-2">$12,628</h3>
+                                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
+                                </div>
+                            </div>
+                        </div>
+                        @*num of mediators*@
+                        <div class="col-lg-6 col-md-12 col-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-start justify-content-between">
+                                        <div class="avatar flex-shrink-0">
+                                            <img src="~/templete/assets/img/icons/unicons/chart-success.png" alt="chart success" class="rounded" />
+                                        </div>
+                                        <div class="dropdown">
+                                            <button class="btn p-0"
+                                                    type="button"
+                                                    id="cardOpt3"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
+                                                <a class="dropdown-item" asp-controller="Mediator" asp-action="index" asp-route-status="@StatusType.Submitted">Pending Mediators</a>
+                                                <a class="dropdown-item" asp-controller="Mediator" asp-action="index" asp-route-status="@StatusType.Accepted">Accepted Mediators</a>
+                                                <a class="dropdown-item" asp-controller="Mediator" asp-action="index" asp-route-status="@StatusType.Rejected">Rejected Mediators</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="fw-semibold d-block mb-1">Num mediators</span>
+                                    <h3 class="card-title mb-2">$12,628</h3>
+                                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                            @*num of mediators*@
+                        <div class="col-lg-6 col-md-12 col-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-start justify-content-between">
+                                        <div class="avatar flex-shrink-0">
+                                            <img src="~/templete/assets/img/icons/unicons/chart-success.png" alt="chart success" class="rounded" />
+                                        </div>
+                                        <div class="dropdown">
+                                            <button class="btn p-0"
+                                                    type="button"
+                                                    id="cardOpt3"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
+                                                <a class="dropdown-item" asp-controller="Mediator" asp-action="index" asp-route-status="@StatusType.Submitted">Pending Mediators</a>
+                                                <a class="dropdown-item" asp-controller="Mediator" asp-action="index" asp-route-status="@StatusType.Accepted">Accepted Mediators</a>
+                                                <a class="dropdown-item" asp-controller="Mediator" asp-action="index" asp-route-status="@StatusType.Rejected">Rejected Mediators</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="fw-semibold d-block mb-1">Num mediators</span>
+                                    <h3 class="card-title mb-2">$12,628</h3>
+                                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Total Revenue -->

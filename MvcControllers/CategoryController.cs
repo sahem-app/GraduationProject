@@ -36,6 +36,8 @@ namespace GraduationProject.MvcControllers
             int recSkip = (pg - 1) * pageSize;
             var data = Categories.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
+            var count = Categories.Count();
+            TempData["count"] = count;
             //return View(await _context.Categories.AsNoTracking().ToArrayAsync());
             return View(data);
         }

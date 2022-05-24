@@ -3,61 +3,89 @@
     ViewData["Title"] = "Case Categories";
     Pager pager = new Pager();
     int pageNo = 0;
-    if(ViewBag.Pager != null)
+    if (ViewBag.Pager != null)
     {
         pager = ViewBag.Pager;
-		pageNo = pager.CurrentPage;
+        pageNo = pager.CurrentPage;
     }
 }
 
-<link rel="stylesheet" href="~/css/tables.css">
-<div class="container-fluid my-5 bg-white p-3 mytable">
-	<div class="row mb-4">
-		<div class="col-6">
-			<h5 class="tableName mb-4 mt-2">Categories Table</h5>
-		</div>
-		<div class="col-6 text-end">
-			<a asp-action="Create" class="btn btn-outline-primary">Create New Category</a>
-		</div>
-	</div>
-	<table class="table">
-		<thead>
-			<tr>
-				<th colspan="2">@Html.DisplayNameFor(m => m.Name)</th>
-			</tr>
-		</thead>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>@item.Name</td>
-				<td class="text-end gap-1">
-					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-secondary"><i class="fa-solid fa-pen"></i> Edit</a>
-					<button type="button" data-bs-toggle="modal" data-bs-target="#Modal" class="btn btn-outline-danger"
-						onclick="document.getElementById('deleteform').action = '/category/delete/@item.Id'">
-						<i class="fa-solid fa-trash me-1"></i>Delete
-					</button>
-				</td>
-			</tr>
-		}
-	</table>
+<!-- Bootstrap Table with Caption -->
+<div class="card mt-5 mb-2">
+    <div class="row m-4">
+        <div class="col-6">
+            <h5 class="tableName">Categories Table</h5>
+        </div>
+        <div class="col-6 text-end mb-1">
+            <a asp-action="create" class="btn btn-primary">Create New Category</a>
+        </div>
+    </div>
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <caption class="ms-4">
+                @if (Model.Any())
+                {
+                    <span>Number of Case Categories: @TempData["count"]</span>
+                }
+            </caption>
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(m => m.Name)</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr class="align-middle">
+                        <td>@item.Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id" asp-route-id="@item.Id">
+                                        <i class="bx bx-edit-alt me-1"></i> Edit
+                                    </a>
+                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Modal"
+                                   onclick="document.getElementById('deleteform').action = '/category/delete/@item.Id'">
+                                        <i class='bx bx-trash'></i>Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <partial name="_Pager" model="@pager" />
 <div class="modal" id="Modal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Case Category</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-			</div>
-			<div class="modal-body">
-				Are you sure you want delete this category?
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-				<form id="deleteform" asp-action="delete" asp-route-id="" method="post">
-					<button class="btn btn-danger">Yes</button>
-				</form>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Case Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want delete this category?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <form id="deleteform" asp-action="delete" asp-route-id="" method="post">
+                    <button class="btn btn-danger">Yes</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

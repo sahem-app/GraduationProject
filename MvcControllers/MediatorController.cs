@@ -29,12 +29,12 @@ namespace GraduationProject.MvcControllers
             _toast = toastNotification;
             _sMSService = sMSService;
         }
-
+        
         [HttpGet]
         public async Task<IActionResult> Index(StatusType status, int pg = 1)
         {
             var mediators = await _context.Mediators.AsNoTracking().Where(m => m.StatusId == status).Select(m => new MediatorVM(m)).ToArrayAsync();
-            int pageSize = 3;
+            int pageSize = 6;
             if (pg < 1)
                 pg = 1;
             var count = mediators.Count();
@@ -45,6 +45,7 @@ namespace GraduationProject.MvcControllers
             if (!Enum.GetValues<StatusType>().Contains(status))
                 status = StatusType.Accepted;
             TempData["status"] = status;
+            TempData["count"] = count;
             return View(data);
         }
 
@@ -82,12 +83,16 @@ namespace GraduationProject.MvcControllers
             await _context.Mediators.AddAsync(model.ToMediator());
             await _context.SaveChangesAsync();
             _toast.AddSuccessToastMessage("Mediator created successfully");
-
-            // sms message
+            try
+            {
+                // sms message
             var result = _sMSService.Send(model.PhoneNumber, "You have been added in sahem application");
             if (!string.IsNullOrEmpty(result.ErrorMessage))
                 return BadRequest(result.ErrorMessage);
             _toast.AddInfoToastMessage("The sms message has been sent successfully");
+            }
+            catch (Exception ex) { }
+            
 
             return RedirectToAction(nameof(Index));
         }

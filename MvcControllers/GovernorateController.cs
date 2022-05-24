@@ -36,6 +36,8 @@ namespace GraduationProject.MvcControllers
             int recSkip = (pg - 1) * pageSize;
             var data = governorates.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
+            var Count = governorates.Count();
+            TempData["count"] = Count;
             return View(data);
         }
 

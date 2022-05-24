@@ -12,6 +12,7 @@ namespace GraduationProject.Models.Location
         public string Name { get; set; }
 
         public City City { get; set; }
+        [Display(Name ="City")]
         public int CityId { get; set; }
 
         public Region()

@@ -1,27 +1,45 @@
 ﻿@model Category
 @{
-	ViewData["Title"] = "Create Category";
+    ViewData["Title"] = "Create Category";
 }
 
-<h1>Create</h1>
 <hr />
 
-<div class="row">
-	<div class="col-md-4">
-		<form asp-action="create" method="post">
-			<div class="form-group mb-3">
-				<label asp-for="Name" class="control-label"></label>
-				<input asp-for="Name" class="form-control" />
-				<span asp-validation-for="Name" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<button class="btn btn-primary me-3">Create</button>
-				<a asp-action="Index" class="btn btn-outline-warning">Cancel</a>
-			</div>
-		</form>
-	</div>
-</div>
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Page/</span> Create New Category</h4>
 
+    <!-- Basic Layout & Basic with Icons -->
+    <div class="row">
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    
+                    <small class="text-muted float-end">New category</small>
+                </div>
+                <div class="card-body">
+                    <form asp-action="create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" label asp-for="Name"></label>
+                            <div class="col-sm-6">
+                                <input type="text" asp-for="Name" class="form-control" id="basic-default-name" placeholder="Enter category name ...." />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Create</button>
+                                <a asp-action="Index" class="btn btn-dark">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Basic with Icons -->
 @section Scripts {
     @{
 	await Html.RenderPartialAsync("_ValidationScriptsPartial");
