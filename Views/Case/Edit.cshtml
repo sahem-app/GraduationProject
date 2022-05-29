@@ -3,169 +3,539 @@
 @{
     ViewData["Title"] = "Edit Cases";
 }
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Page/</span> Edit case form</h4>
 
-<h1>Edit</h1>
+@*
+    <h1>Edit</h1>
 
-<hr />
-<div class="row">
+    <hr />
+    <div class="row">
     <div class="col-md-8 col-lg-6">
-        <form asp-action="Edit" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label mb-3"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label mb-3"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NationalId" class="control-label mb-3"></label>
-                <input asp-for="NationalId" class="form-control" />
-                <span asp-validation-for="NationalId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BirthDate" class="control-label mb-3" for="start"></label>
-                <input asp-for="BirthDate" type="date" id="start" name="BirthDate"
-                       min="1990-01-01" max="2090-1-1" class="form-control" value="">
-                <span asp-validation-for="BirthDate" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <input id="image1" asp-for="NationalIdImage" class="form-control mb-3" type="file" id="formFile">
-                <label asp-for="NationalIdImage" for="formFile" class="form-label"></label>
-                <span asp-validation-for="NationalIdImage" class="text-danger"></span>
-            </div>
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Adults" class="control-label mb-3"></label>
-                <input asp-for="Adults" class="form-control" />
-                <span asp-validation-for="Adults" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Children" class="control-label mb-3"></label>
-                <input asp-for="Children" class="form-control" />
-                <span asp-validation-for="Children" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NeededMoneyAmount" class="control-label mb-3"></label>
-                <input asp-for="NeededMoneyAmount" class="form-control" />
-                <span asp-validation-for="NeededMoneyAmount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PaymentDate" class="control-label mb-3" for="start"></label>
-                <input asp-for="PaymentDate" type="date" id="start" name="PaymentDate"
-                       min="1990-01-01" max="2090-1-1" class="form-control" value="">
-                <span asp-validation-for="PaymentDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label mb-3"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label mb-3"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Story" class="control-label mb-3"></label>
-                <input asp-for="Story" class="form-control" />
-                <span asp-validation-for="Story" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label mb-3"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories,"Id","Name"))">
-                </select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PriorityId" class="control-label mb-3"></label>
-                <select asp-for="PriorityId" class="form-control" asp-items="@(new SelectList(Model.Priorities,"Id","Name"))">
-                </select>
-                <span asp-validation-for="PriorityId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GenderId" class="control-label"></label>
-                <select asp-for="GenderId" class="form-control" asp-items="@(new SelectList(Model.Gender,"Id","Name"))">
-                </select>
-                <span asp-validation-for="GenderId" class="text-danger"></span>
-            </div>
+    <div class="form-group">
+    <label asp-for="Name" class="control-label mb-3"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="PhoneNumber" class="control-label mb-3"></label>
+    <input asp-for="PhoneNumber" class="form-control" />
+    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="NationalId" class="control-label mb-3"></label>
+    <input asp-for="NationalId" class="form-control" />
+    <span asp-validation-for="NationalId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="BirthDate" class="control-label mb-3" for="start"></label>
+    <input asp-for="BirthDate" type="date" id="start" name="BirthDate"
+    min="1990-01-01" max="2090-1-1" class="form-control" value="">
+    <span asp-validation-for="BirthDate" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+    <input id="image1" asp-for="NationalIdImage" class="form-control mb-3" type="file" id="formFile">
+    <label asp-for="NationalIdImage" for="formFile" class="form-label"></label>
+    <span asp-validation-for="NationalIdImage" class="text-danger"></span>
+    </div>
 
-            <div class="form-group">
-                <label asp-for="RelationshipId" class="control-label"></label>
-                <select asp-for="RelationshipId" class="form-control" asp-items="@(new SelectList(Model.Relationships,"Id","Name"))">
-                </select>
-                <span asp-validation-for="RelationshipId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PeriodId" class="control-label"></label>
-                <select asp-for="PeriodId" class="form-control" asp-items="@(new SelectList(Model.Periods,"Id","Name"))">
-                </select>
-                <span asp-validation-for="PeriodId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SocialStatusId" class="control-label mb-3"></label>
-                <select asp-for="SocialStatusId" class="form-control" asp-items="@(new SelectList(Model.SocialStatus,"Id","Name"))">
-                </select>
-                <span asp-validation-for="SocialStatusId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GovernorateId" class="control-label mb-3"></label>
-                <select asp-for="GovernorateId" id="ddlGovernorate" class="form-select" asp-items="@(new SelectList(Model.Governorates,"Id","Name"))">
-                </select>
-                <span asp-validation-for="GovernorateId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="CityId" class="control-label mb-3">City</label>
-                <select id="ddlCity" class="form-select"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="RegionId" class="control-label mb-3"></label>
-                <select asp-for="RegionId" id="ddlRegion" class="form-select"></select>
-                <span asp-validation-for="RegionId" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-            <label asp-for="GeolocationId" class="control-label mb-3"></label>
-            <select asp-for="GeolocationId" class="form-control" asp-items="@(new SelectList(Model.GeoLocation,"Id","Details"))"></select>
-            <span asp-validation-for="GeolocationId" class="text-danger"></span>
-        </div>*@
-            <div class="form-group">
-                <label asp-for="StatusId" class="control-label mb-3"></label>
-                <select asp-for="StatusId" class="form-control" asp-items="@(new SelectList(Model.Status,"Id","Name"))"></select>
-                <span asp-validation-for="StatusId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Longitude" class="control-label mb-3"></label>
-                <input asp-for="Longitude" class="form-control" readonly />
-                <span asp-validation-for="Longitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Latitude" class="control-label mb-3"></label>
-                <input asp-for="Latitude" class="form-control" readonly/>
-                <span asp-validation-for="Latitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Details" class="control-label mb-3"></label>
-                <input asp-for="Details" class="form-control" />
-                <span asp-validation-for="Details" class="text-danger"></span>
-            </div>
-            <div class="form-group" style="height: 400px; width: 600px;" id="map"></div>
-            <div class="form-group">
-                <button class="btn btn-primary me-3">Edit</button>
-                <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+    <div class="form-group">
+    <label asp-for="Adults" class="control-label mb-3"></label>
+    <input asp-for="Adults" class="form-control" />
+    <span asp-validation-for="Adults" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="Children" class="control-label mb-3"></label>
+    <input asp-for="Children" class="form-control" />
+    <span asp-validation-for="Children" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="NeededMoneyAmount" class="control-label mb-3"></label>
+    <input asp-for="NeededMoneyAmount" class="form-control" />
+    <span asp-validation-for="NeededMoneyAmount" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="PaymentDate" class="control-label mb-3" for="start"></label>
+    <input asp-for="PaymentDate" type="date" id="start" name="PaymentDate"
+    min="1990-01-01" max="2090-1-1" class="form-control" value="">
+    <span asp-validation-for="PaymentDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="Address" class="control-label mb-3"></label>
+    <input asp-for="Address" class="form-control" />
+    <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="Title" class="control-label mb-3"></label>
+    <input asp-for="Title" class="form-control" />
+    <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="Story" class="control-label mb-3"></label>
+    <input asp-for="Story" class="form-control" />
+    <span asp-validation-for="Story" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="CategoryId" class="control-label mb-3"></label>
+    <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories,"Id","Name"))">
+    </select>
+    <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="PriorityId" class="control-label mb-3"></label>
+    <select asp-for="PriorityId" class="form-control" asp-items="@(new SelectList(Model.Priorities,"Id","Name"))">
+    </select>
+    <span asp-validation-for="PriorityId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="GenderId" class="control-label"></label>
+    <select asp-for="GenderId" class="form-control" asp-items="@(new SelectList(Model.Gender,"Id","Name"))">
+    </select>
+    <span asp-validation-for="GenderId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+    <label asp-for="RelationshipId" class="control-label"></label>
+    <select asp-for="RelationshipId" class="form-control" asp-items="@(new SelectList(Model.Relationships,"Id","Name"))">
+    </select>
+    <span asp-validation-for="RelationshipId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="PeriodId" class="control-label"></label>
+    <select asp-for="PeriodId" class="form-control" asp-items="@(new SelectList(Model.Periods,"Id","Name"))">
+    </select>
+    <span asp-validation-for="PeriodId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="SocialStatusId" class="control-label mb-3"></label>
+    <select asp-for="SocialStatusId" class="form-control" asp-items="@(new SelectList(Model.SocialStatus,"Id","Name"))">
+    </select>
+    <span asp-validation-for="SocialStatusId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="GovernorateId" class="control-label mb-3"></label>
+    <select asp-for="GovernorateId" id="ddlGovernorate" class="form-select" asp-items="@(new SelectList(Model.Governorates,"Id","Name"))">
+    </select>
+    <span asp-validation-for="GovernorateId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label for="CityId" class="control-label mb-3">City</label>
+    <select id="ddlCity" class="form-select"></select>
+    </div>
+    <div class="form-group">
+    <label asp-for="RegionId" class="control-label mb-3"></label>
+    <select asp-for="RegionId" id="ddlRegion" class="form-select"></select>
+    <span asp-validation-for="RegionId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="StatusId" class="control-label mb-3"></label>
+    <select asp-for="StatusId" class="form-control" asp-items="@(new SelectList(Model.Status,"Id","Name"))"></select>
+    <span asp-validation-for="StatusId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="Longitude" class="control-label mb-3"></label>
+    <input asp-for="Longitude" class="form-control" readonly />
+    <span asp-validation-for="Longitude" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="Latitude" class="control-label mb-3"></label>
+    <input asp-for="Latitude" class="form-control" readonly/>
+    <span asp-validation-for="Latitude" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="Details" class="control-label mb-3"></label>
+    <input asp-for="Details" class="form-control" />
+    <span asp-validation-for="Details" class="text-danger"></span>
+    </div>
+    <div class="form-group" style="height: 400px; width: 600px;" id="map"></div>
+    <div class="form-group">
+    <button class="btn btn-primary me-3">Edit</button>
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Cancel</a>
+    </div>
+    </form>
+    </div>
+    </div>*@
+
+
+<!-- Basic with Icons -->
+<div class="col-xxl">
+    <div class="card mb-4">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0">Edit new case</h5>
+            <small class="text-muted float-end">case form</small>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Name"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-rename'></i></span>
+                            <input asp-for="Name"
+                                   type="text"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter Case Name ..."
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="PhoneNumber"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-phone-call'></i></span>
+                            <input asp-for="PhoneNumber"
+                                   type="text"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter phone number ..."
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="NationalId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-id-card'></i></span>
+                            <input asp-for="NationalId"
+                                   type="text"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter National ID ..."
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="NationalId" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="BirthDate"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bxs-calendar'></i></span>
+                            <input asp-for="BirthDate"
+                                   type="date"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter Case Name ..."
+                                   aria-describedby="basic-icon-default-fullname2"
+                                   id="start" name="BirthDate"
+                                   min="1990-01-01" max="2090-1-1" value="" />
+                        </div>
+                        <span asp-validation-for="BirthDate" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="NationalIdImage"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-id-card'></i></span>
+                            <input asp-for="NationalIdImage"
+                                   type="file"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Select national card image ..."
+                                   aria-describedby="basic-icon-default-fullname2"
+                                   id="formFile" />
+                        </div>
+                        <span asp-validation-for="NationalIdImage" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Adults"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
+                            <input asp-for="Adults"
+                                   type="number"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter number of adults ..."
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="Adults" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Children"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bxs-baby-carriage'></i></span>
+                            <input asp-for="Children"
+                                   type="number"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter number of children ..."
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="Children" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="NeededMoneyAmount"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-money'></i></span>
+                            <input asp-for="NeededMoneyAmount"
+                                   type="number"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter needed money amount ..."
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="NeededMoneyAmount" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="PaymentDate"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bxs-calendar'></i></span>
+                            <input asp-for="PaymentDate"
+                                   type="date"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter Case Name ..."
+                                   aria-describedby="basic-icon-default-fullname2"
+                                   id="start" name="PaymentDate"
+                                   min="1990-01-01" max="2090-1-1" value="" />
+                        </div>
+                        <span asp-validation-for="PaymentDate" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Address"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bxs-edit-location'></i></span>
+                            <input asp-for="Address"
+                                   type="text"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter the addres ..."
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Title"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
+                            <input asp-for="Title"
+                                   type="text"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter the title ..."
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="Title" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="CategoryId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-category'></i></span>
+                            <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories,"Id","Name"))"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="PriorityId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-star'></i></span>
+                            <select asp-for="PriorityId" class="form-control" asp-items="@(new SelectList(Model.Priorities,"Id","Name"))"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="GenderId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-male-female'></i></span>
+                            <select asp-for="GenderId" class="form-control" asp-items="@(new SelectList(Model.Gender,"Id","Name"))"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="RelationshipId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bxs-network-chart'></i></span>
+                            <select asp-for="RelationshipId" class="form-control" asp-items="@(new SelectList(Model.Relationships,"Id","Name"))"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="PeriodId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-recycle'></i></span>
+                            <select asp-for="PeriodId" class="form-control" asp-items="@(new SelectList(Model.Periods,"Id","Name"))"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="SocialStatusId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-stats'></i></span>
+                            <select asp-for="SocialStatusId" class="form-control" asp-items="@(new SelectList(Model.SocialStatus,"Id","Name"))"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="GovernorateId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-location-plus'></i></span>
+                            <select asp-for="GovernorateId" id="ddlGovernorate" class="form-control" asp-items="@(new SelectList(Model.Governorates,"Id","Name"))"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="CityId">City</label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bxs-city'></i></span>
+                            <select for="CityId" id="ddlCity" class="form-control"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="RegionId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-current-location'></i></span>
+                            <select asp-for="RegionId" id="ddlRegion" class="form-control"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="StatusId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-stats'></i></span>
+                            <select asp-for="StatusId" class="form-control" asp-items="@(new SelectList(Model.Status,"Id","Name"))"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Story"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-text'></i></span>
+                            <textarea asp-for="Story"
+                                      id="basic-icon-default-message"
+                                      class="form-control"
+                                      placeholder="Hi,please enter description for this case?"
+                                      aria-describedby="basic-icon-default-message2" maxlength="2000"></textarea>
+                        </div>
+                        <span asp-validation-for="Story" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Longitude"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-current-location'></i></span>
+                            <input asp-for="Longitude" readonly
+                                   class="form-control"
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="Longitude" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Latitude"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-current-location'></i></span>
+                            <input asp-for="Latitude" readonly
+                                   class="form-control"
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="Latitude" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Details"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-current-location'></i></span>
+                            <input asp-for="Details"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   aria-describedby="basic-icon-default-fullname2" />
+
+                        </div>
+                        <span asp-validation-for="Details" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class=" col-sm-10" style="height: 250px; width: 100%;" id="map"></div>
+
+                <div class="row justify-content-end mt-5 text-end">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                        <a asp-action="Index" asp-controller="Home" class="btn btn-dark">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @section Scripts {
     @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
-       <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBW_5XYJse-i3qtDNcWWENWubo1IwqQ3VA&callback=initMap">
-    </script>
 <script>
 
     let governoratesList = document.getElementById('ddlGovernorate');
