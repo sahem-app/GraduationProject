@@ -16,5 +16,8 @@ namespace GraduationProject.ViewModels
 
         [DisplayName("Remember Me")]
         public bool RememberMe { get; set; }
-    }
+
+		[Required]
+		public string fcmToken { get; set; }
+	}
 }

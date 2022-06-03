@@ -311,6 +311,7 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBW_5XYJse-i3qtDNcWWENWubo1IwqQ3VA&callback=initMap">
     </script>
+	<script type="module" src="~/js/notification.js"></script>
     @await Component.InvokeAsync("NToastNotify")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
