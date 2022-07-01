@@ -25,7 +25,7 @@ namespace GraduationProject.MvcControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int pg=1)
+        public async Task<IActionResult> Index(int pg = 1)
         {
             var Categories = await _context.Categories.AsNoTracking().ToArrayAsync();
             int pageSize = 3;

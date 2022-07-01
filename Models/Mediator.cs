@@ -40,10 +40,10 @@ namespace GraduationProject.Models
 
         public bool Completed { get; set; }
 
-        [Required]
+        [Required, Display(Name = "Profile Image")]
         public byte[] ProfileImage { get; set; }
 
-        [Required]
+        [Required ,Display(Name = "National ID Image")]
         public byte[] NationalIdImage { get; set; }
 
         [Column(TypeName = "datetime2(0)")]

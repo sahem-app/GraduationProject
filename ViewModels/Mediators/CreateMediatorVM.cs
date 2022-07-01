@@ -64,8 +64,8 @@ namespace GraduationProject.ViewModels.Mediators
                 NationalId = NationalId,
                 GeoLocation = new GeoLocation
                 {
-                    Location = new Point(Longitude,Latitude) { SRID = 4326 },
-                    Details =Details
+                    Location = new Point(Longitude, Latitude) { SRID = 4326 },
+                    Details = Details
                 },
                 NationalIdImage = FormFileHandler.ConvertToBytes(NationalIdImage),
                 ProfileImage = FormFileHandler.ConvertToBytes(ProfileImage),

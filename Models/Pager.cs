@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GraduationProject.Models
 {
@@ -10,13 +7,13 @@ namespace GraduationProject.Models
         public int TotalItems { get; set; }
         public int CurrentPage { get; set; }
         public int PageSize { get; set; }
-        public int TotalPages{ get; set; }
+        public int TotalPages { get; set; }
         public int StartPage { get; set; }
         public int EndPage { get; set; }
 
         public Pager()
         {
-                
+
         }
         public Pager(int totalItems, int page, int pagsize = 3)
         {
@@ -25,15 +22,15 @@ namespace GraduationProject.Models
             int startPage = currentPage - 5;
             int endPage = currentPage + 4;
 
-            if(startPage <= 0)
+            if (startPage <= 0)
             {
                 endPage = endPage - (startPage - 1);
                 startPage = 1;
             }
-            if(endPage > totalPage)
+            if (endPage > totalPage)
             {
                 endPage = totalPage;
-                if(endPage > 10)
+                if (endPage > 10)
                 {
                     startPage = endPage - 9;
                 }
@@ -45,6 +42,6 @@ namespace GraduationProject.Models
             StartPage = startPage;
             EndPage = endPage;
         }
-        
+
     }
 }

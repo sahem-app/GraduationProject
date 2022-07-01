@@ -1,5 +1,4 @@
 ﻿using GraduationProject.Enums;
-using GraduationProject.Models.Location;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

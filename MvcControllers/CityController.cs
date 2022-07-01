@@ -26,7 +26,7 @@ namespace GraduationProject.MvcControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int pg=1)
+        public async Task<IActionResult> Index(int pg = 1)
         {
             var cities = await _context.Cities.AsNoTrackingWithIdentityResolution().Include(c => c.Governorate).ToArrayAsync();
             int pageSize = 3;
@@ -38,7 +38,7 @@ namespace GraduationProject.MvcControllers
             var data = cities.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
             var Count = cities.Count();
-            TempData["count"] = count;  
+            TempData["count"] = count;
             return View(data);
         }
 
