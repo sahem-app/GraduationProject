@@ -2,9 +2,9 @@
 using NetTopologySuite.Geometries;
 using System;
 
-namespace GraduationProjectAPI.Migrations
+namespace GraduationProject.Migrations
 {
-    public partial class InitDatabase : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,9 @@ namespace GraduationProjectAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Name_AR = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,7 +69,9 @@ namespace GraduationProjectAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
+                    Name = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
+                    Name_AR = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -217,7 +221,7 @@ namespace GraduationProjectAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: false),
                     NationalId = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: false),
                     BirthDate = table.Column<DateTime>(type: "date", nullable: true),
                     Bio = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
@@ -283,7 +287,7 @@ namespace GraduationProjectAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: false),
                     NationalId = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: false),
                     BirthDate = table.Column<DateTime>(type: "date", nullable: false),
                     Adults = table.Column<byte>(type: "tinyint", nullable: false),
@@ -506,15 +510,6 @@ namespace GraduationProjectAPI.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Medical" },
-                    { 2, "Poverty" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Genders",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -537,8 +532,8 @@ namespace GraduationProjectAPI.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { (byte)2, "Received" },
-                    { (byte)1, "Sent" }
+                    { (byte)1, "Sent" },
+                    { (byte)2, "Received" }
                 });
 
             migrationBuilder.InsertData(
@@ -546,11 +541,11 @@ namespace GraduationProjectAPI.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
+                    { (byte)3, "Case" },
                     { (byte)5, "Chat" },
                     { (byte)4, "Payment" },
-                    { (byte)3, "Case" },
-                    { (byte)1, "General" },
-                    { (byte)2, "Mediator" }
+                    { (byte)2, "Mediator" },
+                    { (byte)1, "General" }
                 });
 
             migrationBuilder.InsertData(
@@ -559,8 +554,8 @@ namespace GraduationProjectAPI.Migrations
                 values: new object[,]
                 {
                     { (byte)1, "One Time" },
-                    { (byte)2, "Weekly" },
-                    { (byte)3, "Monthly" }
+                    { (byte)3, "Monthly" },
+                    { (byte)2, "Weekly" }
                 });
 
             migrationBuilder.InsertData(
@@ -578,9 +573,9 @@ namespace GraduationProjectAPI.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { (byte)3, "Neighbor" },
                     { (byte)2, "Family" },
-                    { (byte)1, "Self" }
+                    { (byte)1, "Self" },
+                    { (byte)3, "Neighbor" }
                 });
 
             migrationBuilder.InsertData(
@@ -674,6 +669,18 @@ namespace GraduationProjectAPI.Migrations
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categories_Name",
+                table: "Categories",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Categories_Name_AR",
+                table: "Categories",
+                column: "Name_AR",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Chats_MediatorId",
                 table: "Chats",
                 column: "MediatorId");
@@ -698,6 +705,12 @@ namespace GraduationProjectAPI.Migrations
                 name: "IX_Governorates_Name",
                 table: "Governorates",
                 column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Governorates_Name_AR",
+                table: "Governorates",
+                column: "Name_AR",
                 unique: true);
 
             migrationBuilder.CreateIndex(

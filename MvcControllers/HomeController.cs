@@ -19,10 +19,10 @@ namespace GraduationProject.MvcControllers
         public IActionResult Index()
         {
             var numOfCase = _context.Cases.Count();
-            TempData["casecount"]= numOfCase;
+            TempData["casecount"] = numOfCase;
 
             var numOfMediator = _context.Mediators.Count();
-            TempData["mediatorcount"]=numOfMediator;
+            TempData["mediatorcount"] = numOfMediator;
 
             return View();
         }

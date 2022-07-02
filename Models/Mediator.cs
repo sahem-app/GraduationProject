@@ -43,7 +43,7 @@ namespace GraduationProject.Models
         [Required, Display(Name = "Profile Image")]
         public byte[] ProfileImage { get; set; }
 
-        [Required ,Display(Name = "National ID Image")]
+        [Required, Display(Name = "National ID Image")]
         public byte[] NationalIdImage { get; set; }
 
         [Column(TypeName = "datetime2(0)")]
