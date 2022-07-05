@@ -123,6 +123,7 @@ namespace GraduationProject.MvcControllers
 
             var count = result.Count();
             TempData["count"] = count;
+            TempData["status"] = status.ToString();
             return new ViewAsPdf(result);
         }
     }
