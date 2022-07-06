@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -123,9 +124,17 @@ namespace GraduationProject.MvcControllers
             if (!await _context.Governorates.AnyAsync(g => g.Id == id))
                 return NotFound();
 
-            _context.Governorates.Remove(new Governorate(id));
-            await _context.SaveChangesAsync();
-            _toast.AddSuccessToastMessage("Governorate deleted successfully");
+            try
+            {
+                _context.Governorates.Remove(new Governorate(id));
+                await _context.SaveChangesAsync();
+                _toast.AddSuccessToastMessage("Governorate deleted successfully");
+            }
+            catch (Exception)
+            { 
+                _toast.AddErrorToastMessage("can not delete this governorate"); 
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }

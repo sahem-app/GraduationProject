@@ -11,6 +11,9 @@ namespace GraduationProject.ViewModels
         [Required, StringLength(200)]
         public string Name { get; set; }
 
+        [Required, MaxLength(200)]
+        public string Name_AR { get; set; }
+
         [Display(Name = "City")]
         public int CityId { get; set; }
 

@@ -12,6 +12,10 @@ namespace GraduationProject.Models.Location
         [Required, MaxLength(250), Column(TypeName = "varchar")]
         public string Name { get; set; }
 
+        [Required, MaxLength(250)]
+        public string Name_AR { get; set; }
+
+
         public Governorate Governorate { get; set; }
         [Display(Name = "Governorate")]
         public int GovernorateId { get; set; }
@@ -28,9 +32,10 @@ namespace GraduationProject.Models.Location
             Id = (int)id;
         }
 
-        public City(string name, int governorateId)
+        public City(string name, string name_AR,int governorateId)
         {
             Name = name;
+            Name_AR = name_AR;
             GovernorateId = governorateId;
         }
     }

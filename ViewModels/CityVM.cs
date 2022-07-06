@@ -12,6 +12,9 @@ namespace GraduationProject.ViewModels
         [Required, StringLength(250)]
         public string Name { get; set; }
 
+        [Required, MaxLength(250)]
+        public string Name_AR { get; set; }
+
         [DisplayName("Governorate")]
         public int GovernorateId { get; set; }
 

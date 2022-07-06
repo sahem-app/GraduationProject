@@ -38,8 +38,15 @@
                          <div class="row mb-3">
                             <label  asp-for="Name" class="col-sm-2 col-form-label"></label>
                             <div class="col-sm-6">
-                               <input type="text" asp-for="Name" class="form-control" id="basic-default-name" />
+                               <input type="text" asp-for="Name" class="form-control" id="basic-default-name" placeholder="Enter region Name...."/>
                                 <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label  asp-for="Name_AR" class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-6">
+                                <input asp-for="Name_AR" type="text" class="form-control" id="basic-default-name" placeholder="Enter region Name_ARabic...."/>
+                                <span asp-validation-for="Name_AR" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row justify-content-end">
