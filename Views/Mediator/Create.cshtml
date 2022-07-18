@@ -1,78 +1,176 @@
 ﻿@model CreateMediatorVM
 
 @{
-    ViewData["Title"] = "Create Mediator";
+    ViewData["Title"] = "Create Mediators";
 }
 
-<h1>Create Mediator</h1>
-<hr />
-<div class="row">
-    <div class="col-md-8 col-lg-6">
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group mb-3">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="NationalId" class="control-label">National ID</label>
-                <input asp-for="NationalId" class="form-control" />
-                <span asp-validation-for="NationalId" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="GenderId" class="control-label">Gender</label>
-                <select asp-for="GenderId" class="form-select" asp-items="@(new SelectList(Model.Genders,"Id","Name"))">
-                </select>
-                <span asp-validation-for="GenderId" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="SocialStatusId" class="control-label">Social Status</label>
-                <select asp-for="SocialStatusId" class="form-select" asp-items="@(new SelectList(Model.SocialStatus,"Id","Name"))">
-                </select>
-                <span asp-validation-for="SocialStatusId" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-            <label asp-for="GeolocationId" class="control-label mb-3"></label>
-            <select asp-for="GeolocationId" class="form-control" asp-items="@(new SelectList(Model.GeoLocation,"Id","Details"))"></select>
-            <span asp-validation-for="GeolocationId" class="text-danger"></span>
-        </div>*@
-            <div class="form-group mb-3">
-                <label asp-for="NationalIdImage" class="control-label"></label>
-                <input asp-for="NationalIdImage" class="form-control">
-                <span asp-validation-for="NationalIdImage" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="ProfileImage" class="control-label" for="customFile"></label>
-                <input asp-for="ProfileImage" class="form-control">
-                <span asp-validation-for="ProfileImage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Longitude" class="control-label mb-3"></label>
-                <input asp-for="Longitude" class="form-control" readonly />
-                <span asp-validation-for="Longitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Latitude" class="control-label mb-3"></label>
-                <input asp-for="Latitude" class="form-control" readonly />
-                <span asp-validation-for="Latitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Details" class="control-label mb-3"></label>
-                <input asp-for="Details" class="form-control" />
-                <span asp-validation-for="Details" class="text-danger"></span>
-            </div>
-            <div class="form-group" style="height: 400px; width: 600px;" id="map"></div>
-            <div class="form-group">
-                <button class="btn btn-primary me-3">Create</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Page/</span> Create Mediators form</h4>
+
+<div class="col-xxl">
+    <div class="card mb-4">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0">Create new mediators</h5>
+            <small class="text-muted float-end">mediators form</small>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Name"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-rename'></i></span>
+                            <input asp-for="Name"
+                                   type="text"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter mediator Name ..."
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="PhoneNumber"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-phone-call'></i></span>
+                            <input asp-for="PhoneNumber"
+                                   type="text"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter phone number ..."
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="NationalId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-id-card'></i></span>
+                            <input asp-for="NationalId"
+                                   type="text"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Enter National ID ..."
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="NationalId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="GenderId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-category'></i></span>
+                            <select asp-for="GenderId" class="form-control" asp-items="@(new SelectList(Model.Genders,"Id","Name"))"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="SocialStatusId"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-star'></i></span>
+                            <select asp-for="SocialStatusId" class="form-control" asp-items="@(new SelectList(Model.SocialStatus,"Id","Name"))"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="NationalIdImage"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-id-card'></i></span>
+                            <input asp-for="NationalIdImage"
+                                   type="file"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Select national card image ..."
+                                   aria-describedby="basic-icon-default-fullname2"
+                                   id="formFile" />
+                        </div>
+                        <span asp-validation-for="NationalIdImage" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="ProfileImage" for="customFile"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-id-card'></i></span>
+                            <input asp-for="ProfileImage"
+                                   type="file"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   placeholder="Select national card image ..."
+                                   aria-describedby="basic-icon-default-fullname2"
+                                   id="formFile" />
+                        </div>
+                        <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Longitude"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-current-location'></i></span>
+                            <input asp-for="Longitude" readonly
+                                   class="form-control"
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="Longitude" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Latitude"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-current-location'></i></span>
+                            <input asp-for="Latitude" readonly
+                                   class="form-control"
+                                   aria-describedby="basic-icon-default-fullname2" />
+                        </div>
+                        <span asp-validation-for="Latitude" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" asp-for="Details"></label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-current-location'></i></span>
+                            <input asp-for="Details"
+                                   class="form-control"
+                                   id="basic-icon-default-fullname"
+                                   aria-describedby="basic-icon-default-fullname2" />
+
+                        </div>
+                        <span asp-validation-for="Details" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class=" col-sm-10" style="height: 250px; width: 100%;" id="map"></div>
+
+                <div class="row justify-content-end mt-5 text-end">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <a asp-action="Index" asp-controller="Home" class="btn btn-dark">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

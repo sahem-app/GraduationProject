@@ -1,4 +1,4 @@
-﻿@model Governorate
+﻿@model GovernorateVM
 
 @{
 	ViewData["Title"] = "Edit- Governorate";
@@ -19,14 +19,37 @@
                     <small class="text-muted float-end">Edit Governorate</small>
                 </div>
                 <div class="card-body">
-                    <form asp-action="Edit" method="post">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="@Model.Id" />
-                        <div class="row mb-3">
+                       <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" label asp-for="Name"></label>
                             <div class="col-sm-6">
                                 <input type="text" asp-for="Name" class="form-control" id="basic-default-name" placeholder="Enter Governorate name ...." />
                                 <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                         <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" label asp-for="Name_AR"></label>
+                            <div class="col-sm-6">
+                                <input type="text" asp-for="Name_AR" class="form-control" id="basic-default-name" placeholder="Enter Governorate Arabic name ...." />
+                                <span asp-validation-for="Name_AR" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" asp-for="Image"></label>
+                            <div class="col-sm-6">
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-id-card'></i></span>
+                                    <input asp-for="Image"
+                                           type="file"
+                                           class="form-control"
+                                           id="basic-icon-default-fullname"
+                                           placeholder="Select Category Image ..."
+                                           aria-describedby="basic-icon-default-fullname2"
+                                           id="formFile" />
+                                </div>
+                                <span asp-validation-for="Image" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row justify-content-end">

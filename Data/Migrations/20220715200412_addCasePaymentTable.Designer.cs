@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
-namespace GraduationProjectAPI.Migrations
+namespace GraduationProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220516204228_changeMaxLenrthToPhonnumberFieldInMediatorModel")]
-    partial class changeMaxLenrthToPhonnumberFieldInMediatorModel
+    [Migration("20220715200412_addCasePaymentTable")]
+    partial class addCasePaymentTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -141,6 +141,50 @@ namespace GraduationProjectAPI.Migrations
                     b.ToTable("Cases");
                 });
 
+            modelBuilder.Entity("GraduationProject.Models.CaseProperties.Casepayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AdminId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CaseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DateDelivered")
+                        .HasColumnType("datetime2(0)");
+
+                    b.Property<DateTime>("DateSubmitted")
+                        .HasColumnType("datetime2(0)");
+
+                    b.Property<string>("Details")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<int>("MediatorId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RoundNnumber")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("TransactionImage")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseId");
+
+                    b.HasIndex("MediatorId");
+
+                    b.ToTable("Casepayment");
+                });
+
             modelBuilder.Entity("GraduationProject.Models.CaseProperties.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -148,26 +192,29 @@ namespace GraduationProjectAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("Name_AR")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Medical"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Poverty"
-                        });
+                    b.HasIndex("Name_AR")
+                        .IsUnique();
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("GraduationProject.Models.CaseProperties.Image", b =>
@@ -354,11 +401,19 @@ namespace GraduationProjectAPI.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
+                    b.Property<string>("Name_AR")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GovernorateId");
 
                     b.HasIndex("Name", "GovernorateId")
+                        .IsUnique();
+
+                    b.HasIndex("Name_AR", "GovernorateId")
                         .IsUnique();
 
                     b.ToTable("Cities");
@@ -392,14 +447,25 @@ namespace GraduationProjectAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
+                    b.Property<string>("Name_AR")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("Name_AR")
                         .IsUnique();
 
                     b.ToTable("Governorates");
@@ -420,11 +486,19 @@ namespace GraduationProjectAPI.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
+                    b.Property<string>("Name_AR")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
 
                     b.HasIndex("Name", "CityId")
+                        .IsUnique();
+
+                    b.HasIndex("Name_AR", "CityId")
                         .IsUnique();
 
                     b.ToTable("Regions");
@@ -910,6 +984,25 @@ namespace GraduationProjectAPI.Migrations
                     b.Navigation("SocialStatus");
 
                     b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("GraduationProject.Models.CaseProperties.Casepayment", b =>
+                {
+                    b.HasOne("GraduationProject.Models.Case", "Case")
+                        .WithMany()
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GraduationProject.Models.Mediator", "Mediator")
+                        .WithMany()
+                        .HasForeignKey("MediatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("Mediator");
                 });
 
             modelBuilder.Entity("GraduationProject.Models.CaseProperties.Image", b =>

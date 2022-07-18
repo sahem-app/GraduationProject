@@ -33,13 +33,20 @@ namespace GraduationProject.MvcControllers
             _toastNotification = toastNotification;
             _sMSService = sMSService;
         }
-     
+
         [HttpGet]
         public async Task<IActionResult> AcceptedCases(int pg = 1)
 
         {
             var Case = await _context.Cases.AsNoTracking()
                 .Where(m => m.Status.Id == StatusType.Accepted)
+                .Select(m => new Case
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    NationalId = m.NationalId,
+                    PhoneNumber = m.PhoneNumber,
+                })
                 .ToArrayAsync();
             int pageSize = 3;
             if (pg < 1)
@@ -62,6 +69,13 @@ namespace GraduationProject.MvcControllers
         {
             var Case = await _context.Cases.AsNoTracking()
               .Where(m => m.Status.Id == StatusType.Submitted)
+              .Select(m => new Case
+              {
+                  Id = m.Id,
+                  Name = m.Name,
+                  NationalId = m.NationalId,
+                  PhoneNumber = m.PhoneNumber,
+              })
               .ToArrayAsync();
 
             int pageSize = 3;
@@ -84,6 +98,13 @@ namespace GraduationProject.MvcControllers
         {
             var Case = await _context.Cases.AsNoTracking()
                .Where(m => m.Status.Id == StatusType.Rejected)
+               .Select(m => new Case
+               {
+                   Id = m.Id,
+                   Name = m.Name,
+                   NationalId = m.NationalId,
+                   PhoneNumber = m.PhoneNumber,
+               })
                .ToArrayAsync();
 
             int pageSize = 3;
@@ -188,8 +209,8 @@ namespace GraduationProject.MvcControllers
 
                 _toastNotification.AddInfoToastMessage("The sms message has been sent successfully");
             }
-            catch (Exception ex) { }
-            
+            catch (Exception) { }
+
 
             if (model.StatusId == StatusType.Accepted)
                 return RedirectToAction(nameof(AcceptedCases));

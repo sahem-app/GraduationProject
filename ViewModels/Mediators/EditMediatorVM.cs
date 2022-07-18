@@ -49,10 +49,6 @@ namespace GraduationProject.ViewModels.Mediators
         [Required, MaxLength(4000)]
         public string Details { get; set; }
 
-        //[Display(Name = "Geolocation")]
-        //public int GeolocationId { get; set; }
-        //public IEnumerable<GeoLocation> GeoLocation { get; set; }
-
         public Region Region { get; set; }
         public int? RegionId { get; set; }
 
@@ -73,6 +69,8 @@ namespace GraduationProject.ViewModels.Mediators
         public IEnumerable<SocialStatus> SocialStatus { get; set; }
 
         public IEnumerable<Governorate> Governorates { get; set; }
+        public IEnumerable<City> Cities { get; set; }
+        public IEnumerable<Region> Regions { get; set; }
 
         public void UpdateMediator(Mediator mediator)
         {

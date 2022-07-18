@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
-namespace GraduationProjectAPI.Migrations
+namespace GraduationProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220516015132_changeMaxLengthToPhoneNumberFieldInCaseTable")]
-    partial class changeMaxLengthToPhoneNumberFieldInCaseTable
+    [Migration("20220701200532_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -148,26 +148,29 @@ namespace GraduationProjectAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("Name_AR")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Medical"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Poverty"
-                        });
+                    b.HasIndex("Name_AR")
+                        .IsUnique();
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("GraduationProject.Models.CaseProperties.Image", b =>
@@ -392,14 +395,25 @@ namespace GraduationProjectAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
+                    b.Property<string>("Name_AR")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("Name_AR")
                         .IsUnique();
 
                     b.ToTable("Governorates");
@@ -489,8 +503,8 @@ namespace GraduationProjectAPI.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("varchar(11)");
+                        .HasMaxLength(14)
+                        .HasColumnType("varchar(14)");
 
                     b.Property<byte[]>("ProfileImage")
                         .IsRequired()

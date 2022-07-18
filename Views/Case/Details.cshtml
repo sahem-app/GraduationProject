@@ -1,136 +1,232 @@
 ﻿@model CaseVM
 
 @{
-    ViewData["Title"] = "Detaila- Case";
+    ViewData["Title"] = "Details- Case";
 }
 
-<div class="card mb-3">
-    <div class="card-body">
-        @if (@Model.NationalIdImage != null)
-        {
-            <img width="100" height="100" class="rounded mx-auto img-fluid d-block" src="data:image/png;base64,@Convert.ToBase64String(Model.NationalIdImage)">
-        }
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Name): <small class="text-muted">@Model.Name</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.PhoneNumber): <small class="text-muted">@Model.PhoneNumber</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.NationalId): <small class="text-muted">@Model.NationalId</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.BirthDate): <small class="text-muted">@Model.BirthDate</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.PaymentDate): <small class="text-muted">@Model.PaymentDate</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Adults): <small class="text-muted">@Model.Adults</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Children): <small class="text-muted">@Model.Children</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.NeededMoneyAmount): <small class="text-muted">@Model.NeededMoneyAmount</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Title): <small class="text-muted">@Model.Title</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Address): <small class="text-muted">@Model.Address</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Category): <small class="text-muted">@Model.Category</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Period): <small class="text-muted">@Model.Period</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Relationship): <small class="text-muted">@Model.Relationship</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Mediator): <small class="text-muted">@Model.Mediator</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Priority): <small class="text-muted">@Model.Priority</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Gender): <small class="text-muted">@Model.Gender</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Region): <small class="text-muted">@Model.Region</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.City): <small class="text-muted">@Model.City</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Governorate): <small class="text-muted">@Model.Governorate</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Status): <small class="text-muted">@Model.Status</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Story): <small class="text-muted">@Model.Story</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Latitude): <small class="text-muted">@Model.Latitude</small></p>
-        <p class="card-text">@Html.DisplayNameFor(m => m.Longitude): <small class="text-muted">@Model.Longitude</small></p>
-        <br />
-        <div class="form-group" style="height: 400px; width: 600px;" id="map"></div>
-        @if (Model.ReviewsAboutMe != null)
-        {
-            <hr />
-            foreach (var item in Model.ReviewsAboutMe)
-            {
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
 
-                <div class="row form-group my-4 d-flex align-items-center">
-                    <div class="col-3 col-sm-2">
-                        <img width="50" height="50" class="rounded" src="data:image/png;base64,@Convert.ToBase64String(item.Image)">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold  mb-4"><span class="text-muted fw-light">Page /</span> Case Details  </h4>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <h5 class="card-header">Case Details</h5>
+                    <!-- Account -->
+                    <div class="card-body">
+                        <div class="d-flex align-items-start align-items-sm-center gap-4">
+                            <img src="data:image/png;base64,@Convert.ToBase64String(Model.NationalIdImage)"
+                                 alt="user-avatar"
+                                 class="d-block rounded"
+                                 height="100"
+                                 width="100"
+                                 id="uploadedAvatar" />
+                            <div class="button-wrapper">
+                                <p class="text-muted mb-0">National Id Image</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-4">
-                        <span class="fs-5">@item.Name</span>
-                    </div>
-                    <div class="col-4">
-                        @if (item.IsWorthy)
-                        {
-                            <span class="text-success fs-5">Worthy</span>
-                        }
-                        else
-                        {
-                            <span class="text-danger fs-5">Unworthy</span>
-                        }
-                    </div>
-                </div>
-                <div>
-                    <textarea asp-for="@item.Description" disabled class="form-control bg-white">@item.Description</textarea>
-                </div>
-            }
+                    <hr class="my-0" />
+                    <div class="card-body">
+                        <form id="formAccountSettings" method="get" onsubmit="return false">
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Name" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Name" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="NationalId" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.NationalId" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="PhoneNumber" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.PhoneNumber" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="BirthDate" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.BirthDate" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Title" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Title" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Adults" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Adults" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Children" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Children" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Address" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Address" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="NeededMoneyAmount" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.NeededMoneyAmount" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Gender" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Gender" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Category" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Category" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Priority" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Priority" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Period" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Period" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="SocialStatus" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.SocialStatus" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Relationship" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Relationship" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Governorate" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Governorate" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="City" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.City" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Region" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Region" readonly style="background-color: #fff !important" />
+                                </div>
 
-        }
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Status" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Status" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Story" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Story" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Longitude" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Longitude" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label asp-for="Latitude" class="form-label"></label>
+                                    <input class="form-control" type="text" id="lastName" value="@Model.Latitude" readonly style="background-color: #fff !important" />
+                                </div>
+                                <div class="form-group mb-2" style="height: 300px; width: 100%;" id="map"></div>
+                                @if (Model.ReviewsAboutMe != null)
+                                {
+                                    <hr />
+                                    foreach (var item in Model.ReviewsAboutMe)
+                                    {
 
+                                        <div class="row form-group my-4 d-flex align-items-center">
+                                            <div class="col-3 col-sm-2">
+                                                <img width="50" height="50" class="rounded" src="data:image/png;base64,@Convert.ToBase64String(item.Image)">
+                                            </div>
+                                            <div class="col-4">
+                                                <span class="fs-5">@item.Name</span>
+                                            </div>
+                                            <div class="col-4">
+                                                @if (item.IsWorthy)
+                                                {
+                                                    <span class="text-success fs-5">Worthy</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger fs-5">Unworthy</span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <textarea asp-for="@item.Description" disabled class="form-control bg-white">@item.Description</textarea>
+                                        </div>
+                                    }
 
-        <!-- Button trigger modal -->
-        <button type="button" asp-action="ChangeStatus" data-bs-toggle="modal" data-bs-target="#Modal@(Model.Id)" class="btn btn-outline-primary">
-            Change Status
-        </button>
-
-        <!--  new-->
-        <div class="modal fade" id="Modal@(Model.Id)">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Mediators Status</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        You can change the status to @Model.Name
-                    </div>
-                    <div class="modal-footer">
-                        <form asp-action="ChangeStatus" asp-route-id="@Model.Id" asp-route-name="accepted" method="post">
-                            <button class="btn btn-success">Accepted</button>
+                                }
+                            </div>
+                            <div class="mt-2">
+                                <!-- Button trigger modal -->
+                                <button type="button" asp-action="ChangeStatus" data-bs-toggle="modal" data-bs-target="#Modal@(Model.Id)" class="btn btn-outline-primary">
+                                    Change Status
+                                </button>
+                                <a asp-action="acceptedcases" class="btn btn-outline-secondary">Cancel</a>
+                            </div>
                         </form>
-                        <form asp-action="ChangeStatus" asp-route-id="@Model.Id" asp-route-name="rejected" method="post">
-                            <button class="btn btn-danger">Rejected</button>
-                        </form>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
+                    <!-- /Account -->
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!--  new-->
+<div class="modal fade" id="Modal@(Model.Id)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mediators Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                You can change the status to @Model.Name
+            </div>
+            <div class="modal-footer">
+                <form asp-action="ChangeStatus" asp-route-id="@Model.Id" asp-route-name="accepted" method="post">
+                    <button class="btn btn-success">Accepted</button>
+                </form>
+                <form asp-action="ChangeStatus" asp-route-id="@Model.Id" asp-route-name="rejected" method="post">
+                    <button class="btn btn-danger">Rejected</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts{
-    <script>
-        function initMap() {
-            console.log('hello my map')
-            var options = {
-                zoom: 8,
-                mapTypeId: google.maps.MapTypeId.HYBRID,
-                center: {
-                    lat: 30.0444,
-                    lng: 31.2357
-                }
-            }
-
-            //a new map
-            var map = new google.maps.Map(document.getElementById('map'), options)
-            var marker
-            addMarker({
-                coords: {
-                    lat: @Model.Latitude,
-                    lng: @Model.Longitude
-            },
-                iconImage: ""
-
-            })
-            function addMarker(props) {
-                marker = new google.maps.Marker({
-                    position: props.coords,
-                    map: map,
-                    icon: props.iconImage
-
-                })
+<script>
+    function initMap() {
+        console.log('hello my map')
+        var options = {
+            zoom: 8,
+            mapTypeId: google.maps.MapTypeId.HYBRID,
+            center: {
+                lat: 30.0444,
+                lng: 31.2357
             }
         }
-    </script>
-}
+
+        //a new map
+        var map = new google.maps.Map(document.getElementById('map'), options)
+        var marker
+        addMarker({
+            coords: {
+                lat: @Model.Latitude,
+                lng: @Model.Longitude
+        },
+            iconImage: ""
+
+        })
+        function addMarker(props) {
+            marker = new google.maps.Marker({
+                position: props.coords,
+                map: map,
+                icon: props.iconImage
+
+            })
+        }
+    }
+</script>
+                }

@@ -1,7 +1,9 @@
 ﻿using GraduationProject.Data;
 using GraduationProject.Models;
 using GraduationProject.Models.CaseProperties;
+using GraduationProject.Utilities.General;
 using GraduationProject.Utilities.StaticStrings;
+using GraduationProject.ViewModels.Cases;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +27,7 @@ namespace GraduationProject.MvcControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int pg=1)
+        public async Task<IActionResult> Index(int pg = 1)
         {
             var Categories = await _context.Categories.AsNoTracking().ToArrayAsync();
             int pageSize = 3;
@@ -50,12 +52,18 @@ namespace GraduationProject.MvcControllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Category model)
+        public async Task<IActionResult> Create(CategoryVM model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            await _context.Categories.AddAsync(model);
+            var category = new Category()
+            {
+                Name = model.Name,
+                Name_AR = model.Name_AR,
+                Image = FormFileHandler.ConvertToBytes(model.Image)
+            };
+            await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
             _toast.AddSuccessToastMessage($"{model.Name} category added successfully");
             return RedirectToAction(nameof(Index));
@@ -65,12 +73,19 @@ namespace GraduationProject.MvcControllers
         public async Task<IActionResult> Edit(uint id)
         {
             var category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
-            return category == null ? NotFound() : View(category);
+
+            var categoryVM = new CategoryVM()
+            {
+                Name = category.Name,
+                Name_AR = category.Name_AR
+            };
+
+            return category == null ? NotFound() : View(categoryVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Category model)
+        public async Task<IActionResult> Edit(CategoryVM model)
         {
             if (!ModelState.IsValid)
                 return View(model);
@@ -80,6 +95,9 @@ namespace GraduationProject.MvcControllers
                 return NotFound();
 
             category.Name = model.Name;
+            category.Name_AR = model.Name_AR;
+            category.Image = FormFileHandler.ConvertToBytes(model.Image);
+
             await _context.SaveChangesAsync();
             _toast.AddSuccessToastMessage($"{model.Name} category updated successfully");
             return RedirectToAction(nameof(Index));

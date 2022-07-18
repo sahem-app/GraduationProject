@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,7 +42,7 @@ namespace GraduationProject.MvcControllers
             var data = regions.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
             var Count = regions.Count();
-            TempData["count"]=Count;
+            TempData["count"] = Count;
             return View(data);
         }
 
@@ -75,6 +76,7 @@ namespace GraduationProject.MvcControllers
             var region = new Region
             {
                 Name = model.Name,
+                Name_AR = model.Name_AR,
                 CityId = model.CityId,
             };
             await _context.Regions.AddAsync(region);
@@ -97,6 +99,7 @@ namespace GraduationProject.MvcControllers
             {
                 Id = region.Id,
                 Name = region.Name,
+                Name_AR = region.Name_AR,
                 CityId = region.CityId,
                 GovernorateId = region.City.GovernorateId,
                 Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync()
@@ -112,7 +115,7 @@ namespace GraduationProject.MvcControllers
                 return View(model);
 
             model.Name = model.Name.Trim();
-            if (await _context.Regions.AnyAsync(r => r.Name == model.Name && r.CityId == model.CityId))
+            if (await _context.Regions.AnyAsync(r => r.Name == model.Name && r.Name_AR == model.Name_AR && r.CityId == model.CityId))
             {
                 model.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
                 ModelState.AddModelError("", $"{model.Name} region already exists in this city");
@@ -124,6 +127,7 @@ namespace GraduationProject.MvcControllers
                 return NotFound();
 
             region.Name = model.Name;
+            region.Name_AR = model.Name_AR;
             region.CityId = model.CityId;
             await _context.SaveChangesAsync();
             _toast.AddSuccessToastMessage("Region updated successfully");
@@ -137,9 +141,16 @@ namespace GraduationProject.MvcControllers
             if (!await _context.Regions.AnyAsync(r => r.Id == id))
                 return NotFound();
 
-            _context.Regions.Remove(new Region(id));
-            await _context.SaveChangesAsync();
-            _toast.AddSuccessToastMessage("Region deleted successfully");
+            try
+            {
+                _context.Regions.Remove(new Region(id));
+                await _context.SaveChangesAsync();
+                _toast.AddSuccessToastMessage("Region deleted successfully");
+            }
+            catch (Exception)
+            {
+                _toast.AddErrorToastMessage("can not delete this region");
+            }
             return RedirectToAction(nameof(Index));
         }
     }

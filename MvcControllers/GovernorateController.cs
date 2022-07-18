@@ -1,12 +1,15 @@
 ﻿using GraduationProject.Data;
 using GraduationProject.Models;
 using GraduationProject.Models.Location;
+using GraduationProject.Utilities.General;
 using GraduationProject.Utilities.StaticStrings;
+using GraduationProject.ViewModels;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -49,7 +52,7 @@ namespace GraduationProject.MvcControllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Governorate model)
+        public async Task<IActionResult> Create(GovernorateVM model)
         {
             if (!ModelState.IsValid)
                 return View();
@@ -61,7 +64,14 @@ namespace GraduationProject.MvcControllers
                 return View();
             }
 
-            await _context.Governorates.AddAsync(model);
+            var governorate = new Governorate()
+            {
+                Name = model.Name,
+                Name_AR = model.Name_AR,
+                Image = FormFileHandler.ConvertToBytes(model.Image)
+            };
+
+            await _context.Governorates.AddAsync(governorate);
             await _context.SaveChangesAsync();
             _toast.AddSuccessToastMessage("Governorate added successfully");
             return RedirectToAction(nameof(Index));
@@ -71,12 +81,18 @@ namespace GraduationProject.MvcControllers
         public async Task<IActionResult> Edit(uint id)
         {
             var governorate = await _context.Governorates.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
-            return governorate == null ? NotFound() : View(governorate);
+
+            var goverVM = new GovernorateVM()
+            {
+                Name = governorate.Name,
+                Name_AR = governorate.Name_AR,
+            };
+            return governorate == null ? NotFound() : View(goverVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Governorate model)
+        public async Task<IActionResult> Edit(GovernorateVM model)
         {
             if (!ModelState.IsValid)
                 return View();
@@ -93,6 +109,9 @@ namespace GraduationProject.MvcControllers
                 return NotFound();
 
             governorate.Name = model.Name;
+            governorate.Name_AR = model.Name_AR;
+            governorate.Image = FormFileHandler.ConvertToBytes(model.Image);
+
             await _context.SaveChangesAsync();
             _toast.AddSuccessToastMessage("Governorate updated successfully");
             return RedirectToAction(nameof(Index));
@@ -105,9 +124,17 @@ namespace GraduationProject.MvcControllers
             if (!await _context.Governorates.AnyAsync(g => g.Id == id))
                 return NotFound();
 
-            _context.Governorates.Remove(new Governorate(id));
-            await _context.SaveChangesAsync();
-            _toast.AddSuccessToastMessage("Governorate deleted successfully");
+            try
+            {
+                _context.Governorates.Remove(new Governorate(id));
+                await _context.SaveChangesAsync();
+                _toast.AddSuccessToastMessage("Governorate deleted successfully");
+            }
+            catch (Exception)
+            { 
+                _toast.AddErrorToastMessage("can not delete this governorate"); 
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }

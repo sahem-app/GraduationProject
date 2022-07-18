@@ -8,10 +8,16 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <link href="~/templete/assets/vendor/css/core.css"/>
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="~/templete/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="~/templete/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="~/templete/assets/css/demo.css" />
+    <!-- Page CSS -->
+    <!-- Helpers -->
+    <script src="~/templete/assets/vendor/js/helpers.js"></script>
 </head>
 <body>
-    <p style="text-align:center; font-size:40px;font-weight:500" >Report for Accepted Cases </p>
+    <p style="text-align:center; font-size:40px;font-weight:500">Report for Accepted Cases </p>
     <div>
         <table class="table">
             <thead>
@@ -47,9 +53,6 @@
                         @Html.DisplayNameFor(model =>model.Adults)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model =>model.Address)
-                    </th>
-                    <th>
                         @Html.DisplayNameFor(model =>model.SocialStatus)
                     </th>
                     <th>
@@ -74,13 +77,12 @@
                         <td>@item.NeededMoneyAmount EGP</td>
                         <td>@item.Children</td>
                         <td>@item.Adults</td>
-                        <td>@item.Address</td>
                         <td>@item.SocialStatus</td>
                         <td>@item.Status</td>
                     </tr>
                 }
             </tbody>
-             @if (Model.Any())
+            @if (Model.Any())
             {
                 <tfoot>
                     <tr>
@@ -89,6 +91,9 @@
                 </tfoot>
             }
         </table>
+
+
+
 
     </div>
 </body>

@@ -8,21 +8,21 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
-namespace GraduationProjectAPI.Migrations
+namespace GraduationProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220505114105_CreateTriggersToDeleteGeoLocations")]
-    partial class CreateTriggersToDeleteGeoLocations
+    [Migration("20220706190539_AddfeildName-AR-InRegionAndCity")]
+    partial class AddfeildNameARInRegionAndCity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.16")
+                .HasAnnotation("ProductVersion", "5.0.15")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Case", b =>
+            modelBuilder.Entity("GraduationProject.Models.Case", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,8 +81,8 @@ namespace GraduationProjectAPI.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("varchar(11)");
+                        .HasMaxLength(14)
+                        .HasColumnType("varchar(14)");
 
                     b.Property<byte>("PriorityId")
                         .HasColumnType("tinyint");
@@ -141,36 +141,39 @@ namespace GraduationProjectAPI.Migrations
                     b.ToTable("Cases");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.CaseProperties.Category", b =>
+            modelBuilder.Entity("GraduationProject.Models.CaseProperties.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("Name_AR")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Medical"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Poverty"
-                        });
+                    b.HasIndex("Name_AR")
+                        .IsUnique();
+
+                    b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.CaseProperties.Image", b =>
+            modelBuilder.Entity("GraduationProject.Models.CaseProperties.Image", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -191,7 +194,7 @@ namespace GraduationProjectAPI.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.CaseProperties.Period", b =>
+            modelBuilder.Entity("GraduationProject.Models.CaseProperties.Period", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
@@ -223,7 +226,7 @@ namespace GraduationProjectAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.CaseProperties.Priority", b =>
+            modelBuilder.Entity("GraduationProject.Models.CaseProperties.Priority", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
@@ -255,7 +258,7 @@ namespace GraduationProjectAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.CaseProperties.Relationship", b =>
+            modelBuilder.Entity("GraduationProject.Models.CaseProperties.Relationship", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
@@ -287,7 +290,7 @@ namespace GraduationProjectAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Chat", b =>
+            modelBuilder.Entity("GraduationProject.Models.Chat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -317,7 +320,7 @@ namespace GraduationProjectAPI.Migrations
                     b.ToTable("Chats");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.FAQ", b =>
+            modelBuilder.Entity("GraduationProject.Models.FAQ", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -339,7 +342,7 @@ namespace GraduationProjectAPI.Migrations
                     b.ToTable("FAQs");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Location.City", b =>
+            modelBuilder.Entity("GraduationProject.Models.Location.City", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -354,6 +357,11 @@ namespace GraduationProjectAPI.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
+                    b.Property<string>("Name_AR")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GovernorateId");
@@ -361,10 +369,13 @@ namespace GraduationProjectAPI.Migrations
                     b.HasIndex("Name", "GovernorateId")
                         .IsUnique();
 
+                    b.HasIndex("Name_AR", "GovernorateId")
+                        .IsUnique();
+
                     b.ToTable("Cities");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Location.GeoLocation", b =>
+            modelBuilder.Entity("GraduationProject.Models.Location.GeoLocation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -385,27 +396,38 @@ namespace GraduationProjectAPI.Migrations
                     b.ToTable("GeoLocations");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Location.Governorate", b =>
+            modelBuilder.Entity("GraduationProject.Models.Location.Governorate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
+
+                    b.Property<string>("Name_AR")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
+                    b.HasIndex("Name_AR")
+                        .IsUnique();
+
                     b.ToTable("Governorates");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Location.Region", b =>
+            modelBuilder.Entity("GraduationProject.Models.Location.Region", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -420,6 +442,11 @@ namespace GraduationProjectAPI.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
+                    b.Property<string>("Name_AR")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
@@ -427,10 +454,13 @@ namespace GraduationProjectAPI.Migrations
                     b.HasIndex("Name", "CityId")
                         .IsUnique();
 
+                    b.HasIndex("Name_AR", "CityId")
+                        .IsUnique();
+
                     b.ToTable("Regions");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Mediator", b =>
+            modelBuilder.Entity("GraduationProject.Models.Mediator", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -489,8 +519,8 @@ namespace GraduationProjectAPI.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("varchar(11)");
+                        .HasMaxLength(14)
+                        .HasColumnType("varchar(14)");
 
                     b.Property<byte[]>("ProfileImage")
                         .IsRequired()
@@ -529,7 +559,7 @@ namespace GraduationProjectAPI.Migrations
                     b.ToTable("Mediators");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.MessageType", b =>
+            modelBuilder.Entity("GraduationProject.Models.MessageType", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
@@ -556,7 +586,7 @@ namespace GraduationProjectAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Notification", b =>
+            modelBuilder.Entity("GraduationProject.Models.Notification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -603,7 +633,7 @@ namespace GraduationProjectAPI.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.NotificationType", b =>
+            modelBuilder.Entity("GraduationProject.Models.NotificationType", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
@@ -645,7 +675,7 @@ namespace GraduationProjectAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Reviews.CaseReview", b =>
+            modelBuilder.Entity("GraduationProject.Models.Reviews.CaseReview", b =>
                 {
                     b.Property<int>("MediatorId")
                         .HasColumnType("int");
@@ -673,7 +703,7 @@ namespace GraduationProjectAPI.Migrations
                     b.ToTable("CaseReviews");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Reviews.MediatorReview", b =>
+            modelBuilder.Entity("GraduationProject.Models.Reviews.MediatorReview", b =>
                 {
                     b.Property<int>("RevieweeId")
                         .HasColumnType("int");
@@ -701,7 +731,7 @@ namespace GraduationProjectAPI.Migrations
                     b.ToTable("MediatorReviews");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Shared.Gender", b =>
+            modelBuilder.Entity("GraduationProject.Models.Shared.Gender", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
@@ -728,7 +758,7 @@ namespace GraduationProjectAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Shared.Locale", b =>
+            modelBuilder.Entity("GraduationProject.Models.Shared.Locale", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
@@ -755,7 +785,7 @@ namespace GraduationProjectAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Shared.SocialStatus", b =>
+            modelBuilder.Entity("GraduationProject.Models.Shared.SocialStatus", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
@@ -792,7 +822,7 @@ namespace GraduationProjectAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Shared.Status", b =>
+            modelBuilder.Entity("GraduationProject.Models.Shared.Status", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
@@ -829,63 +859,63 @@ namespace GraduationProjectAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Case", b =>
+            modelBuilder.Entity("GraduationProject.Models.Case", b =>
                 {
-                    b.HasOne("GraduationProjectAPI.Models.CaseProperties.Category", "Category")
+                    b.HasOne("GraduationProject.Models.CaseProperties.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Shared.Gender", "Gender")
+                    b.HasOne("GraduationProject.Models.Shared.Gender", "Gender")
                         .WithMany()
                         .HasForeignKey("GenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Location.GeoLocation", "GeoLocation")
+                    b.HasOne("GraduationProject.Models.Location.GeoLocation", "GeoLocation")
                         .WithOne()
-                        .HasForeignKey("GraduationProjectAPI.Models.Case", "GeoLocationId")
+                        .HasForeignKey("GraduationProject.Models.Case", "GeoLocationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Mediator", "Mediator")
+                    b.HasOne("GraduationProject.Models.Mediator", "Mediator")
                         .WithMany("CasesAdded")
                         .HasForeignKey("MediatorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.CaseProperties.Period", "Period")
+                    b.HasOne("GraduationProject.Models.CaseProperties.Period", "Period")
                         .WithMany()
                         .HasForeignKey("PeriodId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.CaseProperties.Priority", "Priority")
+                    b.HasOne("GraduationProject.Models.CaseProperties.Priority", "Priority")
                         .WithMany()
                         .HasForeignKey("PriorityId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Location.Region", "Region")
+                    b.HasOne("GraduationProject.Models.Location.Region", "Region")
                         .WithMany()
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.CaseProperties.Relationship", "Relationship")
+                    b.HasOne("GraduationProject.Models.CaseProperties.Relationship", "Relationship")
                         .WithMany()
                         .HasForeignKey("RelationshipId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Shared.SocialStatus", "SocialStatus")
+                    b.HasOne("GraduationProject.Models.Shared.SocialStatus", "SocialStatus")
                         .WithMany()
                         .HasForeignKey("SocialStatusId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Shared.Status", "Status")
+                    b.HasOne("GraduationProject.Models.Shared.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -912,9 +942,9 @@ namespace GraduationProjectAPI.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.CaseProperties.Image", b =>
+            modelBuilder.Entity("GraduationProject.Models.CaseProperties.Image", b =>
                 {
-                    b.HasOne("GraduationProjectAPI.Models.Case", "Case")
+                    b.HasOne("GraduationProject.Models.Case", "Case")
                         .WithMany("Images")
                         .HasForeignKey("CaseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -923,15 +953,15 @@ namespace GraduationProjectAPI.Migrations
                     b.Navigation("Case");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Chat", b =>
+            modelBuilder.Entity("GraduationProject.Models.Chat", b =>
                 {
-                    b.HasOne("GraduationProjectAPI.Models.Mediator", "Mediator")
+                    b.HasOne("GraduationProject.Models.Mediator", "Mediator")
                         .WithMany()
                         .HasForeignKey("MediatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.MessageType", "MessageType")
+                    b.HasOne("GraduationProject.Models.MessageType", "MessageType")
                         .WithMany()
                         .HasForeignKey("MessageTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -942,9 +972,9 @@ namespace GraduationProjectAPI.Migrations
                     b.Navigation("MessageType");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Location.City", b =>
+            modelBuilder.Entity("GraduationProject.Models.Location.City", b =>
                 {
-                    b.HasOne("GraduationProjectAPI.Models.Location.Governorate", "Governorate")
+                    b.HasOne("GraduationProject.Models.Location.Governorate", "Governorate")
                         .WithMany("Cities")
                         .HasForeignKey("GovernorateId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -953,9 +983,9 @@ namespace GraduationProjectAPI.Migrations
                     b.Navigation("Governorate");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Location.Region", b =>
+            modelBuilder.Entity("GraduationProject.Models.Location.Region", b =>
                 {
-                    b.HasOne("GraduationProjectAPI.Models.Location.City", "City")
+                    b.HasOne("GraduationProject.Models.Location.City", "City")
                         .WithMany("Regions")
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -964,38 +994,38 @@ namespace GraduationProjectAPI.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Mediator", b =>
+            modelBuilder.Entity("GraduationProject.Models.Mediator", b =>
                 {
-                    b.HasOne("GraduationProjectAPI.Models.Shared.Gender", "Gender")
+                    b.HasOne("GraduationProject.Models.Shared.Gender", "Gender")
                         .WithMany()
                         .HasForeignKey("GenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Location.GeoLocation", "GeoLocation")
+                    b.HasOne("GraduationProject.Models.Location.GeoLocation", "GeoLocation")
                         .WithOne()
-                        .HasForeignKey("GraduationProjectAPI.Models.Mediator", "GeoLocationId")
+                        .HasForeignKey("GraduationProject.Models.Mediator", "GeoLocationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Shared.Locale", "Locale")
+                    b.HasOne("GraduationProject.Models.Shared.Locale", "Locale")
                         .WithMany()
                         .HasForeignKey("LocaleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Location.Region", "Region")
+                    b.HasOne("GraduationProject.Models.Location.Region", "Region")
                         .WithMany()
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("GraduationProjectAPI.Models.Shared.SocialStatus", "SocialStatus")
+                    b.HasOne("GraduationProject.Models.Shared.SocialStatus", "SocialStatus")
                         .WithMany()
                         .HasForeignKey("SocialStatusId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Shared.Status", "Status")
+                    b.HasOne("GraduationProject.Models.Shared.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1014,15 +1044,15 @@ namespace GraduationProjectAPI.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Notification", b =>
+            modelBuilder.Entity("GraduationProject.Models.Notification", b =>
                 {
-                    b.HasOne("GraduationProjectAPI.Models.Mediator", "Mediator")
+                    b.HasOne("GraduationProject.Models.Mediator", "Mediator")
                         .WithMany("Notifications")
                         .HasForeignKey("MediatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.NotificationType", "Type")
+                    b.HasOne("GraduationProject.Models.NotificationType", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1033,15 +1063,15 @@ namespace GraduationProjectAPI.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Reviews.CaseReview", b =>
+            modelBuilder.Entity("GraduationProject.Models.Reviews.CaseReview", b =>
                 {
-                    b.HasOne("GraduationProjectAPI.Models.Case", "Case")
+                    b.HasOne("GraduationProject.Models.Case", "Case")
                         .WithMany("CaseReviews")
                         .HasForeignKey("CaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Mediator", "Mediator")
+                    b.HasOne("GraduationProject.Models.Mediator", "Mediator")
                         .WithMany()
                         .HasForeignKey("MediatorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1052,15 +1082,15 @@ namespace GraduationProjectAPI.Migrations
                     b.Navigation("Mediator");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Reviews.MediatorReview", b =>
+            modelBuilder.Entity("GraduationProject.Models.Reviews.MediatorReview", b =>
                 {
-                    b.HasOne("GraduationProjectAPI.Models.Mediator", "Reviewee")
+                    b.HasOne("GraduationProject.Models.Mediator", "Reviewee")
                         .WithMany("ReviewsAboutMe")
                         .HasForeignKey("RevieweeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GraduationProjectAPI.Models.Mediator", "Reviewer")
+                    b.HasOne("GraduationProject.Models.Mediator", "Reviewer")
                         .WithMany("ReviewsByMe")
                         .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1071,24 +1101,24 @@ namespace GraduationProjectAPI.Migrations
                     b.Navigation("Reviewer");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Case", b =>
+            modelBuilder.Entity("GraduationProject.Models.Case", b =>
                 {
                     b.Navigation("CaseReviews");
 
                     b.Navigation("Images");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Location.City", b =>
+            modelBuilder.Entity("GraduationProject.Models.Location.City", b =>
                 {
                     b.Navigation("Regions");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Location.Governorate", b =>
+            modelBuilder.Entity("GraduationProject.Models.Location.Governorate", b =>
                 {
                     b.Navigation("Cities");
                 });
 
-            modelBuilder.Entity("GraduationProjectAPI.Models.Mediator", b =>
+            modelBuilder.Entity("GraduationProject.Models.Mediator", b =>
                 {
                     b.Navigation("CasesAdded");
 

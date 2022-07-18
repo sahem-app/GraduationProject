@@ -3,42 +3,8 @@
 @{
 	ViewData["Title"] = "Edit Region";
 }
-@*
-<h1>Edit Region</h1>
-<hr />
-
-<div class="row">
-	<div class="col-md-4">
-		<form asp-action="Edit" method="post">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			
-			<div class="form-group mb-3">
-				<label asp-for="GovernorateId" class="control-label">Governorate</label>
-				<select id="ddlGovernorate" asp-for="GovernorateId" class="form-select" asp-items="@(new SelectList(Model.Governorates,"Id","Name"))"></select>
-			</div>
-			<div class="form-group mb-3">
-				<label asp-for="CityId" class="control-label"></label>
-				<select id="ddlCity" asp-for="CityId" class="form-select"></select>
-				<span asp-validation-for="CityId" class="text-danger"></span>
-			</div>
-			<div class="form-group mb-3">
-				<label asp-for="Name" class="control-label"></label>
-				<input asp-for="Name" class="form-control" />
-				<span asp-validation-for="Name" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<button class="btn btn-primary me-3">Save</button>
-				<a asp-action="Index" class="btn btn-secondary">Cancel</a>
-			</div>
-		</form>
-	</div>
-</div>*@
 
 
-
-
-
-<hr />
 
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Page/</span> Edit Region</h4>
@@ -73,8 +39,15 @@
                          <div class="row mb-3">
                             <label  asp-for="Name" class="col-sm-2 col-form-label"></label>
                             <div class="col-sm-6">
-                               <input type="text" asp-for="Name" class="form-control" id="basic-default-name" />
+                               <input type="text" asp-for="Name" class="form-control" id="basic-default-name" placeholder="Enter region Name...."/>
                                 <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label  asp-for="Name_AR" class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-6">
+                                <input asp-for="Name_AR" type="text" class="form-control" id="basic-default-name" placeholder="Enter region Name_ARabic...."/>
+                                <span asp-validation-for="Name_AR" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row justify-content-end">

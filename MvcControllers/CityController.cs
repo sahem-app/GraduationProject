@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,7 +27,7 @@ namespace GraduationProject.MvcControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int pg=1)
+        public async Task<IActionResult> Index(int pg = 1)
         {
             var cities = await _context.Cities.AsNoTrackingWithIdentityResolution().Include(c => c.Governorate).ToArrayAsync();
             int pageSize = 3;
@@ -38,7 +39,7 @@ namespace GraduationProject.MvcControllers
             var data = cities.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
             var Count = cities.Count();
-            TempData["count"] = count;  
+            TempData["count"] = count;
             return View(data);
         }
 
@@ -69,7 +70,7 @@ namespace GraduationProject.MvcControllers
                 return View(model);
             }
 
-            await _context.Cities.AddAsync(new City(model.Name, model.GovernorateId));
+            await _context.Cities.AddAsync(new City(model.Name,model.Name_AR, model.GovernorateId));
             await _context.SaveChangesAsync();
             _toast.AddSuccessToastMessage("City added successfully");
             return RedirectToAction(nameof(Index));
@@ -86,6 +87,7 @@ namespace GraduationProject.MvcControllers
             {
                 Id = city.Id,
                 Name = city.Name,
+                Name_AR = city.Name_AR,
                 GovernorateId = city.GovernorateId,
                 Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync()
             };
@@ -103,7 +105,7 @@ namespace GraduationProject.MvcControllers
             }
 
             model.Name = model.Name.Trim();
-            if (await _context.Cities.AnyAsync(c => c.Name == model.Name && c.GovernorateId == model.GovernorateId))
+            if (await _context.Cities.AnyAsync(c => c.Name == model.Name && c.Name_AR == model.Name_AR && c.GovernorateId == model.GovernorateId))
             {
                 model.Governorates = await _context.Governorates.AsNoTracking().ToArrayAsync();
                 ModelState.AddModelError("", $"{model.Name} city already exists in this governorate");
@@ -115,6 +117,7 @@ namespace GraduationProject.MvcControllers
                 return NotFound();
 
             city.Name = model.Name;
+            city.Name_AR = model.Name_AR;
             city.GovernorateId = model.GovernorateId;
             await _context.SaveChangesAsync();
             _toast.AddSuccessToastMessage("City updated successfully");
@@ -128,9 +131,18 @@ namespace GraduationProject.MvcControllers
             if (!await _context.Cities.AnyAsync(c => c.Id == id))
                 return NotFound();
 
-            _context.Cities.Remove(new City(id));
-            await _context.SaveChangesAsync();
-            _toast.AddSuccessToastMessage("City deleted successfully");
+            try
+            {
+                _context.Cities.Remove(new City(id));
+                await _context.SaveChangesAsync();
+                _toast.AddSuccessToastMessage("City deleted successfully");
+            }
+            catch (Exception)
+            {
+                _toast.AddErrorToastMessage("can not be remove this city");
+            }
+          
+           
             return RedirectToAction(nameof(Index));
         }
     }

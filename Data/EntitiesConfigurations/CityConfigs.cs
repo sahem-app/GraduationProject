@@ -9,6 +9,7 @@ namespace GraduationProject.Data.EntitiesConfigurations
         public void Configure(EntityTypeBuilder<City> builder)
         {
             builder.HasIndex(g => new { g.Name, g.GovernorateId }).IsUnique();
+            builder.HasIndex(g => new { g.Name_AR, g.GovernorateId }).IsUnique();
         }
     }
 }
